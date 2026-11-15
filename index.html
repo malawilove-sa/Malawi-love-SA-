@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Malawi Love SA FIXED</title>
 <style>
@@ -86,4 +86,4 @@ function renderMsgs(){var b=document.getElementById('msgs');b.innerHTML='';var l
 function send(){var inp=document.getElementById('inp');var t=inp.value.trim();if(!t||!active)return;if(!chats[active.name])chats[active.name]=[];chats[active.name].push({from:'me',text:t});localStorage.setItem('mw_c',JSON.stringify(chats));inp.value='';renderMsgs();updateMatches();setTimeout(function(){var reps=["Haha sweet 😊","You in "+active.city+"?","When video call? 📹","You cute 😍","Malawi love is real ❤️"];var r=reps[Math.floor(Math.random()*reps.length)];chats[active.name].push({from:'them',text:r});localStorage.setItem('mw_c',JSON.stringify(chats));renderMsgs();},1000);}
 function video(){if(!active)return;window.open('https://meet.jit.si/MalawiLove_'+active.name,'_blank');}
 render();updateMatches();
-</script></body></html> 
+</script></body></html>
