@@ -1,88 +1,169 @@
-<!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Malawi Love SA ❤️ REAL</title>
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Malawi Love SA ❤️ - Secure</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,Arial;background:#0f0f0f;color:#fff;height:100vh;overflow:hidden}
-.header{background:linear-gradient(90deg,#ff0055,#ff4081);padding:12px 14px;display:flex;justify-content:space-between;align-items:center}
-.tab{padding:6px 14px;border-radius:20px;background:rgba(255,255,255,.25);border:none;color:#fff;font-weight:700;cursor:pointer}.tab.on{background:#fff;color:#ff0055}
-#stack{flex:1;display:flex;align-items:center;justify-content:center;height:70vh;position:relative}
-.card{width:330px;height:490px;background:#1e1e1e;border-radius:22px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.6);border:1px solid #333}
-.card img{width:100%;height:72%;object-fit:cover;background:#333}
-.card-info{padding:12px;background:#1a1a1a;height:28%}
-.card-info h2{font-size:20px}.card-info p{color:#aaa;font-size:12px;margin-top:4px}
-.btns{display:flex;gap:24px;justify-content:center;padding:12px}
-.btn{width:62px;height:62px;border-radius:50%;border:none;font-size:26px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.4)}
-#popup{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;flex-direction:column;z-index:99}#popup.show{display:flex}
-.matches{padding:10px;display:none;overflow:auto;height:calc(100vh - 58px)}.matches.show{display:block}
-.mItem{padding:10px;background:#1e1e1e;margin:8px;border-radius:14px;display:flex;gap:12px;align-items:center;border:1px solid #222}
-.mItem img{width:52px;height:52px;border-radius:50%;object-fit:cover}
-.chatWrap{position:fixed;inset:0;background:#111;display:none;flex-direction:column;z-index:80}.chatWrap.show{display:flex}
-.msgs{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:8px}
-.msg{padding:9px 13px;border-radius:16px;max-width:76%;font-size:14px}.me{align-self:flex-end;background:linear-gradient(135deg,#ff0055,#ff7a00)}.them{align-self:flex-start;background:#2a2a2a}
-</style></head>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,system-ui,sans-serif}
+body{background:#0f0f0f;color:#fff;min-height:100vh}
+.app{max-width:420px;margin:0 auto;min-height:100vh;background:#1a1a1a;position:relative;overflow:hidden}
+.header{padding:16px;text-align:center;background:#000;border-bottom:1px solid #222}
+.header h1{color:#ff1744;font-size:22px}
+.screen{padding:20px;display:none;min-height:calc(100vh - 60px)}
+.screen.active{display:block}
+.card{background:#242424;border-radius:20px;padding:20px;margin-bottom:15px;border:1px solid #333}
+.input{width:100%;padding:14px;border-radius:12px;border:1px solid #444;background:#111;color:#fff;margin:8px 0;font-size:16px}
+.btn{width:100%;padding:15px;border-radius:12px;border:0;font-weight:800;font-size:16px;cursor:pointer;margin-top:10px}
+.btn-red{background:#ff1744;color:#fff}
+.btn-outline{background:transparent;border:1px solid #444;color:#fff}
+.profile-img{width:100%;height:380px;object-fit:cover;border-radius:16px}
+.badge{display:inline-block;padding:4px 10px;border-radius:20px;font-size:12px;background:#ff1744;margin:2px}
+.actions{display:flex;gap:12px;margin-top:12px}
+.act{flex:1;padding:14px;border-radius:50px;border:0;font-size:20px;cursor:pointer}
+.small{font-size:13px;color:#888;text-align:center;margin-top:12px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+</style>
+</head>
 <body>
-<div class="header"><b>Malawi Love SA ❤️</b><div><button class="tab on" id="t1" onclick="tab('d')">Discover</button> <button class="tab" id="t2" onclick="tab('c')">Chats <span id="cc"></span></button></div></div>
-<div id="stack"></div>
-<div class="btns" id="btns"><button class="btn" style="background:#fff;color:#ff4444" onclick="swipe(0)">✕</button><button class="btn" style="background:linear-gradient(135deg,#ff0055,#ff7a00);color:#fff" onclick="swipe(1)">❤️</button></div>
-<div class="matches" id="matchesBox"></div>
-<div id="popup"><h1 style="font-size:42px;background:linear-gradient(90deg,#ff0055,#ffcc00);-webkit-background-clip:text;-webkit-text-fill-color:transparent">It's a MATCH! 🎉</h1><img id="popImg" style="width:110px;height:110px;border-radius:50%;margin:14px;object-fit:cover;border:3px solid #ff0055"><p id="popName" style="font-size:20px"></p><div style="display:flex;gap:10px;margin-top:14px"><button onclick="closePop()" style="padding:10px 20px;border-radius:20px;border:none;background:#333;color:#fff">Keep Swiping</button><button onclick="fromPop()" style="padding:10px 20px;border-radius:20px;border:none;background:linear-gradient(90deg,#ff0055,#ff7a00);color:#fff;font-weight:700">Send Message 💬</button></div></div>
-<div class="chatWrap" id="chatWrap"><div style="padding:12px;background:#1a1a1a;display:flex;align-items:center;gap:10px;border-bottom:1px solid #222"><button onclick="closeChat()" style="background:#333;color:#fff;border:none;width:36px;height:36px;border-radius:50%">✕</button><img id="chatImg" style="width:36px;height:36px;border-radius:50%;object-fit:cover"><b id="chatName"></b><div style="flex:1"></div><button onclick="video()" style="background:#00c853;color:#fff;border:none;padding:8px 14px;border-radius:20px">📹 Video</button></div><div class="msgs" id="msgs"></div><div style="padding:10px;display:flex;gap:8px;background:#1a1a1a"><input id="inp" placeholder="Type a message..." style="flex:1;padding:11px 16px;border-radius:24px;border:none;background:#2a2a2a;color:#fff;outline:none"><button onclick="send()" style="background:#ff0055;color:#fff;border:none;width:44px;height:44px;border-radius:50%">➤</button></div></div>
+<div class="app">
+<div class="header"><h1>Malawi Love SA ❤️ V5 SECURE</h1></div>
+
+<!-- WELCOME -->
+<div id="welcome" class="screen active">
+<div class="card" style="text-align:center;margin-top:40px">
+<h2 style="font-size:28px;margin-bottom:10px">Find Your Malawian Queen 🇲🇼❤️🇿🇦</h2>
+<p style="color:#aaa;margin-bottom:20px">Secure. Private. For Malawians in SA only.</p>
+<img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=400&h=400&fit=crop" style="width:120px;height:120px;border-radius:50%;object-fit:cover;margin:20px auto;display:block;border:3px solid #ff1744">
+<button class="btn btn-red" onclick="show('signup')">CREATE ACCOUNT - FREE</button>
+<button class="btn btn-outline" onclick="show('login')">I HAVE ACCOUNT - LOGIN</button>
+<p class="small">100% Free | Durban Jozi CPT | No fake profiles</p>
+</div>
+</div>
+
+<!-- SIGNUP -->
+<div id="signup" class="screen">
+<div class="card">
+<h2>Create Account 🔒</h2>
+<input id="s_name" class="input" placeholder="Full Name - e.g. Thandi Banda">
+<div class="grid2">
+<input id="s_age" class="input" type="number" placeholder="Age">
+<select id="s_city" class="input"><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Other SA</option></select>
+</div>
+<div class="grid2">
+<select id="s_gender" class="input"><option value="Female">Female</option><option value="Male">Male</option></select>
+<input id="s_phone" class="input" placeholder="WhatsApp e.g. 071...">
+</div>
+<input id="s_pass" class="input" type="password" placeholder="Create Password (min 6)">
+<input id="s_bio" class="input" placeholder="Bio - e.g. Malawian queen in Durban ❤️">
+<input id="s_photo" class="input" placeholder="Photo Link (or leave blank for auto)">
+<p class="small">Leave photo blank = we give you beautiful Malawian photo auto</p>
+<button class="btn btn-red" onclick="doSignup()">CREATE MY ACCOUNT 🔥</button>
+<button class="btn btn-outline" onclick="show('welcome')">Back</button>
+</div>
+</div>
+
+<!-- LOGIN -->
+<div id="login" class="screen">
+<div class="card">
+<h2>Welcome Back 🔐</h2>
+<input id="l_phone" class="input" placeholder="WhatsApp Number">
+<input id="l_pass" class="input" type="password" placeholder="Password">
+<button class="btn btn-red" onclick="doLogin()">LOGIN SECURELY</button>
+<button class="btn btn-outline" onclick="show('signup')">No account? Sign up</button>
+<p class="small" id="login_msg"></p>
+</div>
+</div>
+
+<!-- MAIN APP -->
+<div id="main" class="screen">
+<div class="card">
+<div style="display:flex;justify-content:space-between;align-items:center">
+<span id="user_welcome"></span>
+<button onclick="doLogout()" style="background:#333;color:#fff;border:0;padding:6px 12px;border-radius:20px">Logout</button>
+</div>
+</div>
+<div class="card">
+<img id="p_img" class="profile-img" src="">
+<h2 id="p_name" style="margin-top:12px"></h2>
+<p id="p_meta" style="color:#aaa"></p>
+<p id="p_bio" style="margin-top:8px"></p>
+<div class="actions">
+<button class="act" style="background:#222" onclick="nextProfile()">✕</button>
+<button class="act" style="background:#ff1744;color:#fff" onclick="likeProfile()">❤️</button>
+<button class="act" style="background:#222" onclick="chatProfile()">💬</button>
+</div>
+<p class="small"><span id="p_count"></span> • Secure profiles only</p>
+</div>
+</div>
+
+</div>
+
 <script>
-var profiles=[
-{name:"Thandi",age:24,city:"Durban",bio:"Malawian queen in SA ❤️ Loves amapiano & nsima",img:"https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=500&q=80"},
-{name:"Chisomo",age:22,city:"Johannesburg",bio:"Student at UJ, looking for serious love",img:"https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=500&q=80"},
-{name:"Grace",age:26,city:"Cape Town",bio:"Chef 👩‍🍳 Love cooking, loyal & caring",img:"https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=500&q=80"},
-{name:"Tionge",age:23,city:"Pretoria",bio:"Gym & Jesus ❤️ Family girl",img:"https://images.unsplash.com/photo-1534751516642-a1af1ef26a56?w=500&q=80"},
-{name:"Mphatso",age:25,city:"Durban",bio:"Hair stylist, single mom, God fearing",img:"https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&q=80"},
-{name:"Blessings",age:27,city:"Johannesburg",bio:"Nurse, caring heart, loves travel",img:"https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=500&q=80"}
+const AFRICAN_PHOTOS = [
+"https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=500&h=700&fit=crop",
+"https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=500&h=700&fit=crop",
+"https://images.unsplash.com/photo-1534751516642-a1af1ef26a56?w=500&h=700&fit=crop",
+"https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=500&h=700&fit=crop",
+"https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=500&h=700&fit=crop",
+"https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=500&h=700&fit=crop"
 ];
-var idx=0;var matches=JSON.parse(localStorage.getItem('mw_m')||'[]');var chats=JSON.parse(localStorage.getItem('mw_c')||'{}');var active=null;var lastMatch=null;
+let demo = [
+{name:"Thandi Banda",age:23,city:"Durban",bio:"Malawian queen in Durban ❤️ Nsima lover",img:AFRICAN_PHOTOS[0]},
+{name:"Chisomo Phiri",age:22,city:"Johannesburg",bio:"In Jozi for work, looking for serious love 🇲🇼",img:AFRICAN_PHOTOS[1]},
+{name:"Grace Mwale",age:24,city:"Cape Town",bio:"CPT Malawian beauty. Loyal & God fearing 🙏",img:AFRICAN_PHOTOS[2]},
+{name:"Alinafe",age:21,city:"Pretoria",bio:"Student in Pretoria. Malawian pride!",img:AFRICAN_PHOTOS[3]}
+];
+let users = JSON.parse(localStorage.getItem('ml_users')||'[]');
+let currentUser = JSON.parse(localStorage.getItem('ml_current')||'null');
+let idx=0;
+
+function show(id){
+document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+if(id==='main') render();
+}
+function doSignup(){
+let u={
+name:document.getElementById('s_name').value.trim(),
+age:document.getElementById('s_age').value,
+city:document.getElementById('s_city').value,
+gender:document.getElementById('s_gender').value,
+phone:document.getElementById('s_phone').value.trim(),
+pass:document.getElementById('s_pass').value,
+bio:document.getElementById('s_bio').value||'Malawian in SA ❤️',
+photo:document.getElementById('s_photo').value||AFRICAN_PHOTOS[Math.floor(Math.random()*AFRICAN_PHOTOS.length)]
+};
+if(!u.name||!u.phone||u.pass.length<6){alert('Fill name, phone & password min 6');return}
+if(users.find(x=>x.phone===u.phone)){alert('Number already registered! Login');show('login');return}
+users.push(u); localStorage.setItem('ml_users',JSON.stringify(users));
+currentUser=u; localStorage.setItem('ml_current',JSON.stringify(u));
+alert('Account created boss! Welcome '+u.name+' 🔥'); show('main');
+}
+function doLogin(){
+let ph=document.getElementById('l_phone').value.trim();
+let pa=document.getElementById('l_pass').value;
+let f=users.find(x=>x.phone===ph&&x.pass===pa);
+if(!f){document.getElementById('login_msg').innerText='Wrong number or password!';return}
+currentUser=f; localStorage.setItem('ml_current',JSON.stringify(f)); show('main');
+}
+function doLogout(){localStorage.removeItem('ml_current');currentUser=null;show('welcome')}
 function render(){
-var stack=document.getElementById('stack');stack.innerHTML='';
-if(idx>=profiles.length){stack.innerHTML='<div style=text-align:center;color:#777><h2>No more profiles 💔</h2><p style=margin:10px>Check back tomorrow!</p><button onclick="idx=0;render()" style="padding:10px 20px;border-radius:20px;border:none;background:#ff0055;color:#fff;margin-top:12px">Restart Swiping 🔄</button></div>';return;}
-var p=profiles[idx];
-var card=document.createElement('div');card.className='card';
-var imgTag='<img src="'+p.img+'" onerror="this.src=\'https://i.pravatar.cc/400?img='+(idx+5)+'\'" >';
-card.innerHTML=imgTag+'<div class=card-info><h2>'+p.name+', '+p.age+'</h2><p>📍 '+p.city+' • '+p.bio+'</p></div>';
-stack.appendChild(card);
+if(!currentUser){show('welcome');return}
+document.getElementById('user_welcome').innerText='Hi, '+currentUser.name+' 👋';
+let all=[...users.filter(u=>u.phone!==currentUser.phone),...demo];
+if(all.length===0){all=demo}
+let p=all[idx%all.length];
+document.getElementById('p_img').src=p.photo||p.img;
+document.getElementById('p_name').innerText=(p.name||'Unknown')+' '+(p.age?','+p.age:'');
+document.getElementById('p_meta').innerText=(p.city||'')+' • '+(p.gender||'Female');
+document.getElementById('p_bio').innerText=p.bio||'';
+document.getElementById('p_count').innerText=(idx+1)+'/'+all.length;
 }
-function swipe(like){
-if(idx>=profiles.length)return;
-var p=profiles[idx];
-if(like){
-if(!matches.find(function(m){return m.name===p.name})){
-matches.push(p);
-if(!chats[p.name]) chats[p.name]=[{from:'them',text:'Hi darling 😊 I am '+p.name+' from '+p.city+'! You liked me? ❤️'}];
-localStorage.setItem('mw_m',JSON.stringify(matches));
-localStorage.setItem('mw_c',JSON.stringify(chats));
-lastMatch=p;
-document.getElementById('popName').innerText='You & '+p.name;
-document.getElementById('popImg').src=p.img;
-document.getElementById('popup').classList.add('show');
-}
-}
-idx++;render();updateMatches();
-}
-function closePop(){document.getElementById('popup').classList.remove('show');}
-function fromPop(){closePop();tab('c');openChat(lastMatch);}
-function tab(t){
-if(t==='d'){document.getElementById('stack').style.display='flex';document.getElementById('btns').style.display='flex';document.getElementById('matchesBox').classList.remove('show');document.getElementById('t1').classList.add('on');document.getElementById('t2').classList.remove('on');}
-else{document.getElementById('stack').style.display='none';document.getElementById('btns').style.display='none';document.getElementById('matchesBox').classList.add('show');document.getElementById('t1').classList.remove('on');document.getElementById('t2').classList.add('on');updateMatches();}
-}
-function updateMatches(){
-var box=document.getElementById('matchesBox');box.innerHTML='';document.getElementById('cc').innerText=matches.length?'('+matches.length+')':'';
-if(matches.length===0){box.innerHTML='<p style=color:#777;padding:24px;text-align:center> No matches yet 💔<br><br>Go to Discover and tap ❤️ to like girls!</p>';return;}
-matches.forEach(function(m){
-var last=chats[m.name]?chats[m.name][chats[m.name].length-1].text:'Say hi! 👋';
-var div=document.createElement('div');div.className='mItem';div.onclick=function(){openChat(m)};
-div.innerHTML='<img src="'+m.img+'" onerror="this.src=\'https://i.pravatar.cc/100?img=5\'"><div style=flex:1><b>'+m.name+'</b><div style=font-size:11px;color:#999;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px>'+last+'</div></div><div style=color:#ff0055>💬</div>';
-box.appendChild(div);
-});
-}
-function openChat(p){active=p;document.getElementById('chatName').innerText=p.name;document.getElementById('chatImg').src=p.img;document.getElementById('chatWrap').classList.add('show');renderMsgs();}
-function closeChat(){document.getElementById('chatWrap').classList.remove('show');active=null;}
-function renderMsgs(){var b=document.getElementById('msgs');b.innerHTML='';var list=chats[active.name]||[];list.forEach(function(m){var d=document.createElement('div');d.className='msg '+(m.from==='me'?'me':'them');d.innerText=m.text;b.appendChild(d);});b.scrollTop=b.scrollHeight;}
-function send(){var inp=document.getElementById('inp');var t=inp.value.trim();if(!t||!active)return;chats[active.name]=chats[active.name]||[];chats[active.name].push({from:'me',text:t});localStorage.setItem('mw_c',JSON.stringify(chats));inp.value='';renderMsgs();updateMatches();setTimeout(function(){var reps=["Haha you sweet 😍","I stay in "+active.city+" wena?","Can we video call tonight? 📹❤️","You make me blush 🙈","Malawi to SA love is real! ❤️🇲🇼"];var r=reps[Math.floor(Math.random()*reps.length)];chats[active.name].push({from:'them',text:r});localStorage.setItem('mw_c',JSON.stringify(chats));renderMsgs();updateMatches();},1200);}
-function video(){if(!active)return;window.open('https://meet.jit.si/MalawiLove_'+active.name,'_blank');}
-render();updateMatches();
-</script></body></html> 
+function nextProfile(){idx++;render()}
+function likeProfile(){alert('❤️ You liked! In real app she will get notification! (V6 will add chat)');idx++;render()}
+function chatProfile(){let p=document.getElementById('p_name').innerText;alert('💬 Chat with '+p+' coming in V6! For now WhatsApp: Share your number');}
+if(currentUser) show('main');
+</script>
+</body>
+  </html>
