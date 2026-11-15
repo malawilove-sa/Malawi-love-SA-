@@ -3,81 +3,132 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Malawi Love SA - Authentic Malawian Products in South Africa</title>
+<title>Malawi Love SA - Find Love ❤️</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Arial,sans-serif;background:#fff;color:#333;line-height:1.6}
-header{background:linear-gradient(135deg,#000,#CE1126,#00A651);color:#fff;padding:15px 20px;position:sticky;top:0;z-index:100}
-.logo{font-size:24px;font-weight:bold}
-nav{display:flex;justify-content:space-between;align-items:center}
-nav a{color:#fff;text-decoration:none;margin-left:15px;font-weight:bold}
-.hero{background:linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.7)),url('https://images.unsplash.com/photo-1523805009345-7448845a9e53');background-size:cover;background-position:center;color:#fff;text-align:center;padding:80px 20px}
-.hero h1{font-size:32px;margin-bottom:15px}
-.hero p{font-size:18px;margin-bottom:25px}
-.btn{display:inline-block;background:#00A651;color:#fff;padding:14px 28px;border-radius:30px;text-decoration:none;font-weight:bold;font-size:18px;margin:5px}
-.btn-red{background:#CE1126}
-section{padding:50px 20px;max-width:1100px;margin:auto}
-h2{text-align:center;font-size:28px;margin-bottom:30px;color:#000}
-h2 span{color:#CE1126}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
-.card{background:#f9f9f9;padding:25px;border-radius:15px;text-align:center;border-top:5px solid #00A651;box-shadow:0 4px 10px rgba(0,0,0,0.1)}
-.card h3{margin-bottom:10px;color:#CE1126}
-.products .card{border-top-color:#000}
-.contact-box{background:#000;color:#fff;text-align:center;padding:40px 20px;border-radius:20px}
-footer{background:#111;color:#ccc;text-align:center;padding:20px;font-size:14px}
-.whatsapp-float{position:fixed;bottom:20px;right:20px;background:#25D366;color:#fff;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;text-decoration:none;box-shadow:0 4px 10px rgba(0,0,0,0.3);z-index:200}
+body{font-family:Arial,sans-serif;background:#fff5f7;color:#333}
+header{background:linear-gradient(135deg,#ff004f,#ff7a00);padding:16px 20px;display:flex;justify-content:space-between;align-items:center;color:white;position:sticky;top:0;z-index:100}
+.logo{font-weight:900;font-size:22px}
+.btn{padding:12px 24px;border-radius:30px;border:none;font-weight:700;cursor:pointer}
+.btn-white{background:white;color:#ff004f}
+.btn-pink{background:#ff004f;color:white;width:100%;margin-top:12px;font-size:16px}
+.hero{background:linear-gradient(135deg,#ff004f,#ff3366,#ff7a00);color:white;text-align:center;padding:60px 20px 80px;border-radius:0 0 40px 40px}
+.hero h1{font-size:32px;margin-bottom:12px}
+.hero p{opacity:0.9;font-size:16px;margin-bottom:24px}
+.stats{display:flex;justify-content:center;gap:10px;margin-top:24px;flex-wrap:wrap}
+.stat{background:rgba(255,255,255,0.2);padding:10px 16px;border-radius:20px;font-size:13px}
+.section{padding:20px 14px;max-width:600px;margin:0 auto}
+.card{background:white;border-radius:20px;padding:16px;box-shadow:0 4px 20px rgba(0,0,0,0.08);margin-bottom:16px}
+.profiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.profile-card{background:white;border-radius:20px;overflow:hidden;box-shadow:0 4px 15px rgba(0,0,0,0.08)}
+.profile-card img{width:100%;height:180px;object-fit:cover}
+.profile-info{padding:10px}
+.profile-info h3{font-size:14px}
+.profile-info p{font-size:11px;color:#666;margin:3px 0}
+.badge{display:inline-block;background:#fff0f3;color:#ff004f;padding:3px 7px;border-radius:10px;font-size:10px;font-weight:700}
+.form input,.form select{width:100%;padding:13px;border-radius:12px;border:1.5px solid #eee;margin-bottom:10px;font-size:14px}
+.tabs{display:flex;gap:6px;margin-bottom:12px}
+.tab{flex:1;padding:9px;border-radius:20px;border:1.5px solid #ff004f;background:white;color:#ff004f;font-weight:700;font-size:13px}
+.tab.active{background:#ff004f;color:white}
+.footer{text-align:center;padding:25px;color:#999;font-size:11px}
 </style>
 </head>
 <body>
-<a href="https://wa.me/27700000000" class="whatsapp-float">💬</a>
 <header>
-<nav>
-<div class="logo">🇲🇼 Malawi Love SA 🇿🇦</div>
-<div><a href="#products">Products</a><a href="#contact">Contact</a></div>
-</nav>
+<div class="logo">Malawi Love SA ❤️</div>
+<button class="btn btn-white" onclick="document.getElementById('join').scrollIntoView({behavior:'smooth'})">Join Free</button>
 </header>
 
 <div class="hero">
-<h1>Authentic Malawian Products in South Africa</h1>
-<p>From Durban to all SA – Bringing Malawi Closer to You! Malawi Love ❤️</p>
-<a class="btn" href="https://wa.me/27700000000">Order on WhatsApp</a>
-<a class="btn btn-red" href="#products">View Products</a>
+<div style="font-size:40px">❤️</div>
+<h1>Find Your True Love in South Africa</h1>
+<p>For Everyone • FREE to Join • Men & Women</p>
+<button class="btn btn-white" onclick="document.getElementById('join').scrollIntoView({behavior:'smooth'})">Find Love Now - FREE</button>
+<div class="stats">
+<div class="stat">🔥 2,500+ Members</div>
+<div class="stat">💑 340 Couples</div>
+<div class="stat">📍 Durban • JHB • CPT</div>
+</div>
 </div>
 
-<section id="products" class="products">
-<h2>Our <span>Products</span></h2>
-<div class="grid">
-<div class="card"><h3>🍚 Kilombero Rice</h3><p>Original Malawian aromatic rice – Best quality from Malawi farms.</p><p><b>R150 / 5kg</b></p></div>
-<div class="card"><h3>🥜 Nsinjiro & Chitumbuwa Mix</h3><p>Groundnut flour & traditional snacks ingredients.</p><p><b>R80 / Pack</b></p></div>
-<div class="card"><h3>🐟 Usipa & Bonya</h3><p>Dried Lake Malawi fish – Authentic taste of home.</p><p><b>R120 / Pack</b></p></div>
-<div class="card"><h3>👕 Malawi Apparel</h3><p>Malawi Love T-shirts, Caps & Wrappers (Zitenje).</p><p><b>From R250</b></p></div>
-<div class="card"><h3>🫘 Beans & Soya Pieces</h3><p>Malawian sugar beans, soya pieces & spices.</p><p><b>R60 / Pack</b></p></div>
-<div class="card"><h3>📦 Malawi to SA Shipping</h3><p>We help you send goods from Malawi to SA & SA to Malawi.</p><p><b>Fast & Safe</b></p></div>
+<div class="section">
+<h2 style="margin-bottom:10px;font-size:20px">💘 People Near You</h2>
+<div class="tabs">
+<button class="tab active" onclick="filterGender('all',this)">All</button>
+<button class="tab" onclick="filterGender('women',this)">Women</button>
+<button class="tab" onclick="filterGender('men',this)">Men</button>
 </div>
-</section>
-
-<section>
-<h2>Why <span>Malawi Love SA?</span></h2>
-<div class="grid">
-<div class="card"><h3>✅ 100% Authentic</h3><p>Direct from Malawi – No fake products.</p></div>
-<div class="card"><h3>🚚 Nationwide Delivery</h3><p>Durban, JHB, Cape Town, PTA – We deliver everywhere!</p></div>
-<div class="card"><h3>💬 Trusted by Malawians</h3><p>Serving the Malawian community in SA with love.</p></div>
+<div class="profiles" id="profiles"></div>
 </div>
-</section>
 
-<section id="contact">
-<div class="contact-box">
-<h2 style="color:#fff">Contact Us Today</h2>
-<p style="margin:15px 0">Based in Durban, KZN – Delivering Across South Africa</p>
-<p>📍 Durban, South Africa<br>📱 WhatsApp: +27 70 000 0000<br>📧 malawilove.sa@gmail.com</p>
-<br>
-<a class="btn" href="https://wa.me/27700000000">Chat on WhatsApp Now</a>
+<div class="section" id="join">
+<div class="card form">
+<h2 style="margin-bottom:4px;font-size:18px">Join Free in 30 Seconds ❤️</h2>
+<p style="font-size:12px;color:#666;margin-bottom:12px">100% FREE for everyone!</p>
+<input id="name" placeholder="Your Name">
+<input id="age" type="number" placeholder="Your Age">
+<select id="gender"><option value="">I am...</option><option>Woman</option><option>Man</option></select>
+<select id="looking"><option value="">Looking for...</option><option>Women</option><option>Men</option><option>Both</option></select>
+<select id="city"><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Other SA City</option><option>Malawi</option></select>
+<input id="whatsapp" placeholder="WhatsApp Number (e.g. 071...)">
+<input id="bio" placeholder="About you (e.g. Love music, kind heart)">
+<input id="photo" type="file" accept="image/*">
+<button class="btn btn-pink" onclick="joinNow()">Create Profile FREE ❤️</button>
+<p style="font-size:10px;color:#999;text-align:center;margin-top:8px">Free forever • No payment • WhatsApp only</p>
 </div>
-</section>
+</div>
 
-<footer>
-<p>© 2026 Malawi Love SA – All Rights Reserved.<br>Made with ❤️ by Malawians in SA – Durban</p>
-<p>🇲🇼 Malawi – The Warm Heart of Africa 🇿🇦</p>
-</footer>
+<div class="section">
+<div class="card" style="text-align:center">
+<h3>How it Works?</h3>
+<p style="margin-top:10px;font-size:13px;line-height:1.6">1️⃣ <b>Join Free</b> - Add photo & WhatsApp<br>2️⃣ <b>Browse People</b> - Near Durban, JHB, CPT<br>3️⃣ <b>Chat on WhatsApp</b> - Direct & real!</p>
+</div>
+</div>
+
+<div class="footer">Malawi Love SA ❤️ Made with love in Durban<br>For Everyone • Free • Safe Love • 🇲🇼 🇿🇦</div>
+
+<script>
+const demo=[
+{name:"Thandi",age:24,gender:"women",city:"Durban",bio:"Kind, loves cooking",img:"https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=400"},
+{name:"James",age:27,gender:"men",city:"Johannesburg",bio:"Malawian in SA, hardworking",img:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400"},
+{name:"Blessings",age:22,gender:"women",city:"Cape Town",bio:"Student, funny",img:"https://images.unsplash.com/photo-1534751516642-a1af1ef26a56?w=400"},
+{name:"Patrick",age:29,gender:"men",city:"Durban",bio:"Respectful man looking for love",img:"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400"},
+{name:"Grace",age:25,gender:"women",city:"Pretoria",bio:"Loving, honest",img:"https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=400"},
+{name:"David",age:30,gender:"men",city:"Johannesburg",bio:"Entrepreneur, kind heart",img:"https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400"},
+];
+let all=[...demo];
+const saved=JSON.parse(localStorage.getItem('ml_profiles')||'[]');
+all=[...saved,...all];
+function render(list){
+ const c=document.getElementById('profiles');c.innerHTML='';
+ list.forEach(p=>{
+  const d=document.createElement('div');d.className='profile-card';
+  d.innerHTML=`<img src="${p.img}"><div class="profile-info"><h3>${p.name}, ${p.age}</h3><p>📍 ${p.city}</p><p>${p.bio}</p><span class="badge">${p.gender}</span><button class="btn btn-pink" style="padding:8px;margin-top:6px;font-size:12px" onclick="chat('${p.name}')">Chat 💬</button></div>`;
+  c.appendChild(d);
+ });
+}
+render(all);
+function filterGender(g,btn){
+ document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');
+ if(g==='all')render(all);else render(all.filter(p=>p.gender===g));
+}
+function chat(name){alert(`You want to chat with ${name}! In real app, this will open WhatsApp to ${name}. For now, people will message YOU as admin!`);}
+function joinNow(){
+ const name=document.getElementById('name').value;
+ const age=document.getElementById('age').value;
+ const gender=document.getElementById('gender').value.toLowerCase();
+ const city=document.getElementById('city').value;
+ const bio=document.getElementById('bio').value||'Looking for love';
+ const wa=document.getElementById('whatsapp').value;
+ const file=document.getElementById('photo').files[0];
+ if(!name||!age||!gender||!wa){alert('Fill Name, Age, I am, WhatsApp');return;}
+ let img="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400";
+ if(file){img=URL.createObjectURL(file);}
+ const newP={name,age,gender:gender.includes('w')?'women':'men',city,bio,img,whatsapp:wa};
+ const cur=JSON.parse(localStorage.getItem('ml_profiles')||'[]');cur.unshift(newP);
+ localStorage.setItem('ml_profiles',JSON.stringify(cur));
+ alert(`WELCOME ${name}! ❤️ Profile LIVE!`);location.reload();
+}
+</script>
 </body>
-  </html>
+</html>
