@@ -1,134 +1,178 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Malawi Love SA - Find Love ❤️</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Malawi Love SA - Swipe to Find Love ❤️</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Arial,sans-serif;background:#fff5f7;color:#333}
-header{background:linear-gradient(135deg,#ff004f,#ff7a00);padding:16px 20px;display:flex;justify-content:space-between;align-items:center;color:white;position:sticky;top:0;z-index:100}
-.logo{font-weight:900;font-size:22px}
-.btn{padding:12px 24px;border-radius:30px;border:none;font-weight:700;cursor:pointer}
-.btn-white{background:white;color:#ff004f}
-.btn-pink{background:#ff004f;color:white;width:100%;margin-top:12px;font-size:16px}
-.hero{background:linear-gradient(135deg,#ff004f,#ff3366,#ff7a00);color:white;text-align:center;padding:60px 20px 80px;border-radius:0 0 40px 40px}
-.hero h1{font-size:32px;margin-bottom:12px}
-.hero p{opacity:0.9;font-size:16px;margin-bottom:24px}
-.stats{display:flex;justify-content:center;gap:10px;margin-top:24px;flex-wrap:wrap}
-.stat{background:rgba(255,255,255,0.2);padding:10px 16px;border-radius:20px;font-size:13px}
-.section{padding:20px 14px;max-width:600px;margin:0 auto}
-.card{background:white;border-radius:20px;padding:16px;box-shadow:0 4px 20px rgba(0,0,0,0.08);margin-bottom:16px}
-.profiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.profile-card{background:white;border-radius:20px;overflow:hidden;box-shadow:0 4px 15px rgba(0,0,0,0.08)}
-.profile-card img{width:100%;height:180px;object-fit:cover}
-.profile-info{padding:10px}
-.profile-info h3{font-size:14px}
-.profile-info p{font-size:11px;color:#666;margin:3px 0}
-.badge{display:inline-block;background:#fff0f3;color:#ff004f;padding:3px 7px;border-radius:10px;font-size:10px;font-weight:700}
-.form input,.form select{width:100%;padding:13px;border-radius:12px;border:1.5px solid #eee;margin-bottom:10px;font-size:14px}
-.tabs{display:flex;gap:6px;margin-bottom:12px}
-.tab{flex:1;padding:9px;border-radius:20px;border:1.5px solid #ff004f;background:white;color:#ff004f;font-weight:700;font-size:13px}
-.tab.active{background:#ff004f;color:white}
-.footer{text-align:center;padding:25px;color:#999;font-size:11px}
+body{font-family:Arial,sans-serif;background:#0f0f0f;color:white;overflow-x:hidden}
+header{background:linear-gradient(90deg,#ff004f,#ff7a00);padding:12px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
+.logo{font-weight:900;font-size:20px}
+.icon-btn{background:rgba(255,255,255,0.2);border:none;color:white;width:36px;height:36px;border-radius:50%;font-size:18px}
+.hero-tinder{position:relative;height:82vh;max-width:420px;margin:0 auto;overflow:hidden}
+.card-stack{position:relative;width:100%;height:100%;padding:16px}
+.tinder-card{position:absolute;top:16px;left:16px;right:16px;bottom:100px;background:white;border-radius:24px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.5);color:#333;transition:transform 0.3s;cursor:grab;user-select:none}
+.tinder-card img{width:100%;height:72%;object-fit:cover;pointer-events:none}
+.tinder-info{padding:14px 16px}
+.tinder-info h2{font-size:20px}
+.tinder-info p{font-size:13px;color:#666;margin-top:4px}
+.tags{margin-top:8px;display:flex;gap:6px}
+.tag{background:#fff0f3;color:#ff004f;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.actions{position:absolute;bottom:10px;left:0;right:0;display:flex;justify-content:center;gap:20px;z-index:10}
+.action-btn{width:64px;height:64px;border-radius:50%;border:none;font-size:28px;box-shadow:0 4px 20px rgba(0,0,0,0.2);cursor:pointer}
+.pass{background:white;color:#ff4458}
+.like{background:linear-gradient(135deg,#ff004f,#ff7a00);color:white}
+.superlike{background:white;color:#00c6ff}
+.match-popup{position:fixed;inset:0;background:rgba(0,0,0,0.9);display:none;align-items:center;justify-content:center;flex-direction:column;z-index:999;text-align:center;padding:20px}
+.match-popup.show{display:flex}
+.btn{padding:14px 28px;border-radius:30px;border:none;font-weight:800;font-size:15px;cursor:pointer}
+.btn-pink{background:linear-gradient(135deg,#ff004f,#ff7a00);color:white;width:100%;margin-top:12px}
+.section{padding:16px;max-width:420px;margin:0 auto}
+.form-card{background:#1e1e1e;border-radius:20px;padding:16px;margin-top:10px}
+.form-card input,.form-card select{width:100%;padding:13px;border-radius:12px;border:1px solid #333;background:#2a2a2a;color:white;margin-bottom:10px;font-size:14px}
+.tabs{display:flex;gap:8px;margin:12px 0}
+.tab{flex:1;padding:10px;border-radius:20px;border:1px solid #333;background:#1e1e1e;color:#aaa;font-weight:700;font-size:13px}
+.tab.active{background:linear-gradient(135deg,#ff004f,#ff7a00);color:white;border:none}
+.grid-profiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.mini-card{background:#1e1e1e;border-radius:16px;overflow:hidden}
+.mini-card img{width:100%;height:140px;object-fit:cover}
+.mini-info{padding:8px}
+.like-badge{position:absolute;top:20px;left:20px;border:4px solid #00ff88;color:#00ff88;padding:6px 14px;border-radius:10px;font-weight:900;font-size:18px;transform:rotate(-20deg);opacity:0}
+.nope-badge{position:absolute;top:20px;right:20px;border:4px solid #ff4458;color:#ff4458;padding:6px 14px;border-radius:10px;font-weight:900;font-size:18px;transform:rotate(20deg);opacity:0}
 </style>
 </head>
 <body>
 <header>
 <div class="logo">Malawi Love SA ❤️</div>
-<button class="btn btn-white" onclick="document.getElementById('join').scrollIntoView({behavior:'smooth'})">Join Free</button>
+<div><button class="icon-btn" onclick="showGrid()">🔍</button> <button class="icon-btn" onclick="document.getElementById('join').scrollIntoView({behavior:'smooth'})">👤</button></div>
 </header>
 
-<div class="hero">
-<div style="font-size:40px">❤️</div>
-<h1>Find Your True Love in South Africa</h1>
-<p>For Everyone • FREE to Join • Men & Women</p>
-<button class="btn btn-white" onclick="document.getElementById('join').scrollIntoView({behavior:'smooth'})">Find Love Now - FREE</button>
-<div class="stats">
-<div class="stat">🔥 2,500+ Members</div>
-<div class="stat">💑 340 Couples</div>
-<div class="stat">📍 Durban • JHB • CPT</div>
+<div class="hero-tinder">
+<div class="card-stack" id="stack"></div>
+<div class="actions">
+<button class="action-btn pass" onclick="swipe('nope')">✕</button>
+<button class="action-btn superlike" onclick="swipe('super')">⭐</button>
+<button class="action-btn like" onclick="swipe('like')">❤️</button>
 </div>
 </div>
 
-<div class="section">
-<h2 style="margin-bottom:10px;font-size:20px">💘 People Near You</h2>
-<div class="tabs">
-<button class="tab active" onclick="filterGender('all',this)">All</button>
-<button class="tab" onclick="filterGender('women',this)">Women</button>
-<button class="tab" onclick="filterGender('men',this)">Men</button>
+<div class="match-popup" id="match">
+<h1 style="font-size:44px;color:#ff004f">It's a Match! ❤️</h1>
+<p id="matchText" style="color:white;margin:10px 0"></p>
+<img id="matchImg" src="" style="width:120px;height:120px;border-radius:50%;object-fit:cover;border:4px solid #ff004f;margin:16px 0">
+<div style="display:flex;flex-direction:column;gap:10px;width:100%;max-width:300px">
+<button class="btn btn-pink" onclick="chatMatch()">Chat on WhatsApp 💬</button>
+<button class="btn" style="background:white;color:#ff004f" onclick="closeMatch()">Keep Swiping</button>
 </div>
-<div class="profiles" id="profiles"></div>
+</div>
+
+<div class="section" id="gridSection" style="display:none">
+<h3>💘 All People - Durban, JHB, CPT</h3>
+<div class="tabs">
+<button class="tab active" onclick="filterGrid('all',this)">All</button>
+<button class="tab" onclick="filterGrid('women',this)">Women</button>
+<button class="tab" onclick="filterGrid('men',this)">Men</button>
+</div>
+<div class="grid-profiles" id="grid"></div>
+<button class="btn" style="margin-top:16px;width:100%;background:#1e1e1e;color:white;border:1px solid #333" onclick="showSwipe()">Back to Swipe ❤️</button>
 </div>
 
 <div class="section" id="join">
-<div class="card form">
-<h2 style="margin-bottom:4px;font-size:18px">Join Free in 30 Seconds ❤️</h2>
-<p style="font-size:12px;color:#666;margin-bottom:12px">100% FREE for everyone!</p>
+<div class="form-card">
+<h2 style="font-size:18px;margin-bottom:4px">Join FREE - Get Matches Tonight! 🔥</h2>
+<p style="font-size:12px;color:#888;margin-bottom:12px">WhatsApp Admin: 068 301 5925</p>
 <input id="name" placeholder="Your Name">
-<input id="age" type="number" placeholder="Your Age">
+<input id="age" type="number" placeholder="Age">
 <select id="gender"><option value="">I am...</option><option>Woman</option><option>Man</option></select>
-<select id="looking"><option value="">Looking for...</option><option>Women</option><option>Men</option><option>Both</option></select>
-<select id="city"><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Other SA City</option><option>Malawi</option></select>
-<input id="whatsapp" placeholder="WhatsApp Number (e.g. 071...)">
-<input id="bio" placeholder="About you (e.g. Love music, kind heart)">
+<select id="city"><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Other SA</option><option>Malawi</option></select>
+<input id="whatsapp" placeholder="Your WhatsApp Number">
+<input id="bio" placeholder="About you">
 <input id="photo" type="file" accept="image/*">
-<button class="btn btn-pink" onclick="joinNow()">Create Profile FREE ❤️</button>
-<p style="font-size:10px;color:#999;text-align:center;margin-top:8px">Free forever • No payment • WhatsApp only</p>
+<button class="btn btn-pink" onclick="joinNow()">Create Profile & Swipe ❤️</button>
 </div>
+<div style="text-align:center;padding:20px;color:#666;font-size:11px">Malawi Love SA ❤️ Admin: 068 301 5925<br>Free Dating • Like Tinder • 🇲🇼 🇿🇦</div>
 </div>
-
-<div class="section">
-<div class="card" style="text-align:center">
-<h3>How it Works?</h3>
-<p style="margin-top:10px;font-size:13px;line-height:1.6">1️⃣ <b>Join Free</b> - Add photo & WhatsApp<br>2️⃣ <b>Browse People</b> - Near Durban, JHB, CPT<br>3️⃣ <b>Chat on WhatsApp</b> - Direct & real!</p>
-</div>
-</div>
-
-<div class="footer">Malawi Love SA ❤️ Made with love in Durban<br>For Everyone • Free • Safe Love • 🇲🇼 🇿🇦</div>
 
 <script>
 const demo=[
-{name:"Thandi",age:24,gender:"women",city:"Durban",bio:"Kind, loves cooking",img:"https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=400"},
-{name:"James",age:27,gender:"men",city:"Johannesburg",bio:"Malawian in SA, hardworking",img:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400"},
-{name:"Blessings",age:22,gender:"women",city:"Cape Town",bio:"Student, funny",img:"https://images.unsplash.com/photo-1534751516642-a1af1ef26a56?w=400"},
-{name:"Patrick",age:29,gender:"men",city:"Durban",bio:"Respectful man looking for love",img:"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400"},
-{name:"Grace",age:25,gender:"women",city:"Pretoria",bio:"Loving, honest",img:"https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=400"},
-{name:"David",age:30,gender:"men",city:"Johannesburg",bio:"Entrepreneur, kind heart",img:"https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400"},
+{name:"Thandi",age:24,gender:"women",city:"Durban",bio:"Kind girl, loves cooking & family ❤️",img:"https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=400",tag:"🔥 Hot"},
+{name:"James",age:27,gender:"men",city:"Johannesburg",bio:"Malawian in SA, God fearing, hardworking",img:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400",tag:"✅ Verified"},
+{name:"Blessings",age:22,gender:"women",city:"Cape Town",bio:"Student, funny, loves amapiano",img:"https://images.unsplash.com/photo-1534751516642-a1af1ef26a56?w=400",tag:"⭐ New"},
+{name:"Patrick",age:29,gender:"men",city:"Durban",bio:"Respectful, honest, looking for true love",img:"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400",tag:"💎 Premium"},
+{name:"Grace",age:25,gender:"women",city:"Pretoria",bio:"Loving, honest, family oriented",img:"https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=400",tag:"🔥 Hot"},
+{name:"David",age:30,gender:"men",city:"Johannesburg",bio:"Entrepreneur, kind heart",img:"https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400",tag:"✅ Verified"},
 ];
-let all=[...demo];
-const saved=JSON.parse(localStorage.getItem('ml_profiles')||'[]');
-all=[...saved,...all];
-function render(list){
- const c=document.getElementById('profiles');c.innerHTML='';
- list.forEach(p=>{
-  const d=document.createElement('div');d.className='profile-card';
-  d.innerHTML=`<img src="${p.img}"><div class="profile-info"><h3>${p.name}, ${p.age}</h3><p>📍 ${p.city}</p><p>${p.bio}</p><span class="badge">${p.gender}</span><button class="btn btn-pink" style="padding:8px;margin-top:6px;font-size:12px" onclick="chat('${p.name}')">Chat 💬</button></div>`;
-  c.appendChild(d);
+let profiles=[...demo];let currentIndex=0;let lastMatched=null;const ADMIN_WA="27683015925";
+function renderStack(){
+ const stack=document.getElementById('stack');stack.innerHTML='';
+ if(currentIndex>=profiles.length){stack.innerHTML=`<div style="text-align:center;color:white;padding:40px"><h2>No more people 😢</h2><button class="btn btn-pink" onclick="currentIndex=0;renderStack()" style="margin-top:12px">Restart ❤️</button></div>`;return;}
+ for(let i=Math.min(currentIndex+2,profiles.length-1);i>=currentIndex;i--){
+  const p=profiles[i];const card=document.createElement('div');card.className='tinder-card';card.id='card-'+i;
+  card.style.zIndex=100-i;card.style.transform=`scale(${1-(i-currentIndex)*0.04}) translateY(${(i-currentIndex)*8}px)`;
+  card.innerHTML=`<div class="like-badge" id="like-${i}">LIKE ❤️</div><div class="nope-badge" id="nope-${i}">NOPE ✕</div><img src="${p.img}"><div style="padding:14px"><h2>${p.name}, ${p.age}</h2><p>📍 ${p.city} • ${p.gender}</p><p>${p.bio}</p><div class="tags"><span class="tag">${p.tag}</span><span class="tag">📍 ${p.city}</span></div></div>`;
+  let startX=0,currentX=0,dragging=false;
+  card.addEventListener('touchstart',e=>{startX=e.touches[0].clientX;dragging=true;});
+  card.addEventListener('touchmove',e=>{
+   if(!dragging)return;currentX=e.touches[0].clientX-startX;
+   card.style.transform=`translateX(${currentX}px) rotate(${currentX/10}deg)`;
+   document.getElementById(`like-${i}`).style.opacity=currentX>50?Math.min(currentX/100,1):0;
+   document.getElementById(`nope-${i}`).style.opacity=currentX<-50?Math.min(-currentX/100,1):0;
+  });
+  card.addEventListener('touchend',()=>{
+   dragging=false;
+   if(currentX>80)swipe('like');else if(currentX<-80)swipe('nope');else{card.style.transform='';document.getElementById(`like-${i}`).style.opacity=0;document.getElementById(`nope-${i}`).style.opacity=0;}
+   currentX=0;
+  });
+  stack.appendChild(card);
+ }
+}
+renderStack();
+function swipe(type){
+ if(currentIndex>=profiles.length)return;
+ const card=document.getElementById('card-'+currentIndex);const p=profiles[currentIndex];
+ if(type==='like'||type==='super'){
+  card.style.transform='translateX(500px) rotate(30deg)';
+  setTimeout(()=>{
+   lastMatched=p;
+   document.getElementById('matchText').innerText=`You and ${p.name} liked each other!`;
+   document.getElementById('matchImg').src=p.img;
+   document.getElementById('match').classList.add('show');
+  },300);
+ }else{card.style.transform='translateX(-500px) rotate(-30deg)';}
+ setTimeout(()=>{currentIndex++;renderStack();},350);
+}
+function closeMatch(){document.getElementById('match').classList.remove('show');}
+function chatMatch(){
+ const msg=encodeURIComponent(`Hi! ❤️ I got MATCH with ${lastMatched.name} on Malawi Love SA! My name is...`);
+ window.open(`https://wa.me/${ADMIN_WA}?text=${msg}`,'_blank');closeMatch();
+}
+function showGrid(){document.querySelector('.hero-tinder').style.display='none';document.getElementById('gridSection').style.display='block';renderGrid(profiles);}
+function showSwipe(){document.querySelector('.hero-tinder').style.display='block';document.getElementById('gridSection').style.display='none';}
+function renderGrid(list){
+ const g=document.getElementById('grid');g.innerHTML='';
+ list.forEach((p,idx)=>{
+  const d=document.createElement('div');d.className='mini-card';
+  d.innerHTML=`<img src="${p.img}"><div style="padding:8px"><h4 style="font-size:12px">${p.name}, ${p.age}</h4><p style="font-size:10px;color:#888">📍 ${p.city}</p><button class="btn btn-pink" style="padding:6px;font-size:11px;margin-top:4px" onclick="currentIndex=${idx};showSwipe();renderStack();swipe('like')">Like ❤️</button></div>`;
+  g.appendChild(d);
  });
 }
-render(all);
-function filterGender(g,btn){
- document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');
- if(g==='all')render(all);else render(all.filter(p=>p.gender===g));
+function filterGrid(g,btn){
+ document.querySelectorAll('#gridSection .tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');
+ if(g==='all')renderGrid(profiles);else renderGrid(profiles.filter(p=>p.gender===g));
 }
-function chat(name){alert(`You want to chat with ${name}! In real app, this will open WhatsApp to ${name}. For now, people will message YOU as admin!`);}
 function joinNow(){
  const name=document.getElementById('name').value;
  const age=document.getElementById('age').value;
- const gender=document.getElementById('gender').value.toLowerCase();
+ const gender=document.getElementById('gender').value;
+ const wa=document.getElementById('whatsapp').value;
  const city=document.getElementById('city').value;
  const bio=document.getElementById('bio').value||'Looking for love';
- const wa=document.getElementById('whatsapp').value;
- const file=document.getElementById('photo').files[0];
  if(!name||!age||!gender||!wa){alert('Fill Name, Age, I am, WhatsApp');return;}
- let img="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400";
- if(file){img=URL.createObjectURL(file);}
- const newP={name,age,gender:gender.includes('w')?'women':'men',city,bio,img,whatsapp:wa};
- const cur=JSON.parse(localStorage.getItem('ml_profiles')||'[]');cur.unshift(newP);
- localStorage.setItem('ml_profiles',JSON.stringify(cur));
- alert(`WELCOME ${name}! ❤️ Profile LIVE!`);location.reload();
+ alert(`WELCOME ${name}! ❤️ Profile added!`);window.scrollTo({top:0,behavior:'smooth'});
+ const msg=encodeURIComponent(`NEW MEMBER 🔥 Name:${name} Age:${age} City:${city} WA:${wa} Bio:${bio}`);
+ window.open(`https://wa.me/${ADMIN_WA}?text=${msg}`,'_blank');
 }
 </script>
 </body>
-</html>
+ </html>
