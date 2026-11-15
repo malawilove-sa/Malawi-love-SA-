@@ -1,0 +1,9 @@
+{
+  "name": "Malawi Love SA ❤️",
+  "short_name": "Malawi Love",
+  "start_url": "/Malawi-love-SA-/",
+  "display": "standalone",
+  "background_color": "#0f0f0f",
+  "theme_color": "#ff004f",
+  "icons": [{"src": "https://cdn-icons-png.flaticon.com/512/833/833472.png","sizes": "512x512","type": "image/png"}]
+  }
