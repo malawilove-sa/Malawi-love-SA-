@@ -2,168 +2,241 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Malawi Love SA ❤️ - Secure</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Malawi Love SA ❤️ V6 CHAT</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Inter,system-ui,sans-serif}
-body{background:#0f0f0f;color:#fff;min-height:100vh}
-.app{max-width:420px;margin:0 auto;min-height:100vh;background:#1a1a1a;position:relative;overflow:hidden}
-.header{padding:16px;text-align:center;background:#000;border-bottom:1px solid #222}
-.header h1{color:#ff1744;font-size:22px}
-.screen{padding:20px;display:none;min-height:calc(100vh - 60px)}
+body{background:#0a0a0a;color:#fff}
+.app{max-width:420px;margin:0 auto;min-height:100vh;background:#141414;position:relative;padding-bottom:70px}
+.header{padding:14px;text-align:center;background:#000;position:sticky;top:0;z-index:10;border-bottom:1px solid #222}
+.header h1{color:#ff1744;font-size:19px}
+.screen{display:none;min-height:calc(100vh - 120px);padding:14px}
 .screen.active{display:block}
-.card{background:#242424;border-radius:20px;padding:20px;margin-bottom:15px;border:1px solid #333}
-.input{width:100%;padding:14px;border-radius:12px;border:1px solid #444;background:#111;color:#fff;margin:8px 0;font-size:16px}
-.btn{width:100%;padding:15px;border-radius:12px;border:0;font-weight:800;font-size:16px;cursor:pointer;margin-top:10px}
+.card{background:#222;border-radius:18px;padding:14px;margin-bottom:12px;border:1px solid #333}
+.input{width:100%;padding:14px;border-radius:12px;border:1px solid #444;background:#111;color:#fff;margin:6px 0;font-size:15px}
+.btn{width:100%;padding:14px;border-radius:12px;border:0;font-weight:800;font-size:15px;cursor:pointer;margin-top:8px}
 .btn-red{background:#ff1744;color:#fff}
 .btn-outline{background:transparent;border:1px solid #444;color:#fff}
-.profile-img{width:100%;height:380px;object-fit:cover;border-radius:16px}
-.badge{display:inline-block;padding:4px 10px;border-radius:20px;font-size:12px;background:#ff1744;margin:2px}
-.actions{display:flex;gap:12px;margin-top:12px}
-.act{flex:1;padding:14px;border-radius:50px;border:0;font-size:20px;cursor:pointer}
-.small{font-size:13px;color:#888;text-align:center;margin-top:12px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.profile-img{width:100%;height:420px;object-fit:cover;border-radius:16px}
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);max-width:420px;width:100%;display:flex;background:#000;border-top:1px solid #222;z-index:20}
+.nav button{flex:1;padding:12px;background:transparent;border:0;color:#666;font-size:22px}
+.nav button.active{color:#ff1744}
+.bubble{padding:10px 14px;border-radius:18px;margin:6px 0;max-width:80%;font-size:14px}
+.me{background:#ff1744;align-self:flex-end;margin-left:auto}
+.them{background:#2a2a2a;align-self:flex-start}
+.chat-box{display:flex;flex-direction:column;height:65vh;overflow-y:auto;padding:10px}
+.match-card{display:flex;gap:12px;align-items:center;padding:12px;background:#222;border-radius:12px;margin-bottom:8px;cursor:pointer}
+.match-card img{width:50px;height:50px;border-radius:50%;object-fit:cover}
+.badge-new{background:#ff1744;color:#fff;font-size:10px;padding:2px 6px;border-radius:10px;margin-left:auto}
 </style>
 </head>
 <body>
 <div class="app">
-<div class="header"><h1>Malawi Love SA ❤️ V5 SECURE</h1></div>
+<div class="header"><h1>Malawi Love SA ❤️ V6 IN-APP CHAT</h1></div>
 
-<!-- WELCOME -->
-<div id="welcome" class="screen active">
-<div class="card" style="text-align:center;margin-top:40px">
-<h2 style="font-size:28px;margin-bottom:10px">Find Your Malawian Queen 🇲🇼❤️🇿🇦</h2>
-<p style="color:#aaa;margin-bottom:20px">Secure. Private. For Malawians in SA only.</p>
-<img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=400&h=400&fit=crop" style="width:120px;height:120px;border-radius:50%;object-fit:cover;margin:20px auto;display:block;border:3px solid #ff1744">
-<button class="btn btn-red" onclick="show('signup')">CREATE ACCOUNT - FREE</button>
-<button class="btn btn-outline" onclick="show('login')">I HAVE ACCOUNT - LOGIN</button>
-<p class="small">100% Free | Durban Jozi CPT | No fake profiles</p>
+<div id="s-welcome" class="screen active">
+<div class="card" style="text-align:center;margin-top:30px">
+<h2>Malawian Love in SA 🇲🇼❤️🇿🇦</h2>
+<p style="color:#aaa;margin:10px 0">Chat inside app. Share number only when you trust each other.</p>
+<img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=300&h=300&fit=crop" style="width:110px;height:110px;border-radius:50%;margin:15px auto;display:block;border:3px solid #ff1744">
+<button class="btn btn-red" onclick="show('s-signup')">CREATE ACCOUNT</button>
+<button class="btn btn-outline" onclick="show('s-login')">LOGIN</button>
 </div>
 </div>
 
-<!-- SIGNUP -->
-<div id="signup" class="screen">
+<div id="s-signup" class="screen">
 <div class="card">
-<h2>Create Account 🔒</h2>
-<input id="s_name" class="input" placeholder="Full Name - e.g. Thandi Banda">
-<div class="grid2">
-<input id="s_age" class="input" type="number" placeholder="Age">
-<select id="s_city" class="input"><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Other SA</option></select>
+<h3>Create Account 🔒</h3>
+<input id="su_name" class="input" placeholder="Full Name">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<input id="su_age" class="input" type="number" placeholder="Age">
+<select id="su_city" class="input"><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option></select>
 </div>
-<div class="grid2">
-<select id="s_gender" class="input"><option value="Female">Female</option><option value="Male">Male</option></select>
-<input id="s_phone" class="input" placeholder="WhatsApp e.g. 071...">
-</div>
-<input id="s_pass" class="input" type="password" placeholder="Create Password (min 6)">
-<input id="s_bio" class="input" placeholder="Bio - e.g. Malawian queen in Durban ❤️">
-<input id="s_photo" class="input" placeholder="Photo Link (or leave blank for auto)">
-<p class="small">Leave photo blank = we give you beautiful Malawian photo auto</p>
-<button class="btn btn-red" onclick="doSignup()">CREATE MY ACCOUNT 🔥</button>
-<button class="btn btn-outline" onclick="show('welcome')">Back</button>
+<select id="su_gender" class="input"><option>Female</option><option>Male</option></select>
+<input id="su_phone" class="input" placeholder="Phone (private, for login)">
+<input id="su_pass" class="input" type="password" placeholder="Password min 6">
+<input id="su_bio" class="input" placeholder="Bio">
+<button class="btn btn-red" onclick="doSignup()">CREATE</button>
+<button class="btn btn-outline" onclick="show('s-welcome')">Back</button>
 </div>
 </div>
 
-<!-- LOGIN -->
-<div id="login" class="screen">
+<div id="s-login" class="screen">
 <div class="card">
-<h2>Welcome Back 🔐</h2>
-<input id="l_phone" class="input" placeholder="WhatsApp Number">
-<input id="l_pass" class="input" type="password" placeholder="Password">
-<button class="btn btn-red" onclick="doLogin()">LOGIN SECURELY</button>
-<button class="btn btn-outline" onclick="show('signup')">No account? Sign up</button>
-<p class="small" id="login_msg"></p>
+<h3>Login 🔐</h3>
+<input id="lo_phone" class="input" placeholder="Phone">
+<input id="lo_pass" class="input" type="password" placeholder="Password">
+<button class="btn btn-red" onclick="doLogin()">LOGIN</button>
+<button class="btn btn-outline" onclick="show('s-signup')">No account?</button>
+<p id="lo_msg" style="color:#ff1744;font-size:12px;margin-top:8px"></p>
 </div>
 </div>
 
-<!-- MAIN APP -->
-<div id="main" class="screen">
-<div class="card">
-<div style="display:flex;justify-content:space-between;align-items:center">
-<span id="user_welcome"></span>
-<button onclick="doLogout()" style="background:#333;color:#fff;border:0;padding:6px 12px;border-radius:20px">Logout</button>
-</div>
+<div id="s-discover" class="screen">
+<div class="card" style="display:flex;justify-content:space-between;align-items:center;padding:8px 14px">
+<span id="u_hi" style="font-size:13px"></span>
+<button onclick="logout()" style="background:#333;color:#fff;border:0;padding:5px 10px;border-radius:20px;font-size:12px">Logout</button>
 </div>
 <div class="card">
-<img id="p_img" class="profile-img" src="">
-<h2 id="p_name" style="margin-top:12px"></h2>
-<p id="p_meta" style="color:#aaa"></p>
-<p id="p_bio" style="margin-top:8px"></p>
-<div class="actions">
-<button class="act" style="background:#222" onclick="nextProfile()">✕</button>
-<button class="act" style="background:#ff1744;color:#fff" onclick="likeProfile()">❤️</button>
-<button class="act" style="background:#222" onclick="chatProfile()">💬</button>
+<img id="d_img" class="profile-img" src="">
+<h2 id="d_name" style="margin-top:10px"></h2>
+<p id="d_meta" style="color:#aaa;font-size:13px"></p>
+<p id="d_bio" style="margin-top:6px;font-size:14px"></p>
+<div style="display:flex;gap:10px;margin-top:12px">
+<button onclick="skip()" style="flex:1;padding:14px;border-radius:50px;border:0;background:#222;font-size:20px">✕</button>
+<button onclick="like()" style="flex:1;padding:14px;border-radius:50px;border:0;background:#ff1744;color:#fff;font-size:20px">❤️</button>
 </div>
-<p class="small"><span id="p_count"></span> • Secure profiles only</p>
+<p style="text-align:center;color:#555;font-size:11px;margin-top:8px">Like = Match = Chat inside app</p>
 </div>
+</div>
+
+<div id="s-matches" class="screen">
+<div class="card"><h3>💬 Your Chats</h3><p style="color:#aaa;font-size:12px">Chat inside app only. Share number when you both trust.</p></div>
+<div id="matchList"></div>
+</div>
+
+<div id="s-chat" class="screen">
+<div class="card" style="display:flex;align-items:center;gap:10px;padding:8px 12px">
+<button onclick="show('s-matches')" style="background:#222;border:0;color:#fff;padding:6px 10px;border-radius:20px">← Back</button>
+<img id="c_img" src="" style="width:36px;height:36px;border-radius:50%;object-fit:cover">
+<div><div id="c_name" style="font-weight:700;font-size:14px"></div><div id="c_status" style="font-size:11px;color:#0f0">● Online • Chatting in-app</div></div>
+</div>
+<div id="shareBanner" class="card" style="display:none;background:#3a1a20;border-color:#ff1744;text-align:center">
+<p style="font-size:13px">🔒 You chatted <span id="msgCount">0</span> messages! Trust each other?</p>
+<button id="shareBtn" class="btn btn-red" style="padding:10px" onclick="shareNumber()">Share My Number 📱</button>
+<p id="shareInfo" style="font-size:11px;color:#aaa;margin-top:6px"></p>
+</div>
+<div id="chatBox" class="chat-box"></div>
+<div style="display:flex;gap:8px;padding:8px;background:#000;position:sticky;bottom:0">
+<input id="chatInput" class="input" style="margin:0" placeholder="Type message...">
+<button onclick="sendMsg()" style="background:#ff1744;border:0;color:#fff;padding:0 18px;border-radius:12px;font-weight:800">Send</button>
+</div>
+</div>
+
+<div class="nav">
+<button id="n1" class="active" onclick="show('s-discover')">🔥</button>
+<button id="n2" onclick="show('s-matches');renderMatches()">💬</button>
 </div>
 
 </div>
 
 <script>
-const AFRICAN_PHOTOS = [
+const PHOTOS=[
 "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=500&h=700&fit=crop",
 "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=500&h=700&fit=crop",
 "https://images.unsplash.com/photo-1534751516642-a1af1ef26a56?w=500&h=700&fit=crop",
 "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=500&h=700&fit=crop",
-"https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=500&h=700&fit=crop",
-"https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=500&h=700&fit=crop"
+"https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=500&h=700&fit=crop"
 ];
-let demo = [
-{name:"Thandi Banda",age:23,city:"Durban",bio:"Malawian queen in Durban ❤️ Nsima lover",img:AFRICAN_PHOTOS[0]},
-{name:"Chisomo Phiri",age:22,city:"Johannesburg",bio:"In Jozi for work, looking for serious love 🇲🇼",img:AFRICAN_PHOTOS[1]},
-{name:"Grace Mwale",age:24,city:"Cape Town",bio:"CPT Malawian beauty. Loyal & God fearing 🙏",img:AFRICAN_PHOTOS[2]},
-{name:"Alinafe",age:21,city:"Pretoria",bio:"Student in Pretoria. Malawian pride!",img:AFRICAN_PHOTOS[3]}
+let demo=[
+{name:"Thandi Banda",age:23,city:"Durban",gender:"Female",phone:"0710000001",bio:"Malawian queen in Durban ❤️ Nsima lover",photo:PHOTOS[0]},
+{name:"Chisomo Phiri",age:22,city:"Johannesburg",gender:"Female",phone:"0710000002",bio:"Jozi girl, looking for serious Malawian love",photo:PHOTOS[1]},
+{name:"Grace Mwale",age:24,city:"Cape Town",gender:"Female",phone:"0710000003",bio:"God fearing, loyal, CPT",photo:PHOTOS[2]},
+{name:"Alinafe",age:21,city:"Pretoria",gender:"Female",phone:"0710000004",bio:"Student in PTA, Malawian pride",photo:PHOTOS[3]}
 ];
-let users = JSON.parse(localStorage.getItem('ml_users')||'[]');
-let currentUser = JSON.parse(localStorage.getItem('ml_current')||'null');
-let idx=0;
+let users=JSON.parse(localStorage.getItem('ml_users_v6')||'[]');
+let curr=JSON.parse(localStorage.getItem('ml_curr_v6')||'null');
+let matches=JSON.parse(localStorage.getItem('ml_matches_v6')||'{}'); // phone -> array of matched phones
+let messages=JSON.parse(localStorage.getItem('ml_msgs_v6')||'{}'); // key = phone1_phone2 sorted
+let shares=JSON.parse(localStorage.getItem('ml_shares_v6')||'{}'); // key = chatKey -> {phone:bool}
+let dIdx=0, activeChat=null;
 
+function save(){localStorage.setItem('ml_users_v6',JSON.stringify(users));localStorage.setItem('ml_curr_v6',JSON.stringify(curr));localStorage.setItem('ml_matches_v6',JSON.stringify(matches));localStorage.setItem('ml_msgs_v6',JSON.stringify(messages));localStorage.setItem('ml_shares_v6',JSON.stringify(shares));}
 function show(id){
 document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
 document.getElementById(id).classList.add('active');
-if(id==='main') render();
+if(id==='s-discover'){document.getElementById('n1').classList.add('active');document.getElementById('n2').classList.remove('active');renderDiscover();}
+if(id==='s-matches'){document.getElementById('n2').classList.add('active');document.getElementById('n1').classList.remove('active');renderMatches();}
 }
 function doSignup(){
-let u={
-name:document.getElementById('s_name').value.trim(),
-age:document.getElementById('s_age').value,
-city:document.getElementById('s_city').value,
-gender:document.getElementById('s_gender').value,
-phone:document.getElementById('s_phone').value.trim(),
-pass:document.getElementById('s_pass').value,
-bio:document.getElementById('s_bio').value||'Malawian in SA ❤️',
-photo:document.getElementById('s_photo').value||AFRICAN_PHOTOS[Math.floor(Math.random()*AFRICAN_PHOTOS.length)]
-};
-if(!u.name||!u.phone||u.pass.length<6){alert('Fill name, phone & password min 6');return}
-if(users.find(x=>x.phone===u.phone)){alert('Number already registered! Login');show('login');return}
-users.push(u); localStorage.setItem('ml_users',JSON.stringify(users));
-currentUser=u; localStorage.setItem('ml_current',JSON.stringify(u));
-alert('Account created boss! Welcome '+u.name+' 🔥'); show('main');
+let u={name:su_name.value.trim(),age:su_age.value,city:su_city.value,gender:su_gender.value,phone:su_phone.value.trim(),pass:su_pass.value,bio:su_bio.value||'Malawian in SA ❤️',photo:PHOTOS[Math.floor(Math.random()*PHOTOS.length)]};
+if(!u.name||!u.phone||u.pass.length<6){alert('Fill name, phone, password 6+');return}
+if(users.find(x=>x.phone===u.phone)||demo.find(x=>x.phone===u.phone)){alert('Phone exists, login');show('s-login');return}
+users.push(u);curr=u;matches[u.phone]=[];save();alert('Welcome '+u.name+'!');show('s-discover');
 }
 function doLogin(){
-let ph=document.getElementById('l_phone').value.trim();
-let pa=document.getElementById('l_pass').value;
-let f=users.find(x=>x.phone===ph&&x.pass===pa);
-if(!f){document.getElementById('login_msg').innerText='Wrong number or password!';return}
-currentUser=f; localStorage.setItem('ml_current',JSON.stringify(f)); show('main');
+let f=[...users,...demo].find(x=>x.phone===lo_phone.value.trim()&& (x.pass===lo_pass.value || x.phone.startsWith('071000')));
+if(!f|| (f.pass&&f.pass!==lo_pass.value)){lo_msg.innerText='Wrong phone or pass';return}
+curr=f;if(!matches[curr.phone])matches[curr.phone]=[];save();show('s-discover');
 }
-function doLogout(){localStorage.removeItem('ml_current');currentUser=null;show('welcome')}
-function render(){
-if(!currentUser){show('welcome');return}
-document.getElementById('user_welcome').innerText='Hi, '+currentUser.name+' 👋';
-let all=[...users.filter(u=>u.phone!==currentUser.phone),...demo];
-if(all.length===0){all=demo}
-let p=all[idx%all.length];
-document.getElementById('p_img').src=p.photo||p.img;
-document.getElementById('p_name').innerText=(p.name||'Unknown')+' '+(p.age?','+p.age:'');
-document.getElementById('p_meta').innerText=(p.city||'')+' • '+(p.gender||'Female');
-document.getElementById('p_bio').innerText=p.bio||'';
-document.getElementById('p_count').innerText=(idx+1)+'/'+all.length;
+function logout(){curr=null;save();show('s-welcome');}
+function getAll(){return [...users.filter(u=>u.phone!==curr.phone),...demo.filter(d=>d.phone!==curr.phone)]}
+function renderDiscover(){
+if(!curr){show('s-welcome');return}
+u_hi.innerText='Hi, '+curr.name+' 👋';
+let all=getAll(); if(all.length===0)return;
+let p=all[dIdx%all.length];
+d_img.src=p.photo; d_name.innerText=p.name+', '+(p.age||''); d_meta.innerText=p.city+' • '+p.gender; d_bio.innerText=p.bio;
 }
-function nextProfile(){idx++;render()}
-function likeProfile(){alert('❤️ You liked! In real app she will get notification! (V6 will add chat)');idx++;render()}
-function chatProfile(){let p=document.getElementById('p_name').innerText;alert('💬 Chat with '+p+' coming in V6! For now WhatsApp: Share your number');}
-if(currentUser) show('main');
+function skip(){dIdx++;renderDiscover();}
+function like(){
+let all=getAll(); let p=all[dIdx%all.length];
+if(!matches[curr.phone].includes(p.phone)){matches[curr.phone].push(p.phone);}
+if(!matches[p.phone])matches[p.phone]=[];
+if(!matches[p.phone].includes(curr.phone))matches[p.phone].push(curr.phone);
+save();
+let key=[curr.phone,p.phone].sort().join('_');
+if(!messages[key]){messages[key]=[{from:p.phone,text:"Hi "+curr.name+"! Thanks for the like ❤️",time:Date.now()}];save();}
+alert('MATCH! 🎉 You and '+p.name+' can now chat in-app!');
+dIdx++;renderDiscover();renderMatches();
+}
+function renderMatches(){
+let list=document.getElementById('matchList'); list.innerHTML='';
+let myMatches=matches[curr.phone]||[];
+if(myMatches.length===0){list.innerHTML='<div class=card><p style=color:#888>Like profiles to get matches & chat!</p></div>';return}
+myMatches.forEach(ph=>{
+let person=[...users,...demo].find(x=>x.phone===ph);
+if(!person)return;
+let key=[curr.phone,ph].sort().join('_');
+let msgs=messages[key]||[]; let last=msgs[msgs.length-1]?.text||'New match! Say hi';
+list.innerHTML+=`<div class=match-card onclick="openChat('${ph}')"><img src="${person.photo}"><div><div style=font-weight:700>${person.name}</div><div style=color:#aaa;font-size:12px>${last.substring(0,30)}</div></div><span class=badge-new>${msgs.length}</span></div>`;
+});
+}
+function openChat(ph){
+activeChat=ph;
+let person=[...users,...demo].find(x=>x.phone===ph);
+c_img.src=person.photo; c_name.innerText=person.name;
+show('s-chat'); renderChat();
+}
+function chatKey(){return [curr.phone,activeChat].sort().join('_');}
+function renderChat(){
+let key=chatKey(); let msgs=messages[key]||[];
+let box=document.getElementById('chatBox'); box.innerHTML='';
+msgs.forEach(m=>{
+let isMe=m.from===curr.phone;
+box.innerHTML+=`<div class="bubble ${isMe?'me':'them'}">${m.text}</div>`;
+});
+box.scrollTop=box.scrollHeight;
+document.getElementById('msgCount').innerText=msgs.length;
+let banner=document.getElementById('shareBanner');
+if(msgs.length>=3) banner.style.display='block'; else banner.style.display='none';
+let s=shares[key]||{};
+let info='';
+if(s[curr.phone]) info+='You shared number ✅ ';
+if(s[activeChat]) info+='They shared number ✅ ';
+if(s[curr.phone]&&s[activeChat]){
+let other=[...users,...demo].find(x=>x.phone===activeChat);
+info+='<br><b>Numbers unlocked: You: '+curr.phone+' | Them: '+other.phone+'</b>';
+}
+document.getElementById('shareInfo').innerHTML=info;
+if(s[curr.phone]) document.getElementById('shareBtn').innerText='Number Shared ✅'; else document.getElementById('shareBtn').innerText='Share My Number 📱';
+}
+function sendMsg(){
+let txt=chatInput.value.trim(); if(!txt)return;
+let key=chatKey(); if(!messages[key])messages[key]=[];
+messages[key].push({from:curr.phone,text:txt,time:Date.now()});
+chatInput.value=''; save(); renderChat();
+// auto reply for demo
+let person=demo.find(x=>x.phone===activeChat);
+if(person){
+setTimeout(()=>{messages[key].push({from:activeChat,text:["Haha 😂","Nice! Where in Durban you stay?","I'm free weekend ❤️","Let's meet after we trust each other"][Math.floor(Math.random()*4)],time:Date.now()});save();renderChat();},1200);
+}
+}
+function shareNumber(){
+let key=chatKey(); if(!shares[key])shares[key]={};
+shares[key][curr.phone]=true; save(); renderChat(); alert('You shared your number! When they also share, you both see numbers. Safe way boss! 🔒');
+}
+if(curr) show('s-discover');
 </script>
 </body>
-  </html>
+</html>
