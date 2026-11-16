@@ -1,40 +1,40 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Malawi Love SA  QUEENS</title>
+<title>Malawi Love SA QUEENS V6.3</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Inter,system-ui,sans-serif}
 body{background:#f5f5f7;color:#111}
-.app{max-width:420px;margin:0 auto;min-height:100vh;background:#ffffff;position:relative;padding-bottom:70px;box-shadow:0 0 30px rgba(0,0,0,0.08)}
-.header{padding:14px;text-align:center;background:#ffffff;position:sticky;top:0;z-index:10;border-bottom:1px solid #eee}
+.app{max-width:420px;margin:0 auto;min-height:100vh;background:#fff;position:relative;padding-bottom:70px;box-shadow:0 0 30px rgba(0,0,0,0.08)}
+.header{padding:14px;text-align:center;background:#fff;position:sticky;top:0;z-index:10;border-bottom:1px solid #eee}
 .header h1{color:#ff1744;font-size:19px;font-weight:800}
 .screen{display:none;min-height:calc(100vh - 120px);padding:14px;background:#f8f8fa}
 .screen.active{display:block}
-.card{background:#ffffff;border-radius:18px;padding:14px;margin-bottom:12px;border:1px solid #eee;box-shadow:0 2px 10px rgba(0,0,0,0.04)}
+.card{background:#fff;border-radius:18px;padding:14px;margin-bottom:12px;border:1px solid #eee;box-shadow:0 2px 10px rgba(0,0,0,0.04)}
 .input{width:100%;padding:14px;border-radius:12px;border:1px solid #ddd;background:#fff;color:#111;margin:6px 0;font-size:15px}
 .btn{width:100%;padding:14px;border-radius:12px;border:0;font-weight:800;font-size:15px;cursor:pointer;margin-top:8px}
-.btn-red{background:#ff1744;color:#fff;box-shadow:0 4px 15px rgba(255,23,68,0.3)}
+.btn-red{background:#ff1744;color:#fff}
 .btn-outline{background:#fff;border:1px solid #ddd;color:#111}
 .profile-img{width:100%;height:460px;object-fit:cover;border-radius:16px}
-.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);max-width:420px;width:100%;display:flex;background:#ffffff;border-top:1px solid #eee;z-index:20}
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);max-width:420px;width:100%;display:flex;background:#fff;border-top:1px solid #eee;z-index:20}
 .nav button{flex:1;padding:12px;background:transparent;border:0;color:#aaa;font-size:22px}
 .nav button.active{color:#ff1744}
 .bubble{padding:10px 14px;border-radius:18px;margin:6px 0;max-width:80%;font-size:14px}
 .me{background:#ff1744;color:#fff;align-self:flex-end;margin-left:auto}
 .them{background:#f0f0f0;color:#111;align-self:flex-start}
 .chat-box{display:flex;flex-direction:column;height:65vh;overflow-y:auto;padding:10px;background:#fff}
-.match-card{display:flex;gap:12px;align-items:center;padding:12px;background:#fff;border-radius:12px;margin-bottom:8px;cursor:pointer;border:1px solid #eee}
+.match-card{display:flex;gap:12px;align-items:center;padding:12px;background:#fff;border-radius:12px;margin-bottom:8px;border:1px solid #eee}
 .match-card img{width:50px;height:50px;border-radius:50%;object-fit:cover}
 </style>
 </head>
 <body>
 <div class="app">
-<div class="header"><h1>Malawi Love SA  QUEENS 🇲🇼</h1></div>
+<div class="header"><h1>Malawi Love SA QUEENS 🇲🇼</h1></div>
 <div id="s-welcome" class="screen active">
 <div class="card" style="text-align:center;margin-top:30px">
-<h2 style="color:#111">Malawian Queens in SA 🇲🇼❤️🇿🇦</h2>
+<h2>Malawian Queens in SA 🇲🇼❤️🇿🇦</h2>
 <p style="color:#666;margin:10px 0">100% Malawian beauties only!</p>
 <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=300&h=300&fit=crop" style="width:110px;height:110px;border-radius:50%;margin:15px auto;display:block;border:3px solid #ff1744">
 <button class="btn btn-red" onclick="show('s-signup')">CREATE ACCOUNT</button>
@@ -84,17 +84,17 @@ body{background:#f5f5f7;color:#111}
 </div>
 </div>
 <div id="s-matches" class="screen">
-<div class="card"><h3 style="color:#111">💬 Your Chats</h3><p style="color:#666;font-size:12px">Chat inside app only.</p></div>
+<div class="card"><h3>💬 Your Chats</h3><p style="color:#666;font-size:12px">Chat inside app only.</p></div>
 <div id="matchList"></div>
 </div>
 <div id="s-chat" class="screen" style="background:#fff;padding:0">
-<div class="card" style="display:flex;align-items:center;gap:10px;padding:8px 12px;margin:0;border-radius:0;border-left:0;border-right:0">
+<div class="card" style="display:flex;align-items:center;gap:10px;padding:8px 12px;margin:0;border-radius:0">
 <button onclick="show('s-matches')" style="background:#f0f0f0;border:0;color:#111;padding:6px 10px;border-radius:20px">← Back</button>
 <img id="c_img" src="" style="width:36px;height:36px;border-radius:50%;object-fit:cover">
-<div><div id="c_name" style="font-weight:700;font-size:14px;color:#111"></div><div id="c_status" style="font-size:11px;color:#00c853">● Online • In-app chat</div></div>
+<div><div id="c_name" style="font-weight:700;font-size:14px"></div><div style="font-size:11px;color:#00c853">● Online</div></div>
 </div>
 <div id="shareBanner" class="card" style="display:none;background:#fff0f3;border-color:#ff1744;text-align:center;margin:8px">
-<p style="font-size:13px;color:#111">🔒 You chatted <span id="msgCount">0</span> messages!</p>
+<p style="font-size:13px">🔒 You chatted <span id="msgCount">0</span> messages!</p>
 <button id="shareBtn" class="btn btn-red" style="padding:10px" onclick="shareNumber()">Share My Number 📱</button>
 <p id="shareInfo" style="font-size:11px;color:#666;margin-top:6px"></p>
 </div>
@@ -110,16 +110,22 @@ body{background:#f5f5f7;color:#111}
 </div>
 </div>
 <script>
-// MALAWIAN QUEENS ONLY - AFRICAN BEAUTIES
 const PHOTOS=[
 "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=600&h=800&fit=crop",
-"https://images.unsplash.com/photo-1534751516642-a1af1ef26a56?w=600&h=800&fit=crop",
+"https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=600&h=800&fit=crop",
 "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=600&h=800&fit=crop",
-"https://images.unsplash.com/photo-1580489944761-15a19d654956?w=600&h=800&fit=crop",
+"https://images.unsplash.com/photo-1534751516642-a1af1ef26a56?w=600&h=800&fit=crop",
 "https://images.unsplash.com/photo-1512310604669-443f26c35f52?w=600&h=800&fit=crop"
 ];
 let demo=[
- { =JSON.parse(localStorage.getItem('ml_curr_v6')||'null');
+{name:"Thandi Banda",age:23,city:"Durban",gender:"Female",phone:"0710000001",bio:"Malawian queen in Durban ❤️ Nsima lover",photo:"https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=600&h=800&fit=crop"},
+{name:"Chisomo Phiri",age:22,city:"Johannesburg",gender:"Female",phone:"0710000002",bio:"Jozi girl, loyal Malawian, God fearing",photo:"https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=600&h=800&fit=crop"},
+{name:"Grace Mwale",age:24,city:"Cape Town",gender:"Female",phone:"0710000003",bio:"Cape Town Malawian beauty, serious love",photo:"https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=600&h=800&fit=crop"},
+{name:"Alinafe Mwanza",age:21,city:"Pretoria",gender:"Female",phone:"0710000004",bio:"Real African queen 🇲🇼 Malawian in PTA",photo:"https://images.unsplash.com/photo-1534751516642-a1af1ef26a56?w=600&h=800&fit=crop"},
+{name:"Tadala Chirwa",age:25,city:"Durban",gender:"Female",phone:"0710000005",bio:"Malawian mother, honest love in Durban",photo:"https://images.unsplash.com/photo-1512310604669-443f26c35f52?w=600&h=800&fit=crop"}
+];
+let users=JSON.parse(localStorage.getItem('ml_users_v6')||'[]');
+let curr=JSON.parse(localStorage.getItem('ml_curr_v6')||'null');
 let matches=JSON.parse(localStorage.getItem('ml_matches_v6')||'{}');
 let messages=JSON.parse(localStorage.getItem('ml_msgs_v6')||'{}');
 let shares=JSON.parse(localStorage.getItem('ml_shares_v6')||'{}');
@@ -132,20 +138,14 @@ function logout(){curr=null;save();show('s-welcome');}
 function getAll(){return [...users.filter(u=>u.phone!==curr.phone),...demo.filter(d=>d.phone!==curr.phone)]}
 function renderDiscover(){if(!curr){show('s-welcome');return}u_hi.innerText='Hi, '+curr.name+' 👋';let all=getAll();if(all.length===0)return;let p=all[dIdx%all.length];d_img.src=p.photo;d_name.innerText=p.name+', '+(p.age||'');d_meta.innerText=p.city+' • '+p.gender;d_bio.innerText=p.bio;}
 function skip(){dIdx++;renderDiscover();}
-function like(){let all=getAll();let p=all[dIdx%all.length];if(!matches[curr.phone].includeslet demo=[
-{name:"Thandi Banda",age:23,city:"Durban",gender:"Female",phone:"0710000001",bio:"Malawian queen in Durban ❤️ Nsima lover",photo:"https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=600&h=800&fit=crop&crop=face"},
-{name:"Chisomo Phiri",age:22,city:"Johannesburg",gender:"Female",phone:"0710000002",bio:"Jozi girl, loyal Malawian, God fearing",photo:"https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=600&h=800&fit=crop&crop=face"},
-{name:"Grace Mwale",age:24,city:"Cape Town",gender:"Female",phone:"0710000003",bio:"Cape Town Malawian beauty, serious love",photo:"https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=600&h=800&fit=crop&crop=face"},
-{name:"Alinafe Mwanza",age:21,city:"Pretoria",gender:"Female",phone:"0710000004",bio:"Real African queen 🇲🇼 Malawian in PTA",photo:"https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=600&h=800&fit=crop&crop=face"},
-{name:"Tadala Chirwa",age:25,city:"Durban",gender:"Female",phone:"0710000005",bio:"Malawian mother, honest love in Durban",photo:"https://images.unsplash.com/photo-1534751516642-a1af1ef26a56?w=600&h=800&fit=crop&crop=face"}
-];(p.phone))matches[curr.phone].push(p.phone);if(!matches[p.phone])matches[p.phone]=[];if(!matches[p.phone].includes(curr.phone))matches[p.phone].push(curr.phone);save();let key=[curr.phone,p.phone].sort().join('_');if(!messages[key]){messages[key]=[{from:p.phone,text:"Hi "+curr.name+"! Thanks for the like ❤️ Muli bwanji?",time:Date.now()}];save();}alert('MATCH! 🎉 You and '+p.name+' can now chat!');dIdx++;renderDiscover();renderMatches();}
+function like(){let all=getAll();let p=all[dIdx%all.length];if(!matches[curr.phone].includes(p.phone))matches[curr.phone].push(p.phone);if(!matches[p.phone])matches[p.phone]=[];if(!matches[p.phone].includes(curr.phone))matches[p.phone].push(curr.phone);save();let key=[curr.phone,p.phone].sort().join('_');if(!messages[key]){messages[key]=[{from:p.phone,text:"Hi "+curr.name+"! Thanks for the like ❤️ Muli bwanji?",time:Date.now()}];save();}alert('MATCH! 🎉 You and '+p.name+' can now chat!');dIdx++;renderDiscover();renderMatches();}
 function renderMatches(){let list=document.getElementById('matchList');list.innerHTML='';let myMatches=matches[curr.phone]||[];if(myMatches.length===0){list.innerHTML='<div class=card><p style=color:#888>Like profiles to get matches & chat!</p></div>';return}myMatches.forEach(ph=>{let person=[...users,...demo].find(x=>x.phone===ph);if(!person)return;let key=[curr.phone,ph].sort().join('_');let msgs=messages[key]||[];let last=msgs[msgs.length-1]?.text||'New match! Say hi';list.innerHTML+=`<div class=match-card onclick="openChat('${ph}')"><img src="${person.photo}"><div><div style=font-weight:700;color:#111>${person.name}</div><div style=color:#888;font-size:12px>${last.substring(0,30)}</div></div><span style="margin-left:auto;color:#ff1744;font-size:12px">${msgs.length}</span></div>`;});}
 function openChat(ph){activeChat=ph;let person=[...users,...demo].find(x=>x.phone===ph);c_img.src=person.photo;c_name.innerText=person.name;show('s-chat');renderChat();}
 function chatKey(){return [curr.phone,activeChat].sort().join('_');}
 function renderChat(){let key=chatKey();let msgs=messages[key]||[];let box=document.getElementById('chatBox');box.innerHTML='';msgs.forEach(m=>{let isMe=m.from===curr.phone;box.innerHTML+=`<div class="bubble ${isMe?'me':'them'}">${m.text}</div>`;});box.scrollTop=box.scrollHeight;document.getElementById('msgCount').innerText=msgs.length;let banner=document.getElementById('shareBanner');if(msgs.length>=3)banner.style.display='block';else banner.style.display='none';let s=shares[key]||{};let info='';if(s[curr.phone])info+='You shared ✅ ';if(s[activeChat])info+='They shared ✅ ';if(s[curr.phone]&&s[activeChat]){let other=[...users,...demo].find(x=>x.phone===activeChat);info+='<br><b>Numbers: You: '+curr.phone+' | Them: '+other.phone+'</b>';}document.getElementById('shareInfo').innerHTML=info;if(s[curr.phone])document.getElementById('shareBtn').innerText='Number Shared ✅';else document.getElementById('shareBtn').innerText='Share My Number 📱';}
-function sendMsg(){let txt=chatInput.value.trim();if(!txt)return;let key=chatKey();if(!messages[key])messages[key]=[];messages[key].push({from:curr.phone,text:txt,time:Date.now()});chatInput.value='';save();renderChat();let person=demo.find(x=>x.phone===activeChat);if(person){setTimeout(()=>{messages[key].push({from:activeChat,text:["Muli bwanji? 😍","Haha ndimakukondani ❤️","Where in Durban?","Tionane weekend?"][Math.floor(Math.random()*4)],time:Date.now()});save();renderChat();},1200);}}
+function sendMsg(){let txt=chatInput.value.trim();if(!txt)return;let key=chatKey();if(!messages[key])messages[key]=[];messages[key].push({from:curr.phone,text:txt,time:Date.now()});chatInput.value='';save();renderChat();let person=demo.find(x=>x.phone===activeChat);if(person){setTimeout(()=>{messages[key].push({from:activeChat,text:["Muli bwanji? 😍","Ndimakukondani ❤️","Where in Durban?","Tionane weekend?"][Math.floor(Math.random()*4)],time:Date.now()});save();renderChat();},1200);}}
 function shareNumber(){let key=chatKey();if(!shares[key])shares[key]={};shares[key][curr.phone]=true;save();renderChat();alert('You shared! When they also share, numbers unlock. Safe! 🔒');}
 if(curr) show('s-discover');
 </script>
 </body>
-</html>
+</html> 
