@@ -4,21 +4,21 @@
     "slug": "malawi-love-sa",
     "version": "9.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./IMG-20261117-WA3598.jpg",
     "splash": {
-      "image": "./assets/icon.png",
+      "image": "./IMG-20261117-WA3598.jpg",
       "resizeMode": "contain",
       "backgroundColor": "#0052CC"
     },
     "android": {
       "package": "com.malawilovesa.app",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/icon.png",
+        "foregroundImage": "./IMG-20261117-WA3598.jpg",
         "backgroundColor": "#0052CC"
       }
     },
     "web": {
-      "favicon": "./assets/icon.png"
+      "favicon": "./IMG-20261117-WA3598.jpg"
     }
   }
 }
