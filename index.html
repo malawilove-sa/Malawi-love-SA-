@@ -3,45 +3,61 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-* { margin:0; padding:0; box-sizing:border-box; font-family: -apple-system, sans-serif; }
-body { background:#fff5f6; }
-.header { display:flex; justify-content:space-between; align-items:center; padding:14px 20px; background:#fff5f6; }
-.header h2 { font-size:22px; color:#1a2b3c; }
-.card { margin:0 14px; background:white; border-radius:28px; overflow:hidden; box-shadow:0 8px 25px rgba(0,0,0,0.08); }
-.card img { width:100%; height:420px; object-fit:cover; }
-.info { padding:18px; text-align:center; }
-.info h1 { font-size:32px; color:#1a2b3c; }
-.info p { color:#888; font-size:19px; margin:4px 0 10px; }
-.tag { display:inline-block; background:#f2f2f2; padding:6px 14px; border-radius:20px; font-size:16px; }
-.like-btn { display:block; margin:18px 14px 10px; background:#ff5a7a; color:white; border:none; width:calc(100% - 28px); padding:16px; border-radius:30px; font-size:22px; font-weight:600; }
-.nav { position:fixed; bottom:12px; left:12px; right:12px; background:white; border-radius:25px; display:flex; justify-content:space-around; padding:14px 0; box-shadow:0 5px 20px rgba(0,0,0,0.08); }
-.nav div { text-align:center; font-size:14px; color:#888; }
-.nav .active { color:#ff5a7a; font-weight:700; }
+*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,sans-serif}
+body{background:#fff5f6;padding-bottom:120px}
+.header{display:flex;justify-content:space-between;align-items:center;padding:14px 20px}
+.header h2{font-size:22px;color:#1a2b3c}
+.card{margin:0 14px;background:#fff;border-radius:28px;overflow:hidden;box-shadow:0 8px 25px rgba(0,0,0,.08)}
+.card img{width:100%;height:420px;object-fit:cover;background:#eee}
+.info{padding:18px;text-align:center}
+.info h1{font-size:32px;color:#1a2b3c}
+.info p{color:#888;font-size:19px;margin:4px 0 10px}
+.tag{display:inline-block;background:#f2f2f2;padding:6px 14px;border-radius:20px}
+.like-btn{display:block;margin:12px 18px 18px;background:#ff5a7a;color:#fff;border:none;width:calc(100% - 36px);padding:16px;border-radius:30px;font-size:22px;font-weight:600}
+.nav{position:fixed;bottom:12px;left:12px;right:12px;background:#fff;border-radius:25px;display:flex;justify-content:space-around;padding:14px 0;box-shadow:0 5px 20px rgba(0,0,0,.08)}
+.nav div{text-align:center;font-size:14px;color:#888}
+.nav .active{color:#ff5a7a;font-weight:700}
+#status{text-align:center;padding:10px;color:#888}
 </style>
 </head>
 <body>
-
-<div class="header">
-  <span>‹</span><h2>Profiles</h2><span>⚙️</span>
-</div>
-
-<div class="card">
-  <img src="spahu.jpg">
-  <div class="info">
-    <h1>Spahu, 26</h1>
-    <p>📍 Durban</p>
-    <span class="tag">🎵 Music</span>
-  </div>
-</div>
-
-<button class="like-btn">♡ Like</button>
+<div class="header"><span>‹</span><h2>Profiles</h2><span>⚙️</span></div>
+<div id="status">Loading real profiles...</div>
+<div id="list"></div>
 
 <div class="nav">
-  <div class="active">👥<br>Profiles</div>
-  <div>♥<br>Likes</div>
-  <div>✨<br>Matches</div>
-  <div>💬<br>Messages</div>
+<div class="active">👥<br>Profiles</div><div>♥<br>Likes</div><div>✨<br>Matches</div><div>💬<br>Messages</div>
 </div>
 
+<script>
+const SUPABASE_URL = "https://fzkavixubxtrlptplymq.supabase.co";
+const SUPABASE_KEY = "sb_publishable_SnXO5On70bbqUONRFAX4EA_0JBAw_Sc";
+
+async function loadProfiles(){
+  try{
+    const res = await fetch(SUPABASE_URL + "/rest/v1/profiles?select=*", {
+      headers:{ "apikey": SUPABASE_KEY, "Authorization": "Bearer "+SUPABASE_KEY }
+    });
+    let data = await res.json();
+    if(!data || data.length===0){
+      data = [{name:"Spahu", age:26, city:"Durban", interests:"Music", photo_url:"https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800"}];
+      document.getElementById("status").innerText = "Showing demo - add profiles in Supabase to show real people";
+    } else {
+      document.getElementById("status").innerText = data.length + " real people found ❤️";
+    }
+    document.getElementById("list").innerHTML = data.map(p=>`
+      <div class="card">
+        <img src="${p.photo_url || p.photo || 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800'}">
+        <div class="info"><h1>${p.name || 'User'}, ${p.age || ''}</h1><p>📍 ${p.city || p.location || 'Durban'}</p><span class="tag">🎵 ${p.interests || 'Music'}</span></div>
+        <button class="like-btn" onclick="likeUser('${p.name}')">♡ Like</button>
+      </div><br>
+    `).join("");
+  }catch(e){
+    document.getElementById("status").innerText = "Error loading - check Supabase table name is 'profiles'";
+  }
+}
+function likeUser(name){ alert("You liked "+name+" ❤️"); }
+loadProfiles();
+</script>
 </body>
 </html>
