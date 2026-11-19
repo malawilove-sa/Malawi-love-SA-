@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -24,39 +24,21 @@ body{background:#fff5f6;padding-bottom:120px}
 <div class="header"><span>‹</span><h2>Profiles</h2><span>⚙️</span></div>
 <div id="status">Loading real profiles...</div>
 <div id="list"></div>
-
-<div class="nav">
-<div class="active">👥<br>Profiles</div><div>♥<br>Likes</div><div>✨<br>Matches</div><div>💬<br>Messages</div>
-</div>
-
+<div class="nav"><div class="active">👥<br>Profiles</div><div>♥<br>Likes</div><div>✨<br>Matches</div><div>💬<br>Messages</div></div>
 <script>
-const SUPABASE_URL = "https://fzkavixubxtrlptplymq.supabase.co";
-const SUPABASE_KEY = "sb_publishable_SnXO5On70bbqUONRFAX4EA_0JBAw_Sc";
-
+const SUPABASE_URL="https://fzkavixubxtrlptplymq.supabase.co";
+const SUPABASE_KEY="sb_publishable_SnXO5On70bbqUONRFAX4EA_0JBAw_Sc";
 async function loadProfiles(){
-  try{
-    const res = await fetch(SUPABASE_URL + "/rest/v1/profiles?select=*", {
-      headers:{ "apikey": SUPABASE_KEY, "Authorization": "Bearer "+SUPABASE_KEY }
-    });
-    let data = await res.json();
-    if(!data || data.length===0){
-      data = [{name:"Spahu", age:26, city:"Durban", interests:"Music", photo_url:"https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800"}];
-      document.getElementById("status").innerText = "Showing demo - add profiles in Supabase to show real people";
-    } else {
-      document.getElementById("status").innerText = data.length + " real people found ❤️";
-    }
-    document.getElementById("list").innerHTML = data.map(p=>`
-      <div class="card">
-        <img src="${p.photo_url || p.photo || 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800'}">
-        <div class="info"><h1>${p.name || 'User'}, ${p.age || ''}</h1><p>📍 ${p.city || p.location || 'Durban'}</p><span class="tag">🎵 ${p.interests || 'Music'}</span></div>
-        <button class="like-btn" onclick="likeUser('${p.name}')">♡ Like</button>
-      </div><br>
-    `).join("");
-  }catch(e){
-    document.getElementById("status").innerText = "Error loading - check Supabase table name is 'profiles'";
-  }
+  const res=await fetch(SUPABASE_URL+"/rest/v1/profiles?select=*",{headers:{"apikey":SUPABASE_KEY,"Authorization":"Bearer "+SUPABASE_KEY}});
+  const data=await res.json();
+  document.getElementById("status").innerText=data.length+" real people found ❤️";
+  document.getElementById("list").innerHTML=data.map(p=>`
+  <div class="card">
+    <img src="${p.photo_url || 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800'}">
+    <div class="info"><h1>${p.full_name || p.name}, ${p.age || ''}</h1><p>📍 ${p.city || 'Durban'}</p><span class="tag">🎵 ${p.interests || 'Music'}</span></div>
+    <button class="like-btn" onclick="alert('You liked ${p.full_name} ❤️')">♡ Like</button>
+  </div><br>`).join("");
 }
-function likeUser(name){ alert("You liked "+name+" ❤️"); }
 loadProfiles();
 </script>
 </body>
