@@ -1,90 +1,176 @@
- <!DOCTYPE html>
+     <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Malawi Love - Real App</title>
+<title>Malawi Love 🇲🇼 - Real App</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-body{font-family:Arial;background:#fff5f5;margin:0;padding:15px}
-h1{color:#e11d48;text-align:center}
-.card{background:white;border-radius:15px;padding:15px;margin:10px 0;box-shadow:0 2px 10px #ddd}
-input,select{width:100%;padding:12px;margin:6px 0;border:1px solid #ddd;border-radius:10px;box-sizing:border-box}
-button{width:100%;padding:13px;background:#e11d48;color:white;border:none;border-radius:10px;font-weight:bold;margin-top:8px}
-img{width:100%;border-radius:12px;height:260px;object-fit:cover}
-.tabs{display:flex;gap:8px} .tabs button{background:#ffe4e6;color:#e11d48}
+body{font-family:Arial;background:#fff0f3;margin:0;padding:12px}
+h1{text-align:center;color:#e91e63;margin:5px}
+.card{background:#fff;border-radius:20px;padding:15px;margin:14px 0;box-shadow:0 5px 20px rgba(0,0,0,.12);text-align:center}
+.card img{width:100%;height:340px;object-fit:cover;border-radius:15px}
+.name{font-size:23px;font-weight:bold;text-align:left}
+.info{text-align:left;color:#444;margin:4px 0}
+.actions{display:flex;gap:10px;margin-top:12px}
+button{border:none;border-radius:12px;padding:13px;font-weight:bold;cursor:pointer}
+.pass{flex:1;background:#eee;font-size:22px}
+.like{flex:1;background:#e91e63;color:#fff;font-size:18px}
+.chatbtn{flex:1;background:#25D366;color:#fff}
+.tab{background:#ffd6e0;color:#e91e63;padding:10px 14px;margin:3px}
+.tab.active{background:#e91e63;color:#fff}
+input,select{width:100%;padding:12px;border-radius:10px;border:1px solid #ddd;margin:6px 0;box-sizing:border-box}
+.big{width:100%;background:#e91e63;color:#fff}
+.green{width:100%;background:#25D366;color:#fff}
+.gray{width:100%;background:#eee}
+#msgs{max-height:280px;overflow:auto;text-align:left}
+.msg{padding:8px 10px;border-radius:10px;margin:5px 0;background:#f1f1f1}
+.msg.me{background:#ffe0ec;text-align:right}
 </style>
 </head>
 <body>
 <h1>❤️ Malawi Love 🇲🇼</h1>
-<p id="status" style="text-align:center">Connecting to your REAL Supabase...</p>
+<p id="status" style="text-align:center">Real App - Loading...</p>
 
-<div class="tabs">
-<button onclick="show('signup')">Sign Up</button>
-<button onclick="show('browse')">Browse People</button>
+<div id="authBox" class="card">
+<h2 id="authTitle">Login</h2>
+<input id="a_name" placeholder="Your Name (for Sign Up)">
+<input id="a_phone" placeholder="Phone - e.g 265983...">
+<input id="a_pass" type="password" placeholder="Password">
+<input id="a_age" type="number" placeholder="Age (for Sign Up)">
+<input id="a_city" placeholder="City - e.g Durban (for Sign Up)">
+<input id="a_interest" placeholder="Interests - e.g Singing (for Sign Up)">
+<input id="a_photo" placeholder="Photo Link - paste image link (for Sign Up) or leave empty">
+<button class="big" onclick="doLogin()">LOGIN</button>
+<button class="green" onclick="doSignup()">SIGN UP - CREATE MY PROFILE ❤️</button>
+<p style="font-size:12px;color:#888">Sign Up = creates your real profile in Supabase. Login = uses Phone + Password</p>
 </div>
 
-<div id="signup" class="card">
-<h3>Create Profile - Real Table</h3>
-<input id="full_name" placeholder="Full Name - e.g. Spahu">
-<input id="phone" placeholder="Phone - e.g. 071...">
-<input id="email" placeholder="Email">
-<input id="age" type="number" placeholder="Age - e.g. 20">
-<input id="city" placeholder="City - e.g. Durban">
-<input id="interests" placeholder="Interests - e.g. Music">
-<input id="photo_url" placeholder="Photo URL - paste image link">
-<button onclick="signup()">Create My Profile ❤️</button>
+<div id="appBox" style="display:none">
+<div style="text-align:center">
+<button class="tab active" id="tBrowse" onclick="showTab('browse')">Browse ❤️</button>
+<button class="tab" id="tChat" onclick="showTab('chat')">Chats 💬</button>
+<button class="tab" id="tMatch" onclick="showTab('match')">Matches 🔥</button>
+<button class="tab" onclick="logout()">Logout</button>
 </div>
-
-<div id="browse" class="card" style="display:none">
-<h3>Real People in Durban</h3>
-<button onclick="loadProfiles()">Refresh People</button>
-<div id="list"></div>
+<div id="browseTab"><div id="list"></div></div>
+<div id="chatTab" style="display:none">
+<div class="card">
+<h3 id="chatWith">Select a person to chat</h3>
+<div id="msgs"></div>
+<input id="msgInput" placeholder="Type message...">
+<button class="big" onclick="sendMsg()">Send ❤️</button>
+</div>
+</div>
+<div id="matchTab" style="display:none"><div id="matchList"></div></div>
 </div>
 
 <script>
 const SUPABASE_URL = "https://fzkavixubxtrlptplymq.supabase.co";
 const SUPABASE_KEY = "sb_publishable_SnXO5On70bbqUONRFAX4EA_0JBAw_Sc";
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let people=[], currentIndex=0, me=null, chattingWith=null;
+let saved = localStorage.getItem('malawi_user');
+if(saved){ me=JSON.parse(saved); afterLogin(); }
 
-function show(id){
-  document.getElementById('signup').style.display = id==='signup'?'block':'none';
-  document.getElementById('browse').style.display = id==='browse'?'block':'none';
-  if(id==='browse') loadProfiles();
+async function doSignup(){
+  const name=document.getElementById('a_name').value.trim();
+  const phone=document.getElementById('a_phone').value.trim();
+  const pass=document.getElementById('a_pass').value.trim();
+  const age=document.getElementById('a_age').value;
+  const city=document.getElementById('a_city').value.trim();
+  const interests=document.getElementById('a_interest').value.trim();
+  const photo=document.getElementById('a_photo').value.trim() || 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600';
+  if(!name||!phone||!pass) return alert("Fill Name, Phone and Password Dada!");
+  const {data, error} = await client.from('profiles').insert([{name, phone, password:pass, age: age?parseInt(age):null, city: city||'Durban', interests: interests||'', photo_url:photo}]).select().single();
+  if(error) return alert("Sign Up Error: "+error.message);
+  me=data; localStorage.setItem('malawi_user', JSON.stringify(me)); alert("Welcome "+name+"! Your REAL profile created ❤️"); afterLogin();
 }
-
-async function signup(){
-  const data = {
-    full_name: document.getElementById('full_name').value,
-    phone: document.getElementById('phone').value,
-    email: document.getElementById('email').value,
-    age: parseInt(document.getElementById('age').value),
-    city: document.getElementById('city').value,
-    interests: document.getElementById('interests').value,
-    photo_url: document.getElementById('photo_url').value || 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600',
-    role: 'user'
-  };
-  if(!data.full_name || !data.phone){ alert('Please fill Name and Phone'); return; }
-  const { error } = await supabaseClient.from('profiles').insert([data]);
-  if(error){ alert('Error: '+error.message); }
-  else{ alert('Welcome '+data.full_name+'! Your REAL profile is saved!'); show('browse'); }
+async function doLogin(){
+  const phone=document.getElementById('a_phone').value.trim();
+  const pass=document.getElementById('a_pass').value.trim();
+  if(!phone||!pass) return alert("Enter Phone + Password!");
+  const {data, error} = await client.from('profiles').select('*').eq('phone', phone).eq('password', pass).single();
+  if(error||!data) return alert("Wrong Phone or Password! Try Sign Up first.");
+  me=data; localStorage.setItem('malawi_user', JSON.stringify(me)); alert("Welcome back "+me.name+" ❤️"); afterLogin();
 }
-
-async function loadProfiles(){
-  document.getElementById('status').innerText = 'Loading real people...';
-  const { data, error } = await supabaseClient.from('profiles').select('*').order('created_at',{ascending:false});
-  if(error){ document.getElementById('status').innerText = 'Error: '+error.message; return; }
-  document.getElementById('status').innerText = 'Found '+data.length+' real people ✅';
-  document.getElementById('list').innerHTML = data.map(p=>`
-    <div class="card">
-      <img src="${p.photo_url || 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600'}">
-      <h3>${p.full_name}, ${p.age || ''}</h3>
-      <p>📍 ${p.city || ''} • 🎵 ${p.interests || ''}</p>
-      <p>📞 ${p.phone || ''}</p>
-      <button onclick="alert('You liked ${p.full_name}! ❤️')">❤️ Like ${p.full_name}</button>
-    </div>`).join('');
+function logout(){ localStorage.removeItem('malawi_user'); location.reload(); }
+async function afterLogin(){
+  document.getElementById('authBox').style.display='none';
+  document.getElementById('appBox').style.display='block';
+  document.getElementById('status').innerText="Logged in as "+me.name+" ✔️ Real App";
+  load();
 }
-loadProfiles();
+async function load(){
+  const {data, error} = await client.from('profiles').select('*').order('created_at',{ascending:false});
+  if(error){ document.getElementById('status').innerText="Error: "+error.message; return; }
+  people=(data||[]).filter(p=>p.phone!==me.phone);
+  document.getElementById('status').innerText="Found "+people.length+" REAL people ✔️ - You are "+me.name;
+  showOne(); loadMatches();
+}
+function showOne(){
+  const div=document.getElementById('list');
+  if(currentIndex>=people.length){ div.innerHTML="<p style='text-align:center'>No more people! Invite friends ❤️</p>"; return; }
+  const p=people[currentIndex];
+  div.innerHTML=`
+  <div class="card">
+    <img src="${p.photo_url || 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600'}">
+    <div class="name">${p.name||'No Name'}, ${p.age||''}</div>
+    <div class="info">📍 ${p.city||'Durban'} • 🎵 ${p.interests||''}</div>
+    <div class="info">📞 ${p.phone||''}</div>
+    <div class="actions">
+      <button class="pass" onclick="next()">✖️</button>
+      <button class="like" onclick="likePerson()">❤️ LIKE</button>
+      <button class="chatbtn" onclick="openChat('${p.name}','${p.phone}')">💬 Chat</button>
+    </div>
+  </div>
+  <p style="text-align:center;color:#888">${currentIndex+1} / ${people.length}</p>
+  <a href="https://wa.me/${p.phone}" target="_blank"><button class="green">Chat on WhatsApp 📲</button></a>`;
+}
+function next(){ currentIndex++; showOne(); }
+async function likePerson(){
+  const p=people[currentIndex];
+  const {error} = await client.from('likes').insert([{liker_name:me.name, liked_name:p.name}]);
+  if(error) alert(error.message);
+  else alert("You liked "+p.name+" ❤️");
+  // check if they liked you back = MATCH
+  const {data} = await client.from('likes').select('*').eq('liker_name', p.name).eq('liked_name', me.name);
+  if(data && data.length>0){
+    alert("🔥🔥 IT'S A MATCH with "+p.name+"!! ❤️❤️");
+    await client.from('matches').insert([{user1_name:me.name, user2_name:p.name}]);
+    loadMatches();
+  }
+  next();
+}
+async function loadMatches(){
+  const {data} = await client.from('matches').select('*');
+  const my = (data||[]).filter(m=>m.user1_name===me.name||m.user2_name===me.name);
+  document.getElementById('matchList').innerHTML = my.length? my.map(m=>{
+    const other = m.user1_name===me.name? m.user2_name : m.user1_name;
+    return `<div class="card"><b>🔥 MATCH with ${other} ❤️</b><br><button class="chatbtn" onclick="openChat('${other}','')">💬 Chat Now</button></div>`;
+  }).join('') : "<p style='text-align:center'>No matches yet. Like someone! ❤️</p>";
+}
+function openChat(name, phone){ chattingWith=name; showTab('chat'); document.getElementById('chatWith').innerText="Chatting with "+name; loadMsgs(); }
+function showTab(t){
+  document.getElementById('browseTab').style.display=t==='browse'?'block':'none';
+  document.getElementById('chatTab').style.display=t==='chat'?'block':'none';
+  document.getElementById('matchTab').style.display=t==='match'?'block':'none';
+  document.getElementById('tBrowse').classList.toggle('active',t==='browse');
+  document.getElementById('tChat').classList.toggle('active',t==='chat');
+  document.getElementById('tMatch').classList.toggle('active',t==='match');
+}
+async function loadMsgs(){
+  if(!chattingWith) return;
+  const {data}=await client.from('messages').select('*').order('created_at',{ascending:true});
+  const f=(data||[]).filter(m=>(m.sender_name===me.name && m.receiver_name===chattingWith)||(m.sender_name===chattingWith && m.receiver_name===me.name));
+  document.getElementById('msgs').innerHTML=f.map(m=>`<div class="msg ${m.sender_name===me.name?'me':''}"><b>${m.sender_name}:</b> ${m.message_text}</div>`).join('')||"<p>No messages yet. Say hi! 👋</p>";
+}
+async function sendMsg(){
+  const text=document.getElementById('msgInput').value.trim();
+  if(!text||!chattingWith) return alert("Select a person first!");
+  await client.from('messages').insert([{sender_name:me.name, receiver_name:chattingWith, message_text:text}]);
+  document.getElementById('msgInput').value=""; loadMsgs();
+}
+setInterval(()=>{ if(chattingWith) loadMsgs(); },3000);
 </script>
 </body>
 </html>
