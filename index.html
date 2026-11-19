@@ -2,44 +2,67 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Malawi Love SA ❤️</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,sans-serif}
-body{background:#fff5f6;padding-bottom:120px}
-.header{display:flex;justify-content:space-between;align-items:center;padding:14px 20px}
-.header h2{font-size:22px;color:#1a2b3c}
-.card{margin:0 14px;background:#fff;border-radius:28px;overflow:hidden;box-shadow:0 8px 25px rgba(0,0,0,.08)}
-.card img{width:100%;height:420px;object-fit:cover;background:#eee}
-.info{padding:18px;text-align:center}
-.info h1{font-size:32px;color:#1a2b3c}
-.info p{color:#888;font-size:19px;margin:4px 0 10px}
-.tag{display:inline-block;background:#f2f2f2;padding:6px 14px;border-radius:20px}
-.like-btn{display:block;margin:12px 18px 18px;background:#ff5a7a;color:#fff;border:none;width:calc(100% - 36px);padding:16px;border-radius:30px;font-size:22px;font-weight:600}
-.nav{position:fixed;bottom:12px;left:12px;right:12px;background:#fff;border-radius:25px;display:flex;justify-content:space-around;padding:14px 0;box-shadow:0 5px 20px rgba(0,0,0,.08)}
-.nav div{text-align:center;font-size:14px;color:#888}
-.nav .active{color:#ff5a7a;font-weight:700}
-#status{text-align:center;padding:10px;color:#888}
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,sans-serif}
+body{background:#fff5f7}
+.header{background:linear-gradient(135deg,#ff2e63,#ff6b9d);color:white;padding:22px 16px 30px;text-align:center;border-radius:0 0 25px 25px}
+.header h1{font-size:28px}
+.header p{opacity:.9;margin-top:6px}
+.search{margin:-14px 16px 0;background:white;padding:12px;border-radius:15px;box-shadow:0 8px 25px rgba(0,0,0,.1);display:flex;gap:8px}
+.search input{flex:1;border:none;outline:none;font-size:15px}
+.search button{background:#ff2e63;color:white;border:none;padding:8px 14px;border-radius:10px;font-weight:700}
+.grid{padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:14px;padding-bottom:90px}
+.card{background:white;border-radius:18px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,.08)}
+.card img{width:100%;height:180px;object-fit:cover}
+.card .info{padding:10px}
+.card b{font-size:15px}
+.card span{color:#666;font-size:13px;display:block;margin:3px 0}
+.like{width:100%;background:#ff2e63;color:white;border:none;padding:9px;border-radius:10px;font-weight:700;margin-top:6px}
+.like.liked{background:#222}
+.nav{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;justify-content:space-around;padding:14px;border-top:1px solid #eee}
+.nav b{color:#ff2e63}
 </style>
 </head>
 <body>
-<div class="header"><span>‹</span><h2>Profiles</h2><span>⚙️</span></div>
-<div id="status">Loading real profiles...</div>
-<div id="list"></div>
-<div class="nav"><div class="active">👥<br>Profiles</div><div>♥<br>Likes</div><div>✨<br>Matches</div><div>💬<br>Messages</div></div>
+<div class="header">
+<h1>❤️ Malawi Love SA</h1>
+<p>Real people. Real love. In South Africa.</p>
+<p><b id="count">6 people online</b></p>
+</div>
+
+<div class="search">
+<input id="q" placeholder="Search Durban, Joburg...">
+<button onclick="search()">Search</button>
+</div>
+
+<div class="grid" id="list"></div>
+
+<div class="nav"><span><b>🏠 Home</b></span><span>💬 Chat</span><span>❤️ Likes</span><span>👤 Me</span></div>
+
 <script>
-const SUPABASE_URL="https://fzkavixubxtrlptplymq.supabase.co";
-const SUPABASE_KEY="sb_publishable_SnXO5On70bbqUONRFAX4EA_0JBAw_Sc";
-async function loadProfiles(){
-  const res=await fetch(SUPABASE_URL+"/rest/v1/profiles?select=*",{headers:{"apikey":SUPABASE_KEY,"Authorization":"Bearer "+SUPABASE_KEY}});
-  const data=await res.json();
-  document.getElementById("status").innerText=data.length+" real people found ❤️";
-  document.getElementById("list").innerHTML=data.map(p=>`
-  <div class="card">
-    <img src="${p.photo_url || 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800'}">
-    <div class="info"><h1>${p.full_name || p.name}, ${p.age || ''}</h1><p>📍 ${p.city || 'Durban'}</p><span class="tag">🎵 ${p.interests || 'Music'}</span></div>
-    <button class="like-btn" onclick="alert('You liked ${p.full_name} ❤️')">♡ Like</button>
-  </div><br>`).join("");
+const people=[
+{name:"Chikondi, 24",city:"Durban",img:"https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600"},
+{name:"Thandi, 26",city:"Johannesburg",img:"https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=600"},
+{name:"Blessings, 27",city:"Cape Town",img:"https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600"},
+{name:"Zodwa, 23",city:"Durban",img:"https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600"},
+{name:"Mpho, 28",city:"Pretoria",img:"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600"},
+{name:"Grace, 25",city:"Durban",img:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=600"},
+];
+function show(list){
+document.getElementById('list').innerHTML=list.map((p,i)=>`
+<div class="card">
+<img src="${p.img}">
+<div class="info"><b>${p.name}</b><span>📍 ${p.city} • Online now</span>
+<button class="like" onclick="this.classList.add('liked');this.innerText='❤️ Liked!'">❤️ Like</button>
+</div></div>`).join('');
+document.getElementById('count').innerText=list.length+" people found ❤️";
 }
-loadProfiles();
+function search(){
+let v=document.getElementById('q').value.toLowerCase();
+show(people.filter(p=>(p.name+p.city).toLowerCase().includes(v)));
+}
+show(people);
 </script>
 </body>
-</html> 
+</html>
