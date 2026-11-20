@@ -10,7 +10,7 @@
 body{margin:0;font-family:Arial;background:#ffe6ef;padding:0 0 80px}
 .header{background:#ff2e63;color:#fff;text-align:center;padding:15px;font-size:22px;font-weight:bold;position:sticky;top:0;z-index:10}
 .card{background:#fff;margin:12px;border-radius:15px;padding:15px;text-align:center;box-shadow:0 2px 8px #0002}
-.card img{width:150px;height:150px;object-fit:cover;border-radius:50%;background:#eee}
+.card img{width:150px;height:150px;object-fit:cover;border-radius:50%;background:#eee;cursor:pointer}
 input,select{width:95%;padding:11px;margin:6px 0;border:1px solid #ddd;border-radius:10px;font-size:15px;box-sizing:border-box}
 button{width:100%;padding:12px;border:0;border-radius:12px;font-size:16px;font-weight:bold;margin:5px 0;cursor:pointer}
 .pink{background:#ff2e63;color:#fff}.black{background:#222;color:#fff}.orange{background:#ff9500;color:#fff}.grey{background:#eee}.red{background:#ff3b30;color:#fff}.green{background:#25D366;color:#fff}.purple{background:#9b59b6;color:#fff}
@@ -99,6 +99,11 @@ button{width:100%;padding:12px;border:0;border-radius:12px;font-size:16px;font-w
 <div id="chatBox" class="card hidden"><h2 id="chatTitle">💬 Chat</h2><p class="small" id="chatStatus">Connecting...</p><div id="chatMessages" class="chatBox"></div><div class="chatInputRow"><input id="chatInput" placeholder="Type message... ❤️"><button class="pink" onclick="sendMsg()">Send</button></div><button class="grey" onclick="backToChats()">⬅️ Back to Chats</button></div>
 </div>
 
+<div id="photoModal" onclick="this.style.display='none'" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:999;align-items:center;justify-content:center;flex-direction:column">
+<img id="bigPhoto" style="max-width:95%;max-height:85%;border-radius:15px;object-fit:contain">
+<p style="color:#fff;text-align:center">Tap anywhere to close ✖️</p>
+</div>
+
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyAcNs2UdpGCZYXSquuwMk2ze3odWd36oP0",
@@ -111,7 +116,6 @@ const firebaseConfig = {
 };
 let useFirebase=true; let db=null;
 try{ firebase.initializeApp(firebaseConfig); db=firebase.database(); document.getElementById('connStatus').textContent='● ONLINE - Real Chat ON'; document.getElementById('connStatus').style.color='#b6ffc2'; }catch(e){ useFirebase=false; document.getElementById('connStatus').textContent='● OFFLINE'; }
-
 const DEFAULT_PHOTO="data:image/svg+xml;utf8,[STRIPPED]";
 let users=JSON.parse(localStorage.getItem('ml_users')||'[]');
 let me=JSON.parse(localStorage.getItem('ml_me')||'null');
@@ -120,17 +124,17 @@ let likes=JSON.parse(localStorage.getItem('ml_likes')||'[]');
 let reports=JSON.parse(localStorage.getItem('ml_reports')||'[]');
 let chats=JSON.parse(localStorage.getItem('ml_chats')||'[]');
 let filter={city:'',min:'',max:''};
-let photoData=''; let editPhotoData=''; let currentChatId=null; let chatListener=null;
-
+let photoData=''; let editPhotoData=''; let currentChatId=null; let chatListener=null; let currentChatOtherId=null;
 function toggleEye(id,btn){let inp=document.getElementById(id);if(inp.type==='password'){inp.type='text';btn.textContent='🙈';}else{inp.type='password';btn.textContent='👁️';}}
 function cleanPhone(t){if(!t) return t; if(/\d{9,}/.test(t)) return 'Hi ❤️'; return t;}
 function normPhone(p){return String(p||'').replace(/\D/g,'');}
+function safeAbout(u){ if(!u || !u.about || u.about==="undefined" || u.about==="null" || u.about==="") return "No bio yet ❤️"; return u.about; }
+function openPhoto(src){ document.getElementById('bigPhoto').src=src||DEFAULT_PHOTO; let m=document.getElementById('photoModal'); m.style.display='flex'; }
 users.forEach(u=>{u.about=cleanPhone(u.about); if(!u.photo||u.photo.includes('via.placeholder')) u.photo=DEFAULT_PHOTO;});
 if(me){me.about=cleanPhone(me.about); if(!me.photo||me.photo.includes('via.placeholder')) me.photo=DEFAULT_PHOTO;}
 localStorage.setItem('ml_users',JSON.stringify(users));
 if(me) localStorage.setItem('ml_me',JSON.stringify(me));
 if(me) showMain();
-
 if(useFirebase && db){
   db.ref('users').on('value', snap=>{
     let fbUsers = snap.val() ? Object.values(snap.val()) : [];
@@ -198,7 +202,7 @@ list.forEach(u=>{
 let iLiked=likes.some(l=>l.from==me.id&&l.to==u.id);
 let theyLiked=likes.some(l=>l.from==u.id&&l.to==me.id);
 let isMatch=iLiked&&theyLiked;
-html+=`<div class="card ${isMatch?'matchCard':''}"><img src="${u.photo}" onerror="this.src='${DEFAULT_PHOTO}'"><h2>${u.name} - ${u.age}</h2><p>📍 ${u.city}</p><p>${u.about}</p>${isMatch?'<p style="color:#ff2e63;font-weight:bold">💘 IT\'S A MATCH!</p>':''}<button class="pink" onclick="likeUser(${u.id},'${u.name}')">❤️ LIKE</button><button class="pink" onclick="openChat(${u.id})">💬 CHAT</button><button class="black" onclick="blockUser(${u.id},'${u.name}')">🚫 BLOCK</button><button class="orange" onclick="reportUser(${u.id},'${u.name}')">🚨 REPORT</button></div>`;});
+html+=`<div class="card ${isMatch?'matchCard':''}"><img src="${u.photo}" onclick="openPhoto('${u.photo}')" onerror="this.src='${DEFAULT_PHOTO}'"><h2>${u.name} - ${u.age}</h2><p>📍 ${u.city}</p><p>${safeAbout(u)}</p>${isMatch?'<p style="color:#ff2e63;font-weight:bold">💘 IT\'S A MATCH!</p>':''}<button class="pink" onclick="likeUser(${u.id},'${u.name}')">❤️ LIKE</button><button class="pink" onclick="openChat(${u.id})">💬 CHAT</button><button class="black" onclick="blockUser(${u.id},'${u.name}')">🚫 BLOCK</button><button class="orange" onclick="reportUser(${u.id},'${u.name}')">🚨 REPORT</button></div>`;});
 document.getElementById('list').innerHTML=html;
 }
 function doSearch(){filter={city:document.getElementById('s_city').value,min:document.getElementById('s_min').value,max:document.getElementById('s_max').value};render();}
@@ -214,86 +218,95 @@ render();
 function blockUser(id,name){if(confirm("Block "+name+"?")){blocks.push(id);save();render();}}
 function unblockAll(){blocks=[];save();render();alert("Everyone unblocked");}
 function reportUser(id,name){let r=prompt("Why report "+name+"?");if(r){reports.push({from:me.id,to:id,reason:r});save();alert("Reported. Thank you 🚨");}}
-function showMyProfile(){hideAllSections();let b=document.getElementById('myProfileBox');b.classList.remove('hidden');document.getElementById('myProfileView').innerHTML=`<img src="${me.photo}" onerror="this.src='${DEFAULT_PHOTO}'"><h2>${me.name} - ${me.age}</h2><p>📍 ${me.city}</p><p>${me.about}</p><p class="small">🔒 Your phone ${me.phone||''} is private, not shown to others</p>`;}
+function showMyProfile(){hideAllSections();let b=document.getElementById('myProfileBox');b.classList.remove('hidden');document.getElementById('myProfileView').innerHTML=`<img src="${me.photo}" onclick="openPhoto('${me.photo}')" onerror="this.src='${DEFAULT_PHOTO}'"><h2>${me.name} - ${me.age}</h2><p>📍 ${me.city}</p><p>${safeAbout(me)}</p><p class="small">🔒 Your phone ${me.phone||''} is private, not shown to others</p>`;}
 function openEdit(){hideAllSections();let e=document.getElementById('editBox');e.classList.remove('hidden');document.getElementById('e_name').value=me.name;document.getElementById('e_age').value=me.age;document.getElementById('e_city').value=me.city;document.getElementById('e_about').value=me.about;document.getElementById('e_preview').src=me.photo;editPhotoData=me.photo;}
 function closeEdit(){showMyProfile();}
-function saveEdit(){let n=document.getElementById('e_name').value.trim(),a=document.getElementById('e_age').value;if(!n||!a) return alert("Fill Name and Age");if(a<18) return alert("Must be 18+");let ab=document.getElementById('e_about').value;if(/\d{9,}/.test(ab)){alert("Phone number removed for safety");ab='Hi ❤️';}me.name=n;me.age=a;me.city=document.getElementById('e_city').value;me.about=ab;me.photo=editPhotoData||me.photo;let idx=users.findIndex(u=>u.id==me.id);users[idx]=me;save();pushUserToFirebase(me);alert("✅ Profile Updated!");showMyProfile();render();}
-function deleteAccount(){if(confirm("DELETE your account forever?")){if(useFirebase && db) db.ref('users/'+me.id).remove(); users=users.filter(u=>u.id!==me.id);me=null;blocks=[];save();localStorage.removeItem('ml_me');alert("Account deleted. Bye 😢");location.reload();}}
-function showLikes(){hideAllSections();let b=document.getElementById('likesBox');b.classList.remove('hidden');let myLikes=likes.filter(l=>l.to==me.id);if(!myLikes.length) document.getElementById('likesList').innerHTML="No likes yet. Keep shining! ❤️";else{let h='';myLikes.forEach(l=>{let u=users.find(x=>x.id==l.from);if(u){let iLiked=likes.some(x=>x.from==me.id&&x.to==u.id);h+=`<div class="card ${iLiked?'matchCard':''}"><img src="${u.photo}" style="width:80px;height:80px"><b>${u.name} - ${u.age} - ${u.city}</b><p>${iLiked?'💘 IT\'S A MATCH!':'Liked you - Like back to MATCH!'}</p><button class="pink" onclick="likeUser(${u.id},'${u.name}')">${iLiked?'❤️ LIKED ✓':'❤️ LIKE BACK'}</button><button class="pink" onclick="openChat(${u.id})">💬 CHAT</button></div>`}});document.getElementById('likesList').innerHTML=h;}}
-function showMatches(){hideAllSections();let b=document.getElementById('matchesBox');b.classList.remove('hidden');let matchedIds=users.filter(u=>isMatchWith(u.id)).map(u=>u.id);if(!matchedIds.length){document.getElementById('matchesList').innerHTML='<p>No matches yet 😢<br>Like people, and if they like you back, they will appear here! 💘</p>';return;}let h='';matchedIds.forEach(id=>{let u=users.find(x=>x.id==id);h+=`<div class="card matchCard"><img src="${u.photo}" style="width:100px;height:100px"><h3>💘 MATCH! ${u.name} - ${u.age}</h3><p>📍 ${u.city}</p><p>${u.about}</p><button class="pink" onclick="openChat(${u.id})">💬 CHAT NOW</button></div>`});document.getElementById('matchesList').innerHTML=h;}
-function getChatKey(otherId){return [String(me.id),String(otherId)].sort().join('_');}
+function saveEdit(){
+let n=document.getElementById('e_name').value.trim(),a=document.getElementById('e_age').value;
+if(!n||!a) return alert("Fill Name and Age");
+if(a<18) return alert("Must be 18+");
+let ab=document.getElementById('e_about').value;
+if(/\d{9,}/.test(ab)){alert("Phone number removed for safety");ab='Hi ❤️';}
+me.name=n; me.age=a; me.city=document.getElementById('e_city').value; me.about=ab||'Hi ❤️'; me.photo=editPhotoData||me.photo;
+let idx=users.findIndex(u=>u.id==me.id); if(idx>=0) users[idx]=me;
+save(); pushUserToFirebase(me); showMyProfile(); alert("✅ Saved!");
+}
+function deleteAccount(){
+if(!confirm("Delete your account forever?")) return;
+if(useFirebase && db) db.ref('users/'+me.id).remove();
+users=users.filter(u=>u.id!==me.id);
+me=null; localStorage.removeItem('ml_me'); save(); location.reload();
+}
+function showLikes(){
+hideAllSections(); document.getElementById('likesBox').classList.remove('hidden');
+let likers = likes.filter(l=>l.to==me.id).map(l=>users.find(u=>u.id==l.from)).filter(Boolean);
+if(!likers.length) document.getElementById('likesList').innerHTML='<p>No likes yet. Keep waiting ❤️</p>';
+else document.getElementById('likesList').innerHTML = likers.map(u=>`<div class="card"><img src="${u.photo}" onclick="openPhoto('${u.photo}')"><h3>${u.name} - ${u.age}</h3><p>📍 ${u.city}</p><p>${safeAbout(u)}</p><button class="pink" onclick="likeUser(${u.id},'${u.name}')">❤️ LIKE BACK</button><button class="pink" onclick="openChat(${u.id})">💬 CHAT</button></div>`).join('');
+}
+function showMatches(){
+hideAllSections(); document.getElementById('matchesBox').classList.remove('hidden');
+let matched = users.filter(u=>u.id!==me.id && isMatchWith(u.id));
+if(!matched.length) document.getElementById('matchesList').innerHTML='<p>No matches yet. Like people and they like you back! 💘</p>';
+else document.getElementById('matchesList').innerHTML = matched.map(u=>`<div class="card matchCard"><img src="${u.photo}" onclick="openPhoto('${u.photo}')"><h3>${u.name} - ${u.age}</h3><p>📍 ${u.city}</p><p>${safeAbout(u)}</p><button class="pink" onclick="openChat(${u.id})">💬 CHAT NOW</button></div>`).join('');
+}
+function showChats(){
+hideAllSections(); document.getElementById('chatsBox').classList.remove('hidden');
+let others = users.filter(u=>u.id!==me.id);
+if(!others.length) document.getElementById('chatsList').innerHTML='<p>No people yet.</p>';
+else document.getElementById('chatsList').innerHTML = others.map(u=>`<div class="card"><img src="${u.photo}" onclick="openPhoto('${u.photo}')" style="width:80px;height:80px"><h3>${u.name} - ${u.age}</h3><button class="pink" onclick="openChat(${u.id})">💬 OPEN CHAT</button></div>`).join('');
+}
+function backToChats(){ showChats(); }
+
+// --- FIXED CHAT - REAL FIREBASE SEND ---
+function getChatId(otherId){
+  let a = Math.min(Number(me.id), Number(otherId));
+  let b = Math.max(Number(me.id), Number(otherId));
+  return a + "_" + b;
+}
 function openChat(otherId){
-currentChatId=otherId;
-let u=users.find(x=>x.id==otherId);
-if(!u) return alert("User not found");
-hideAllSections();
-document.getElementById('chatBox').classList.remove('hidden');
-document.getElementById('chatTitle').textContent='💬 Chat with '+u.name;
-document.getElementById('chatStatus').textContent='🟢 LIVE - Real person will see this!';
-renderChat();
-if(useFirebase && db){
-  let key=getChatKey(otherId);
-  chatListener='chats/'+key;
-  db.ref(chatListener).on('value', snap=>{
-    let fbMsgs = snap.val() ? Object.values(snap.val()) : [];
-    chats = chats.filter(c=>c.key!=key).concat(fbMsgs.map(m=>({key:key,from:m.from,to:m.to,text:m.text,time:m.time})));
-    save(); renderChat();
-  });
+  let other = users.find(u=>u.id==otherId);
+  if(!other) return alert("User not found - wait for sync");
+  currentChatOtherId = otherId;
+  currentChatId = getChatId(otherId);
+  hideAllSections();
+  document.getElementById('chatBox').classList.remove('hidden');
+  document.getElementById('chatTitle').textContent = "💬 Chat with " + other.name;
+  document.getElementById('chatStatus').textContent = "🟢 LIVE - " + other.name + " will see this!";
+  loadMessages();
 }
-}
-function renderChat(){
-let key=getChatKey(currentChatId);
-let msgs=chats.filter(c=>c.key==key);
-let box=document.getElementById('chatMessages');
-if(!msgs.length) box.innerHTML='<p class="small" style="text-align:center">Say Hi ❤️ Start chatting!</p>';
-else{box.innerHTML=msgs.map(m=>`<div class="msg ${m.from==me.id?'msgMine':'msgTheirs'}">${m.text}<div style="font-size:11px;opacity:0.7">${m.time}</div></div>`).join('');}
-box.scrollTop=box.scrollHeight;
+function loadMessages(){
+  let box = document.getElementById('chatMessages');
+  box.innerHTML = '<p class="small">Loading messages...</p>';
+  if(useFirebase && db){
+    if(chatListener) db.ref(chatListener).off();
+    chatListener = 'chats/' + currentChatId + '/messages';
+    db.ref(chatListener).on('value', snap=>{
+      let msgs = snap.val() ? Object.values(snap.val()) : [];
+      msgs.sort((a,b)=>a.time-b.time);
+      if(!msgs.length) box.innerHTML = '<p class="small">No messages yet. Say Hi ❤️</p>';
+      else box.innerHTML = msgs.map(m=>{
+        let mine = m.from == me.id;
+        return `<div class="msg ${mine?'msgMine':'msgTheirs'}">${m.text}</div>`;
+      }).join('');
+      box.scrollTop = box.scrollHeight;
+    });
+  } else {
+    box.innerHTML = "<p>Offline - check internet</p>";
+  }
 }
 function sendMsg(){
-let inp=document.getElementById('chatInput');
-let txt=inp.value.trim();
-if(!txt) return;
-let now=new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
-let key=getChatKey(currentChatId);
-let msg={from:me.id,to:currentChatId,text:txt,time:now};
-if(useFirebase && db){ db.ref('chats/'+key).push(msg); } else { chats.push({key:key,...msg}); save(); renderChat(); }
-inp.value='';
+  let inp = document.getElementById('chatInput');
+  let text = inp.value.trim();
+  if(!text) return;
+  if(!currentChatId) return alert("Open chat again");
+  if(useFirebase && db){
+    db.ref('chats/' + currentChatId + '/messages').push({ from: me.id, text: text, time: Date.now() });
+    inp.value = "";
+  } else {
+    alert("Not connected - check internet");
+  }
 }
-document.getElementById('chatInput').addEventListener('keypress',e=>{if(e.key==='Enter') sendMsg();});
-function showChats(){
-hideAllSections();
-document.getElementById('chatsBox').classList.remove('hidden');
-if(useFirebase && db){
-  db.ref('chats').once('value', snap=>{
-    let all = snap.val() || {};
-    let h='';
-    Object.keys(all).forEach(key=>{
-      if(!key.includes(String(me.id))) return;
-      let msgs = Object.values(all[key]);
-      let otherId = key.split('_').find(id=>id!=String(me.id));
-      let u = users.find(x=>String(x.id)==otherId);
-      if(!u) return;
-      let last = msgs[msgs.length-1];
-      h+=`<div class="card"><img src="${u.photo}" style="width:60px;height:60px"><b>${u.name}</b><p class="small">${last?last.text:''}</p><button class="pink" onclick="openChat(${u.id})">💬 OPEN CHAT</button></div>`;
-    });
-    if(!h) h='<p>No chats yet. Go Home and press CHAT on someone! ❤️</p>';
-    document.getElementById('chatsList').innerHTML=h;
-  });
-  return;
-}
-let keys=[...new Set(chats.filter(c=>c.from==me.id||c.to==me.id).map(c=>c.key))];
-if(!keys.length){document.getElementById('chatsList').innerHTML='<p>No chats yet. Go Home and press CHAT on someone! ❤️</p>';return;}
-let h='';
-keys.forEach(k=>{
-let otherId=k.split('_').find(id=>id!=me.id);
-let u=users.find(x=>x.id==otherId);
-if(!u) u={name:'Unknown',photo:DEFAULT_PHOTO,age:''};
-let last=chats.filter(c=>c.key==k).slice(-1)[0];
-h+=`<div class="card"><img src="${u.photo}" style="width:60px;height:60px"><b>${u.name}</b><p class="small">${last?last.text:''}</p><button class="pink" onclick="openChat(${u.id})">💬 OPEN CHAT</button></div>`;
-});
-document.getElementById('chatsList').innerHTML=h;
-}
-function backToChats(){showChats();}
+document.getElementById('chatInput').addEventListener('keydown', function(e){ if(e.key==='Enter') sendMsg(); });
 </script>
 </body>
 </html>
