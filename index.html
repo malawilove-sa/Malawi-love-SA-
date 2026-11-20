@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+  <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -25,6 +25,9 @@ button{width:100%;padding:12px;border:0;border-radius:12px;font-size:16px;font-w
 .msg{max-width:75%;padding:8px 10px;border-radius:12px;margin:5px 0;font-size:14px;word-wrap:break-word}
 .msgMine{background:#ff2e63;color:#fff;margin-left:auto;text-align:right}
 .msgTheirs{background:#eee;color:#000}
+.tick{font-size:11px;display:block;margin-top:3px}
+.tickSeen{color:#7ee2ff;font-weight:bold}
+.tickSent{color:#ffd6e0}
 .chatInputRow{display:flex;gap:6px}.chatInputRow input{flex:1}.chatInputRow button{width:70px}
 .matchCard{border:3px solid #ff2e63;background:linear-gradient(180deg,#fff,#ffe6ef)}
 </style>
@@ -79,7 +82,6 @@ button{width:100%;padding:12px;border:0;border-radius:12px;font-size:16px;font-w
 <button class="pink" onclick="showChats()">💬 Chats</button>
 <button class="red" onclick="logout()">Logout</button>
 </div>
-
 <div id="homeArea">
 <div class="card"><p class="small" id="peopleCount">Loading people...</p>
 <h3>🔍 Search</h3>
@@ -90,7 +92,6 @@ button{width:100%;padding:12px;border:0;border-radius:12px;font-size:16px;font-w
 </div>
 <div id="list"></div>
 </div>
-
 <div id="myProfileBox" class="card hidden"><h2>👤 My Profile</h2><div id="myProfileView"></div><button class="pink" onclick="openEdit()">✏️ EDIT MY PROFILE</button><button class="black" onclick="unblockAll()">Unblock Everyone</button><button class="red" onclick="deleteAccount()">🗑️ DELETE MY ACCOUNT</button></div>
 <div id="editBox" class="card hidden"><h2>✏️ Edit My Profile</h2><input id="e_name" placeholder="Name"><input id="e_age" type="number" placeholder="Age"><select id="e_city"><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Polokwane</option><option>Blantyre</option><option>Lilongwe</option><option>Other</option></select><input id="e_about" placeholder="About you"><label>Change Photo:<input id="e_photo" type="file" accept="image/*"></label><img id="e_preview" style="width:120px;height:120px;border-radius:50%;object-fit:cover"><button class="green" onclick="saveEdit()">✅ SAVE CHANGES</button><button class="grey" onclick="closeEdit()">Cancel</button></div>
 <div id="likesBox" class="card hidden"><h2>❤️ Who Liked You</h2><p class="small">Like them back to make a MATCH! 💘</p><div id="likesList"></div></div>
@@ -169,13 +170,13 @@ if(ph.length<9) return alert("Enter a valid Phone Number");
 let found=users.find(u=>normPhone(u.phone)==ph);
 if(found) return alert("This phone number already has account! Go to LOGIN tab.");
 if(/\d{9,}/.test(ab)){alert("⚠️ Phone number removed from About for safety."); ab='Hi ❤️';}
-me={id:Date.now(),name:n,age:a,city:c,phone:ph,about:ab||'Hi ❤️',photo:photoData||DEFAULT_PHOTO,pass:p,secret:sec.toLowerCase()};users.push(me);save();pushUserToFirebase(me);showMain();alert("Welcome "+me.name+" ❤️ Account created! Now people on OTHER phones can see you!");
+me={id:Date.now(),name:n,age:a,city:c,phone:ph,about:ab||'Hi ❤️',photo:photoData||DEFAULT_PHOTO,pass:p,secret:sec.toLowerCase()};users.push(me);save();pushUserToFirebase(me);showMain();alert("Welcome "+me.name+" ❤️ Account created!");
 }
 function doLogin(){
 let ph=normPhone(document.getElementById('l_phone').value),p=document.getElementById('l_pass').value;
 if(!ph||!p) return alert("Type Phone Number + Password");
 let found=users.find(u=>normPhone(u.phone)==ph);
-if(!found) return alert("No account with phone '"+ph+"'. Go to SIGN UP first! If you signed up on another phone, wait 5 sec and try again - it is syncing.");
+if(!found) return alert("No account with phone '"+ph+"'. Go to SIGN UP first!");
 if(found.pass!==p) return alert("Wrong password! Press FORGOT PASSWORD? if you forgot.");
 me=found; me.about=cleanPhone(me.about); save(); showMain(); alert("Welcome back "+me.name+" ❤️");
 }
@@ -189,7 +190,7 @@ if(found.secret!==sec) return alert("Wrong Secret Word! Try again.");
 found.pass=np; save(); pushUserToFirebase(found); alert("✅ Password changed! Now login with your NEW password."); hideForgot();
 }
 function showMain(){document.getElementById('authBox').classList.add('hidden');document.getElementById('mainBox').classList.remove('hidden');showHome();}
-function hideAllSections(){document.getElementById('homeArea').classList.add('hidden');document.getElementById('myProfileBox').classList.add('hidden');document.getElementById('editBox').classList.add('hidden');document.getElementById('likesBox').classList.add('hidden');document.getElementById('matchesBox').classList.add('hidden');document.getElementById('chatsBox').classList.add('hidden');document.getElementById('chatBox').classList.add('hidden'); if(chatListener && db){ db.ref(chatListener).off(); chatListener=null; }}
+function hideAllSections(){document.getElementById('homeArea').classList.add('hidden');document.getElementById('myProfileBox').classList.add('hidden');document.getElementById('editBox').classList.add('hidden');document.getElementById('likesBox').classList.add('hidden');document.getElementById('matchesBox').classList.add('hidden');document.getElementById('chatsBox').classList.add('hidden');document.getElementById('chatBox').classList.add('hidden'); if(chatListener && db){ db.ref(chatListener).off(); chatListener=null; } }
 function showHome(){hideAllSections();document.getElementById('homeArea').classList.remove('hidden');render();}
 function logout(){me=null;localStorage.removeItem('ml_me');location.reload();}
 function render(){
@@ -197,7 +198,7 @@ let html='';let list=users.filter(u=>u.id!==me.id && !blocks.includes(u.id));
 if(filter.city) list=list.filter(u=>u.city==filter.city);
 if(filter.min) list=list.filter(u=>Number(u.age)>=Number(filter.min));
 if(filter.max) list=list.filter(u=>Number(u.age)<=Number(filter.max));
-if(!list.length) html='<div class="card">No people found. Try CLEAR SEARCH.<br><span class="small">If your friend signed up on another phone, wait 10 seconds - Firebase is syncing...</span></div>';
+if(!list.length) html='<div class="card">No people found. Try CLEAR SEARCH.</div>';
 list.forEach(u=>{
 let iLiked=likes.some(l=>l.from==me.id&&l.to==u.id);
 let theyLiked=likes.some(l=>l.from==u.id&&l.to==me.id);
@@ -207,106 +208,101 @@ document.getElementById('list').innerHTML=html;
 }
 function doSearch(){filter={city:document.getElementById('s_city').value,min:document.getElementById('s_min').value,max:document.getElementById('s_max').value};render();}
 function clearSearch(){filter={city:'',min:'',max:''};document.getElementById('s_city').value='';document.getElementById('s_min').value='';document.getElementById('s_max').value='';render();}
-function isMatchWith(otherId){return likes.some(l=>l.from==me.id&&l.to==otherId) && likes.some(l=>l.from==otherId&&l.to==me.id);}
 function likeUser(id,name){
 if(likes.some(l=>l.from==me.id&&l.to==id)) return alert("You already liked "+name+" ❤️");
 likes.push({from:me.id,to:id});save();pushLikeToFirebase();
-if(likes.some(l=>l.from==id&&l.to==me.id)){alert("💘💘💘 IT'S A MATCH with "+name+"! 💘💘💘\nYou both liked each other! Go to Matches and CHAT now!");}
-else{alert("Liked "+name+" ❤️ If she likes you back, it will become a MATCH!");}
+if(likes.some(l=>l.from==id&&l.to==me.id)){alert("💘💘💘 IT'S A MATCH with "+name+"! 💘💘💘");}
+else{alert("Liked "+name+" ❤️");}
 render();
 }
 function blockUser(id,name){if(confirm("Block "+name+"?")){blocks.push(id);save();render();}}
 function unblockAll(){blocks=[];save();render();alert("Everyone unblocked");}
 function reportUser(id,name){let r=prompt("Why report "+name+"?");if(r){reports.push({from:me.id,to:id,reason:r});save();alert("Reported. Thank you 🚨");}}
-function showMyProfile(){hideAllSections();let b=document.getElementById('myProfileBox');b.classList.remove('hidden');document.getElementById('myProfileView').innerHTML=`<img src="${me.photo}" onclick="openPhoto('${me.photo}')" onerror="this.src='${DEFAULT_PHOTO}'"><h2>${me.name} - ${me.age}</h2><p>📍 ${me.city}</p><p>${safeAbout(me)}</p><p class="small">🔒 Your phone ${me.phone||''} is private, not shown to others</p>`;}
-function openEdit(){hideAllSections();let e=document.getElementById('editBox');e.classList.remove('hidden');document.getElementById('e_name').value=me.name;document.getElementById('e_age').value=me.age;document.getElementById('e_city').value=me.city;document.getElementById('e_about').value=me.about;document.getElementById('e_preview').src=me.photo;editPhotoData=me.photo;}
-function closeEdit(){showMyProfile();}
+function showMyProfile(){hideAllSections();let b=document.getElementById('myProfileBox');b.classList.remove('hidden');document.getElementById('myProfileView').innerHTML=`<img src="${me.photo}" onclick="openPhoto('${me.photo}')" onerror="this.src='${DEFAULT_PHOTO}'"><h2>${me.name} - ${me.age}</h2><p>📍 ${me.city}</p><p>${safeAbout(me)}</p>`;}
+function openEdit(){hideAllSections();document.getElementById('editBox').classList.remove('hidden');document.getElementById('e_name').value=me.name;document.getElementById('e_age').value=me.age;document.getElementById('e_city').value=me.city;document.getElementById('e_about').value=me.about;document.getElementById('e_preview').src=me.photo;editPhotoData='';}
+function closeEdit(){hideAllSections();showMyProfile();}
 function saveEdit(){
-let n=document.getElementById('e_name').value.trim(),a=document.getElementById('e_age').value;
-if(!n||!a) return alert("Fill Name and Age");
-if(a<18) return alert("Must be 18+");
-let ab=document.getElementById('e_about').value;
-if(/\d{9,}/.test(ab)){alert("Phone number removed for safety");ab='Hi ❤️';}
-me.name=n; me.age=a; me.city=document.getElementById('e_city').value; me.about=ab||'Hi ❤️'; me.photo=editPhotoData||me.photo;
+me.name=document.getElementById('e_name').value.trim()||me.name;
+me.age=document.getElementById('e_age').value||me.age;
+me.city=document.getElementById('e_city').value;
+let ab=document.getElementById('e_about').value.trim();
+if(/\d{9,}/.test(ab)){ab='Hi ❤️'; alert("Phone removed from About");}
+me.about=ab||me.about;
+if(editPhotoData) me.photo=editPhotoData;
 let idx=users.findIndex(u=>u.id==me.id); if(idx>=0) users[idx]=me;
-save(); pushUserToFirebase(me); showMyProfile(); alert("✅ Saved!");
+save(); pushUserToFirebase(me); alert("Saved ✅"); showMyProfile();
 }
-function deleteAccount(){
-if(!confirm("Delete your account forever?")) return;
-if(useFirebase && db) db.ref('users/'+me.id).remove();
-users=users.filter(u=>u.id!==me.id);
-me=null; localStorage.removeItem('ml_me'); save(); location.reload();
+function showLikes(){hideAllSections();document.getElementById('likesBox').classList.remove('hidden');let who=likes.filter(l=>l.to==me.id).map(l=>users.find(u=>u.id==l.from)).filter(Boolean);let html='';if(!who.length) html='<p>No likes yet. Keep shining! ❤️</p>';who.forEach(u=>{html+=`<div class="card"><img src="${u.photo}" onclick="openPhoto('${u.photo}')"><h3>${u.name} - ${u.age}</h3><p>📍 ${u.city}</p><button class="pink" onclick="likeUser(${u.id},'${u.name}')">❤️ LIKE BACK</button><button class="pink" onclick="openChat(${u.id})">💬 CHAT</button></div>`});document.getElementById('likesList').innerHTML=html;}
+function showMatches(){hideAllSections();document.getElementById('matchesBox').classList.remove('hidden');let ms=users.filter(u=>u.id!==me.id && likes.some(l=>l.from==me.id&&l.to==u.id) && likes.some(l=>l.from==u.id&&l.to==me.id));let html='';if(!ms.length) html='<p>No matches yet. Like people and they like you back! 💘</p>';ms.forEach(u=>{html+=`<div class="card matchCard"><img src="${u.photo}" onclick="openPhoto('${u.photo}')"><h3>${u.name} - ${u.age}</h3><p>📍 ${u.city}</p><button class="pink" onclick="openChat(${u.id})">💬 CHAT NOW</button></div>`});document.getElementById('matchesList').innerHTML=html;}
+function showChats(){hideAllSections();document.getElementById('chatsBox').classList.remove('hidden');if(!useFirebase||!db){document.getElementById('chatsList').innerHTML='<p>Chats need internet.</p>';return;}
+db.ref('chats').once('value', snap=>{
+  let all=snap.val()||{}; let ids=new Set();
+  Object.keys(all).forEach(cid=>{
+    let parts=cid.split('_'); if(parts.includes(String(me.id))){
+      let other=parts.find(p=>p!=String(me.id)); if(other) ids.add(Number(other));
+    }
+  });
+  // also add matches
+  users.forEach(u=>{ if(u.id!==me.id && likes.some(l=>l.from==me.id&&l.to==u.id)) ids.add(u.id); });
+  let html=''; if(!ids.size) html='<p>No chats yet. Go to Home and tap CHAT! 💬</p>';
+  ids.forEach(id=>{
+    let u=users.find(x=>x.id==id); if(!u) return;
+    html+=`<div class="card"><img src="${u.photo}" onclick="openPhoto('${u.photo}')" style="width:80px;height:80px"><h3>${u.name}</h3><button class="pink" onclick="openChat(${u.id})">💬 OPEN CHAT</button></div>`;
+  });
+  document.getElementById('chatsList').innerHTML=html;
+});
 }
-function showLikes(){
-hideAllSections(); document.getElementById('likesBox').classList.remove('hidden');
-let likers = likes.filter(l=>l.to==me.id).map(l=>users.find(u=>u.id==l.from)).filter(Boolean);
-if(!likers.length) document.getElementById('likesList').innerHTML='<p>No likes yet. Keep waiting ❤️</p>';
-else document.getElementById('likesList').innerHTML = likers.map(u=>`<div class="card"><img src="${u.photo}" onclick="openPhoto('${u.photo}')"><h3>${u.name} - ${u.age}</h3><p>📍 ${u.city}</p><p>${safeAbout(u)}</p><button class="pink" onclick="likeUser(${u.id},'${u.name}')">❤️ LIKE BACK</button><button class="pink" onclick="openChat(${u.id})">💬 CHAT</button></div>`).join('');
-}
-function showMatches(){
-hideAllSections(); document.getElementById('matchesBox').classList.remove('hidden');
-let matched = users.filter(u=>u.id!==me.id && isMatchWith(u.id));
-if(!matched.length) document.getElementById('matchesList').innerHTML='<p>No matches yet. Like people and they like you back! 💘</p>';
-else document.getElementById('matchesList').innerHTML = matched.map(u=>`<div class="card matchCard"><img src="${u.photo}" onclick="openPhoto('${u.photo}')"><h3>${u.name} - ${u.age}</h3><p>📍 ${u.city}</p><p>${safeAbout(u)}</p><button class="pink" onclick="openChat(${u.id})">💬 CHAT NOW</button></div>`).join('');
-}
-function showChats(){
-hideAllSections(); document.getElementById('chatsBox').classList.remove('hidden');
-let others = users.filter(u=>u.id!==me.id);
-if(!others.length) document.getElementById('chatsList').innerHTML='<p>No people yet.</p>';
-else document.getElementById('chatsList').innerHTML = others.map(u=>`<div class="card"><img src="${u.photo}" onclick="openPhoto('${u.photo}')" style="width:80px;height:80px"><h3>${u.name} - ${u.age}</h3><button class="pink" onclick="openChat(${u.id})">💬 OPEN CHAT</button></div>`).join('');
-}
-function backToChats(){ showChats(); }
+function getChatId(otherId){ return [String(me.id), String(otherId)].sort().join('_'); }
 
-// --- FIXED CHAT - REAL FIREBASE SEND ---
-function getChatId(otherId){
-  let a = Math.min(Number(me.id), Number(otherId));
-  let b = Math.max(Number(me.id), Number(otherId));
-  return a + "_" + b;
-}
+// ===== CHAT WITH SEEN / BLUE TICKS =====
 function openChat(otherId){
-  let other = users.find(u=>u.id==otherId);
-  if(!other) return alert("User not found - wait for sync");
-  currentChatOtherId = otherId;
-  currentChatId = getChatId(otherId);
+  currentChatOtherId=otherId; currentChatId=getChatId(otherId);
+  let other=users.find(u=>u.id==otherId);
   hideAllSections();
   document.getElementById('chatBox').classList.remove('hidden');
-  document.getElementById('chatTitle').textContent = "💬 Chat with " + other.name;
-  document.getElementById('chatStatus').textContent = "🟢 LIVE - " + other.name + " will see this!";
-  loadMessages();
-}
-function loadMessages(){
-  let box = document.getElementById('chatMessages');
-  box.innerHTML = '<p class="small">Loading messages...</p>';
+  document.getElementById('chatTitle').textContent='💬 Chat with '+(other?other.name:'');
+  document.getElementById('chatStatus').textContent='Live Chat ❤️';
+  document.getElementById('chatMessages').innerHTML='<p class="small">Loading messages...</p>';
+  if(chatListener && db){ db.ref(chatListener).off(); }
+  chatListener='chats/'+currentChatId;
   if(useFirebase && db){
-    if(chatListener) db.ref(chatListener).off();
-    chatListener = 'chats/' + currentChatId + '/messages';
     db.ref(chatListener).on('value', snap=>{
-      let msgs = snap.val() ? Object.values(snap.val()) : [];
-      msgs.sort((a,b)=>a.time-b.time);
-      if(!msgs.length) box.innerHTML = '<p class="small">No messages yet. Say Hi ❤️</p>';
-      else box.innerHTML = msgs.map(m=>{
-        let mine = m.from == me.id;
-        return `<div class="msg ${mine?'msgMine':'msgTheirs'}">${m.text}</div>`;
-      }).join('');
-      box.scrollTop = box.scrollHeight;
+      let data=snap.val()||{};
+      let keys=Object.keys(data);
+      let html='';
+      if(!keys.length) html='<p class="small">No messages yet. Say Hi ❤️</p>';
+      keys.forEach(k=>{
+        let m=data[k];
+        if(m.from==me.id){
+          let tick = m.seen ? '<span class="tick tickSeen">✓✓ Seen</span>' : '<span class="tick tickSent">✓ Sent</span>';
+          html+=`<div class="msg msgMine">${m.text||''}${tick}</div>`;
+        } else {
+          html+=`<div class="msg msgTheirs">${m.text||''}</div>`;
+        }
+      });
+      let box=document.getElementById('chatMessages'); box.innerHTML=html; box.scrollTop=box.scrollHeight;
+      // MARK THEIR MESSAGES AS SEEN - I opened the chat, so I saw them
+      keys.forEach(k=>{
+        let m=data[k];
+        if(m.to==me.id && !m.seen){
+          db.ref(chatListener+'/'+k+'/seen').set(true);
+        }
+      });
     });
-  } else {
-    box.innerHTML = "<p>Offline - check internet</p>";
   }
 }
 function sendMsg(){
-  let inp = document.getElementById('chatInput');
-  let text = inp.value.trim();
-  if(!text) return;
-  if(!currentChatId) return alert("Open chat again");
+  let inp=document.getElementById('chatInput');
+  let txt=inp.value.trim(); if(!txt) return;
+  if(!currentChatId || !currentChatOtherId) return alert("Open a chat first");
+  inp.value='';
   if(useFirebase && db){
-    db.ref('chats/' + currentChatId + '/messages').push({ from: me.id, text: text, time: Date.now() });
-    inp.value = "";
-  } else {
-    alert("Not connected - check internet");
+    db.ref('chats/'+currentChatId).push({from:me.id, to:currentChatOtherId, text:txt, time:Date.now(), seen:false});
   }
 }
-document.getElementById('chatInput').addEventListener('keydown', function(e){ if(e.key==='Enter') sendMsg(); });
+document.getElementById('chatInput').addEventListener('keydown', e=>{ if(e.key==='Enter') sendMsg(); });
+function backToChats(){ if(chatListener && db){ db.ref(chatListener).off(); chatListener=null; } currentChatId=null; currentChatOtherId=null; showChats(); }
+function deleteAccount(){ if(!confirm("Delete your account forever?")) return; if(useFirebase&&db) db.ref('users/'+me.id).remove(); users=users.filter(u=>u.id!==me.id); me=null; localStorage.removeItem('ml_me'); save(); location.reload(); }
 </script>
 </body>
-</html>
+</html> 
