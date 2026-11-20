@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+ <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -16,6 +16,8 @@ button{width:100%;padding:12px;border:0;border-radius:12px;font-size:16px;font-w
 .hidden{display:none}
 .topbar{display:flex;gap:6px;padding:10px}.topbar button{font-size:13px;padding:9px}
 .small{font-size:13px;color:#555}
+.tabBtn{flex:1;padding:12px;border-radius:12px 12px 0 0}
+.tabActive{background:#ff2e63;color:#fff}.tabInactive{background:#eee;color:#333}
 </style>
 </head>
 <body>
@@ -23,16 +25,33 @@ button{width:100%;padding:12px;border:0;border-radius:12px;font-size:16px;font-w
 
 <div id="authBox" class="card">
 <h2>Welcome ❤️</h2>
+<div class="row" style="margin-bottom:10px">
+<button id="tabSignup" class="tabBtn tabActive" onclick="showTab('signup')">SIGN UP</button>
+<button id="tabLogin" class="tabBtn tabInactive" onclick="showTab('login')">LOGIN</button>
+</div>
+
+<!-- SIGN UP FORM -->
+<div id="signupForm">
 <input id="a_name" placeholder="Your Name">
 <input id="a_age" type="number" placeholder="Age">
 <select id="a_city"><option value="">Select City</option><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Polokwane</option><option>Blantyre</option><option>Lilongwe</option><option>Other</option></select>
-<input id="a_about" placeholder="About you - NEVER put your phone number!">
+<input id="a_about" placeholder="About you">
 <input id="a_pass" type="password" placeholder="Create Password">
 <label style="display:block;text-align:left;font-size:14px;margin:8px"><input id="a_18" type="checkbox" style="width:auto"> I am 18+ years old and I agree to Terms & Privacy</label>
 <label style="display:block">Your Photo:<input id="a_photo" type="file" accept="image/*"></label>
 <img id="a_preview" class="hidden" style="margin:auto">
-<button class="pink" onclick="signup()">SIGN UP / LOGIN</button>
-<p class="small">⚠️ Never put your phone number or WhatsApp in your profile. Keep safe! 18+ only.</p>
+<button class="pink" onclick="doSignup()">CREATE ACCOUNT ❤️</button>
+<p class="small">New here? Fill all and press CREATE ACCOUNT.<br>⚠️ Don't put phone number in About. 18+ only.</p>
+</div>
+
+<!-- LOGIN FORM -->
+<div id="loginForm" class="hidden">
+<input id="l_name" placeholder="Your Name">
+<input id="l_pass" type="password" placeholder="Your Password">
+<button class="black" onclick="doLogin()">LOGIN ➡️</button>
+<p class="small">Already have account? Type your Name + Password and press LOGIN.<br>Forgot password? You must create new account with different name.</p>
+<button class="grey" onclick="showTab('signup')">Don't have account? Go to SIGN UP</button>
+</div>
 </div>
 
 <div id="mainBox" class="hidden">
@@ -66,7 +85,7 @@ button{width:100%;padding:12px;border:0;border-radius:12px;font-size:16px;font-w
 <input id="e_name" placeholder="Name">
 <input id="e_age" type="number" placeholder="Age">
 <select id="e_city"><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Polokwane</option><option>Blantyre</option><option>Lilongwe</option><option>Other</option></select>
-<input id="e_about" placeholder="About you - NO phone number!">
+<input id="e_about" placeholder="About you">
 <label>Change Photo:<input id="e_photo" type="file" accept="image/*"></label>
 <img id="e_preview" style="width:120px;height:120px;border-radius:50%;object-fit:cover">
 <button class="green" onclick="saveEdit()">✅ SAVE CHANGES</button>
@@ -77,8 +96,7 @@ button{width:100%;padding:12px;border:0;border-radius:12px;font-size:16px;font-w
 </div>
 
 <script>
-const DEFAULT_PHOTO="data:image/svg+xml;utf8,"+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="150" height="150"><circle cx="75" cy="75" r="75" fill="#ffc0d0"/><circle cx="75" cy="60" r="28" fill="#fff"/><ellipse cx="75" cy="115" rx="45" ry="30" fill="#fff"/><text x="75" y="145" text-anchor="middle" font-size="12" fill="#ff2e63">MalawiLove</text></svg>`);
-function goodPhoto(p){ if(!p || p.includes("via.placeholder") || p.includes("150x150")) return DEFAULT_PHOTO; return p; }
+const DEFAULT_PHOTO="data:image/svg+xml;utf8,[STRIPPED]";
 let users=JSON.parse(localStorage.getItem('ml_users')||'[]');
 let me=JSON.parse(localStorage.getItem('ml_me')||'null');
 let blocks=JSON.parse(localStorage.getItem('ml_blocks')||'[]');
@@ -87,41 +105,56 @@ let reports=JSON.parse(localStorage.getItem('ml_reports')||'[]');
 let filter={city:'',min:'',max:''};
 let photoData='';
 let editPhotoData='';
-users=users.map(u=>({...u,photo:goodPhoto(u.photo)}));
-if(me) me.photo=goodPhoto(me.photo);
-
+function cleanPhone(t){if(!t) return t; if(/\d{9,}/.test(t)) return 'Hi ❤️'; return t;}
+users.forEach(u=>{u.about=cleanPhone(u.about); if(!u.photo||u.photo.includes('via.placeholder')) u.photo=DEFAULT_PHOTO;});
+if(me){me.about=cleanPhone(me.about); if(!me.photo||me.photo.includes('via.placeholder')) me.photo=DEFAULT_PHOTO;}
+localStorage.setItem('ml_users',JSON.stringify(users));
+if(me) localStorage.setItem('ml_me',JSON.stringify(me));
 if(me) showMain();
+function showTab(which){
+if(which=='signup'){
+document.getElementById('signupForm').classList.remove('hidden');
+document.getElementById('loginForm').classList.add('hidden');
+document.getElementById('tabSignup').className='tabBtn tabActive';
+document.getElementById('tabLogin').className='tabBtn tabInactive';
+}else{
+document.getElementById('signupForm').classList.add('hidden');
+document.getElementById('loginForm').classList.remove('hidden');
+document.getElementById('tabSignup').className='tabBtn tabInactive';
+document.getElementById('tabLogin').className='tabBtn tabActive';
+}
+}
 document.getElementById('a_photo').addEventListener('change',e=>{let r=new FileReader();r.onload=()=>{photoData=r.result;let p=document.getElementById('a_preview');p.src=photoData;p.classList.remove('hidden')};r.readAsDataURL(e.target.files[0])});
 document.getElementById('e_photo').addEventListener('change',e=>{let r=new FileReader();r.onload=()=>{editPhotoData=r.result;document.getElementById('e_preview').src=editPhotoData};r.readAsDataURL(e.target.files[0])});
 function save(){localStorage.setItem('ml_users',JSON.stringify(users));localStorage.setItem('ml_me',JSON.stringify(me));localStorage.setItem('ml_blocks',JSON.stringify(blocks));localStorage.setItem('ml_likes',JSON.stringify(likes));localStorage.setItem('ml_reports',JSON.stringify(reports));}
-function signup(){
+function doSignup(){
 let n=document.getElementById('a_name').value.trim(),a=document.getElementById('a_age').value,c=document.getElementById('a_city').value,ab=document.getElementById('a_about').value.trim(),p=document.getElementById('a_pass').value;
 if(!document.getElementById('a_18').checked) return alert("You must tick 'I am 18+'");
 if(!n||!a||!c||!p) return alert("Fill Name, Age, City, Password");
 if(a<18) return alert("Must be 18+");
-if(/\d{9,}/.test(ab)) return alert("⚠️ Do NOT put phone number in About! Remove it for safety.");
 let found=users.find(u=>u.name.toLowerCase()==n.toLowerCase());
-if(found){if(found.pass!==p) return alert("Wrong password for this name"); me=found;}
-else{me={id:Date.now(),name:n,age:a,city:c,about:ab||'Hi ❤️',photo:photoData||DEFAULT_PHOTO,pass:p};users.push(me);}
-save();showMain();alert("Welcome "+me.name+" ❤️");
+if(found) return alert("This name already exists! Go to LOGIN tab and login, or use another name.");
+if(/\d{9,}/.test(ab)){alert("⚠️ Phone number removed from About for your safety."); ab='Hi ❤️';}
+me={id:Date.now(),name:n,age:a,city:c,about:ab||'Hi ❤️',photo:photoData||DEFAULT_PHOTO,pass:p};users.push(me);save();showMain();alert("Welcome "+me.name+" ❤️ Account created!");
+}
+function doLogin(){
+let n=document.getElementById('l_name').value.trim(),p=document.getElementById('l_pass').value;
+if(!n||!p) return alert("Type Name + Password");
+let found=users.find(u=>u.name.toLowerCase()==n.toLowerCase());
+if(!found) return alert("No account with name '"+n+"'. Go to SIGN UP tab first!");
+if(found.pass!==p) return alert("Wrong password! Try again.");
+me=found; me.about=cleanPhone(me.about); save(); showMain(); alert("Welcome back "+me.name+" ❤️");
 }
 function showMain(){document.getElementById('authBox').classList.add('hidden');document.getElementById('mainBox').classList.remove('hidden');showHome();}
 function showHome(){document.getElementById('myProfileBox').classList.add('hidden');document.getElementById('editBox').classList.add('hidden');document.getElementById('likesBox').classList.add('hidden');document.getElementById('list').classList.remove('hidden');render();}
 function logout(){me=null;localStorage.removeItem('ml_me');location.reload();}
 function render(){
-let html='';
-let list=users.filter(u=>u.id!==me.id && !blocks.includes(u.id));
+let html='';let list=users.filter(u=>u.id!==me.id && !blocks.includes(u.id));
 if(filter.city) list=list.filter(u=>u.city==filter.city);
 if(filter.min) list=list.filter(u=>Number(u.age)>=Number(filter.min));
 if(filter.max) list=list.filter(u=>Number(u.age)<=Number(filter.max));
 if(!list.length) html='<div class="card">No people found. Try CLEAR SEARCH.</div>';
-list.forEach(u=>{
-html+=`<div class="card"><img src="${goodPhoto(u.photo)}" onerror="this.src='${DEFAULT_PHOTO}'"><h2>${u.name} - ${u.age}</h2><p>📍 ${u.city}</p><p>${u.about}</p>
-<button class="pink" onclick="likeUser(${u.id})">❤️ LIKE</button>
-<button class="pink" onclick="chatUser('${u.name}')">💬 CHAT</button>
-<button class="black" onclick="blockUser(${u.id},'${u.name}')">🚫 BLOCK</button>
-<button class="orange" onclick="reportUser(${u.id},'${u.name}')">🚨 REPORT</button></div>`;
-});
+list.forEach(u=>{html+=`<div class="card"><img src="${u.photo}" onerror="this.src='${DEFAULT_PHOTO}'"><h2>${u.name} - ${u.age}</h2><p>📍 ${u.city}</p><p>${u.about}</p><button class="pink" onclick="likeUser(${u.id})">❤️ LIKE</button><button class="pink" onclick="chatUser('${u.name}')">💬 CHAT</button><button class="black" onclick="blockUser(${u.id},'${u.name}')">🚫 BLOCK</button><button class="orange" onclick="reportUser(${u.id},'${u.name}')">🚨 REPORT</button></div>`;});
 document.getElementById('list').innerHTML=html;
 }
 function doSearch(){filter={city:document.getElementById('s_city').value,min:document.getElementById('s_min').value,max:document.getElementById('s_max').value};render();}
@@ -131,35 +164,12 @@ function chatUser(name){alert("Chat with "+name);}
 function blockUser(id,name){if(confirm("Block "+name+"?")){blocks.push(id);save();render();}}
 function unblockAll(){blocks=[];save();render();alert("Everyone unblocked");}
 function reportUser(id,name){let r=prompt("Why report "+name+"?");if(r){reports.push({from:me.id,to:id,reason:r});save();alert("Reported. Thank you 🚨");}}
-function showMyProfile(){
-document.getElementById('list').classList.add('hidden');document.getElementById('likesBox').classList.add('hidden');document.getElementById('editBox').classList.add('hidden');
-let b=document.getElementById('myProfileBox');b.classList.remove('hidden');
-document.getElementById('myProfileView').innerHTML=`<img src="${goodPhoto(me.photo)}" onerror="this.src='${DEFAULT_PHOTO}'"><h2>${me.name} - ${me.age}</h2><p>📍 ${me.city}</p><p>${me.about}</p>`;
-}
-function openEdit(){
-document.getElementById('myProfileBox').classList.add('hidden');
-let e=document.getElementById('editBox');e.classList.remove('hidden');
-document.getElementById('e_name').value=me.name;document.getElementById('e_age').value=me.age;document.getElementById('e_city').value=me.city;document.getElementById('e_about').value=me.about;document.getElementById('e_preview').src=goodPhoto(me.photo);editPhotoData=me.photo;
-}
+function showMyProfile(){document.getElementById('list').classList.add('hidden');document.getElementById('likesBox').classList.add('hidden');document.getElementById('editBox').classList.add('hidden');let b=document.getElementById('myProfileBox');b.classList.remove('hidden');document.getElementById('myProfileView').innerHTML=`<img src="${me.photo}" onerror="this.src='${DEFAULT_PHOTO}'"><h2>${me.name} - ${me.age}</h2><p>📍 ${me.city}</p><p>${me.about}</p>`;}
+function openEdit(){document.getElementById('myProfileBox').classList.add('hidden');let e=document.getElementById('editBox');e.classList.remove('hidden');document.getElementById('e_name').value=me.name;document.getElementById('e_age').value=me.age;document.getElementById('e_city').value=me.city;document.getElementById('e_about').value=me.about;document.getElementById('e_preview').src=me.photo;editPhotoData=me.photo;}
 function closeEdit(){document.getElementById('editBox').classList.add('hidden');showMyProfile();}
-function saveEdit(){
-let n=document.getElementById('e_name').value.trim(),a=document.getElementById('e_age').value,ab=document.getElementById('e_about').value;
-if(!n||!a) return alert("Fill Name and Age"); if(a<18) return alert("Must be 18+");
-if(/\d{9,}/.test(ab)) return alert("⚠️ Remove phone number from About! Not safe.");
-me.name=n;me.age=a;me.city=document.getElementById('e_city').value;me.about=ab;me.photo=editPhotoData||me.photo;
-let idx=users.findIndex(u=>u.id==me.id);users[idx]=me;save();alert("✅ Profile Updated!");closeEdit();render();
-}
-function deleteAccount(){
-if(confirm("DELETE your account forever?")){
-users=users.filter(u=>u.id!==me.id);me=null;blocks=[];save();localStorage.removeItem('ml_me');alert("Account deleted.");location.reload();
-}}
-function showLikes(){
-document.getElementById('list').classList.add('hidden');document.getElementById('myProfileBox').classList.add('hidden');document.getElementById('editBox').classList.add('hidden');
-let b=document.getElementById('likesBox');b.classList.remove('hidden');
-let myLikes=likes.filter(l=>l.to==me.id);
-if(!myLikes.length) document.getElementById('likesList').innerHTML="No likes yet. Keep shining! ❤️";
-else{let h='';myLikes.forEach(l=>{let u=users.find(x=>x.id==l.from);if(u) h+=`<div class="card"><img src="${goodPhoto(u.photo)}" style="width:80px;height:80px"><b>${u.name} - ${u.age} - ${u.city}</b></div>`});document.getElementById('likesList').innerHTML=h;}
-}
+function saveEdit(){let n=document.getElementById('e_name').value.trim(),a=document.getElementById('e_age').value;if(!n||!a) return alert("Fill Name and Age");if(a<18) return alert("Must be 18+");let ab=document.getElementById('e_about').value;if(/\d{9,}/.test(ab)){alert("Phone number removed for safety");ab='Hi ❤️';}me.name=n;me.age=a;me.city=document.getElementById('e_city').value;me.about=ab;me.photo=editPhotoData||me.photo;let idx=users.findIndex(u=>u.id==me.id);users[idx]=me;save();alert("✅ Profile Updated!");closeEdit();render();}
+function deleteAccount(){if(confirm("DELETE your account forever?")){users=users.filter(u=>u.id!==me.id);me=null;blocks=[];save();localStorage.removeItem('ml_me');alert("Account deleted. Bye 😢");location.reload();}}
+function showLikes(){document.getElementById('list').classList.add('hidden');document.getElementById('myProfileBox').classList.add('hidden');document.getElementById('editBox').classList.add('hidden');let b=document.getElementById('likesBox');b.classList.remove('hidden');let myLikes=likes.filter(l=>l.to==me.id);if(!myLikes.length) document.getElementById('likesList').innerHTML="No likes yet. Keep shining! ❤️";else{let h='';myLikes.forEach(l=>{let u=users.find(x=>x.id==l.from);if(u) h+=`<div class="card"><img src="${u.photo}" style="width:80px;height:80px"><b>${u.name} - ${u.age} - ${u.city}</b></div>`});document.getElementById('likesList').innerHTML=h;}}
 </script>
 </body>
 </html>
