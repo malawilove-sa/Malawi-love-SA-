@@ -1,156 +1,217 @@
-    <!DOCTYPE html>
+     <!DOCTYPE html>
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Malawi Love SA</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-body{font-family:Arial;background:#ff6b81;color:white;padding:20px;margin:0}
-input{background:white;padding:14px;border:none;border-radius:12px;width:100%;box-sizing:border-box;margin:6px 0}
-button{width:100%;padding:14px;border:none;border-radius:12px;font-weight:bold;margin-top:10px}
-.login{background:#ff4757;color:white}
-.signup{background:#2ed573;color:white}
-.card{background:white;color:#333;padding:15px;border-radius:15px;margin:10px 0;text-align:center}
-.card img{width:100%;border-radius:12px;max-height:320px;object-fit:cover}
-.logout{background:#57606f;color:white}
-.chatbtn{background:#25D366;color:white}
-.likebtn{background:#ff4757;color:white;font-size:18px}
-.back{background:#57606f;color:white}
-.tabs{display:flex;gap:8px}
-.tabs button{flex:1;background:white;color:#ff4757;padding:12px}
-.tabs button.active{background:#ff4757;color:white}
-.msgbox{background:white;color:#333;padding:12px;border-radius:12px;margin:8px 0;max-width:85%;text-align:left}
-.mine{background:#dcf8c6;margin-left:auto;text-align:right}
-.chatwrap{height:55vh;overflow-y:auto}
-.sendrow{display:flex;gap:8px}
-.sendrow input{flex:1}
-.sendrow button{width:90px;background:#25D366;color:white;margin-top:6px}
-.matchbadge{background:#ffd700;color:#333;padding:6px;border-radius:10px;font-weight:bold}
-small{color:#eee}
+body{font-family:Arial;background:#f4f4f4;color:#333;padding:20px;margin:0}
+input{background:white;padding:14px;border:1px solid #ccc;border-radius:12px;width:100%;box-sizing:border-box;margin:6px 0}
+button{background:#e91e63;color:white;padding:13px;border:none;border-radius:12px;width:100%;margin:6px 0;font-weight:bold}
+.card{background:white;padding:15px;border-radius:15px;margin:10px 0;text-align:center}
+.card img{width:100%;height:220px;object-fit:cover;border-radius:12px}
+.chatbox{background:#f1f1f1;padding:10px;border-radius:10px;height:300px;overflow-y:auto}
+.tab{display:flex;gap:4px}
+.tab button{flex:1;background:white;color:#e91e63;padding:12px}
+.tab button.active{background:#e91e63;color:white}
+.pass-wrap{position:relative}
+.pass-wrap input{padding-right:50px}
+.eye-btn{position:absolute;right:5px;top:6px;width:40px !important;background:none !important;color:#333 !important;font-size:20px;padding:8px !important}
 </style>
 </head>
 <body>
 <h2 style="text-align:center">Malawi Love SA ❤️</h2>
 <p id="status" style="text-align:center">Ready</p>
+
 <div id="auth">
-<h2 style="text-align:center">Login / Sign Up</h2>
+<h2>Sign Up / Login</h2>
 <input id="name" placeholder="Full Name">
-<input id="phone" placeholder="Phone - e.g. 0799455789">
+<input id="phone" placeholder="Phone e.g. 0781234567">
+<div class="pass-wrap">
 <input id="pass" type="password" placeholder="Password">
+<button type="button" class="eye-btn" onclick="togglePass()">👁️</button>
+</div>
 <input id="age" type="number" placeholder="Age">
-<input id="city" placeholder="City - e.g. Durban">
+<input id="city" placeholder="City e.g. Durban / Lilongwe">
 <input id="interests" placeholder="Interests">
 <input id="photo" placeholder="Photo Link - Paste postimages link here">
-<small>Photo: postimages.org > Upload > Copy Direct Link > Paste here</small>
-<button class="login" onclick="doLogin()">LOGIN</button>
-<button class="signup" onclick="doSignup()">SIGN UP ❤️</button>
+<input id="email" placeholder="Email - Write here e-mail">
+<button onclick="doSignup()">SIGN UP</button>
+<button onclick="doLogin()">LOGIN</button>
 </div>
+
 <div id="home" style="display:none">
-<div class="tabs">
-<button id="tabPeople" class="active" onclick="showTab('people')">👥 People</button>
-<button id="tabLiked" onclick="showTab('liked')">❤️ Who Liked Me</button>
-<button id="tabMatches" onclick="showTab('matches')">💘 Matches</button>
+<div class="tab">
+<button id="tabPeople" class="active" onclick="showTab('people')">People</button>
+<button id="tabLiked" onclick="showTab('liked')">Liked By Me</button>
+<button id="tabMatches" onclick="showTab('matches')">Matches</button>
 </div>
-<p style="text-align:center" id="tabTitle">People near you ❤️</p>
+<p style="text-align:center"><b id="tabTitle">People near you</b></p>
 <div id="people"></div>
-<button class="logout" onclick="doLogout()">LOGOUT</button>
+<button onclick="doLogout()">LOGOUT</button>
+<button onclick="showEditProfile()">EDIT MY PROFILE</button>
 </div>
+
+<div id="editpage" style="display:none">
+<h2>Edit My Profile</h2>
+<input id="edit-name" placeholder="Full Name">
+<input id="edit-age" type="number" placeholder="Age">
+<input id="edit-city" placeholder="City - Durban / Lilongwe / Blantyre / Joburg / Cape Town">
+<input id="edit-interests" placeholder="Interests">
+<input id="edit-photo" placeholder="Photo Link">
+<button onclick="saveProfile()">SAVE CHANGES</button>
+<button onclick="backHome()">BACK</button>
+</div>
+
 <div id="chatpage" style="display:none">
-<h2 id="chattitle" style="text-align:center">Chat ❤️</h2>
-<div id="messages" class="chatwrap"></div>
-<div class="sendrow"><input id="msginput" placeholder="Type message... ❤️"><button onclick="sendMsg()">SEND</button></div>
-<button class="back" onclick="backHome()">← BACK</button>
+<h2 id="chattitle">Chat</h2>
+<div class="chatbox" id="messages"></div>
+<div style="display:flex;gap:5px"><input id="msginput" placeholder="Type message..."><button onclick="sendMsg()">SEND</button></div>
+<button onclick="backHome()">BACK</button>
 </div>
+
 <script>
 const SUPABASE_URL = "https://fzkavixubxtrlptplymq.supabase.co";
 const SUPABASE_KEY = "sb_publishable_SnXO5On70bbqUONRFAX4EA_0JBAw_Sc";
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-let myPhone="", chatWith="", chatWithName="", currentTab="people";
-function getEmail(){ return document.getElementById('phone').value.trim() + "@gmail.com"; }
+let myPhone = "";
+let currentTab = "people";
+let chatWith = "";
+
+function togglePass(){
+  let p = document.getElementById("pass");
+  p.type = p.type === "password" ? "text" : "password";
+}
+
+function getEmail(){ return document.getElementById("phone").value.trim() + "@gmail.com"; }
+
 async function doSignup(){
-  document.getElementById('status').innerText="Creating profile...";
-  const email=getEmail(); const password=document.getElementById('pass').value;
-  const { data, error } = await supabaseClient.auth.signUp({ email, password });
-  if(error){ alert("Sign Up Error: "+error.message); return; }
-  localStorage.setItem("my_phone", document.getElementById('phone').value.trim());
-  const { error: err2 } = await supabaseClient.from('profiles').insert([{ id: data.user.id, full_name: document.getElementById('name').value, phone: document.getElementById('phone').value, age: document.getElementById('age').value, city: document.getElementById('city').value, interests: document.getElementById('interests').value, photo_url: document.getElementById('photo').value.trim() }]);
-  if(err2){ alert("Profile Error: "+err2.message); return; }
-  alert("SUCCESS! ❤️"); showHome();
+  document.getElementById("status").innerText="Creating profile...";
+  let email = getEmail();
+  const { data, error } = await supabaseClient.auth.signUp({ email, password: document.getElementById("pass").value });
+  if(error){ alert("Sign Up Error: " + error.message); return; }
+  let user_id = data.user ? data.user.id : null;
+  const { error: e2 } = await supabaseClient.from("profiles").insert([{ id: user_id, phone: document.getElementById("phone").value.trim(), full_name: document.getElementById("name").value, age: document.getElementById("age").value, city: document.getElementById("city").value, interests: document.getElementById("interests").value, photo: document.getElementById("photo").value }]);
+  if(e2){ alert("Profile error: " + e2.message); return; }
+  localStorage.setItem("my_phone", document.getElementById("phone").value.trim());
+  alert("SUCCESS!"); showHome();
 }
+
 async function doLogin(){
-  document.getElementById('status').innerText="Logging in...";
-  const email=getEmail(); const password=document.getElementById('pass').value;
-  const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-  if(error){ alert("Login Error: "+error.message); return; }
-  localStorage.setItem("my_phone", document.getElementById('phone').value.trim());
-  alert("Welcome back! ❤️"); showHome();
+  document.getElementById("status").innerText="Logging in...";
+  let email = getEmail();
+  const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password: document.getElementById("pass").value });
+  if(error){ alert("Login Error: " + error.message); return; }
+  localStorage.setItem("my_phone", document.getElementById("phone").value.trim());
+  alert("Welcome back!"); showHome();
 }
+
 async function showTab(tab){
-  currentTab=tab;
-  document.getElementById('tabPeople').className = tab=='people'?'active':''; 
-  document.getElementById('tabLiked').className = tab=='liked'?'active':'';
-  document.getElementById('tabMatches').className = tab=='matches'?'active':'';
-  document.getElementById('tabTitle').innerText = tab=='people'?'People near you ❤️':tab=='liked'?'People who liked you ❤️':'Your Matches 💘';
+  currentTab = tab;
+  document.getElementById("tabPeople").className = tab=="people" ? "active" : "";
+  document.getElementById("tabLiked").className = tab=="liked" ? "active" : "";
+  document.getElementById("tabMatches").className = tab=="matches" ? "active" : "";
+  document.getElementById("tabTitle").innerText = tab=="people" ? "People near you" : tab=="liked" ? "People you liked" : "People who liked you";
   showHomeList();
 }
+
 async function showHome(){
-  document.getElementById('auth').style.display="none"; document.getElementById('chatpage').style.display="none"; document.getElementById('home').style.display="block";
-  document.getElementById('status').innerText="You are inside ❤️";
-  myPhone = localStorage.getItem("my_phone") || document.getElementById('phone').value.trim();
+  document.getElementById("auth").style.display="none";
+  document.getElementById("chatpage").style.display="none";
+  document.getElementById("editpage").style.display="none";
+  document.getElementById("home").style.display="block";
+  myPhone = localStorage.getItem("my_phone") || document.getElementById("phone").value.trim();
   showHomeList();
 }
+
 async function showHomeList(){
-  const { data: people } = await supabaseClient.from('profiles').select('*');
-  const { data: myLikes } = await supabaseClient.from('likes').select('*').eq('liker_phone', myPhone);
-  const { data: likedMe } = await supabaseClient.from('likes').select('*').eq('liked_phone', myPhone);
-  const iLiked = new Set((myLikes||[]).map(l=>l.liked_phone));
-  const theyLikedMe = new Set((likedMe||[]).map(l=>l.liker_phone));
-  let list = people||[];
-  if(currentTab=='liked') list = list.filter(p=>theyLikedMe.has(p.phone));
-  if(currentTab=='matches') list = list.filter(p=>theyLikedMe.has(p.phone) && iLiked.has(p.phone));
-  let html="";
+  let { data } = await supabaseClient.from("profiles").select("*");
+  let { data: likes } = await supabaseClient.from("likes").select("*").eq("liker_phone", myPhone);
+  let { data: likedMe } = await supabaseClient.from("likes").select("*").eq("liked_phone", myPhone);
+  let likedList = likes ? likes.map(l=>l.liked_phone) : [];
+  let likedMeList = likedMe ? likedMe.map(l=>l.liker_phone) : [];
+  let list = data || [];
+  if(currentTab=="liked") list = list.filter(p=>likedList.includes(p.phone));
+  if(currentTab=="matches") list = list.filter(p=>likedList.includes(p.phone) && likedMeList.includes(p.phone));
+  let html = "";
   list.forEach(p=>{
     if(p.phone==myPhone) return;
-    const photo = p.photo_url || "";
-    const photoHtml = photo ? `<img src="${photo}">` : `<div style="background:#ffe0e6;padding:40px;border-radius:12px;font-size:50px">❤️<br><small style="color:#333;font-size:14px">No Photo Yet</small></div>`;
-    const isMatch = theyLikedMe.has(p.phone) && iLiked.has(p.phone);
-    const liked = iLiked.has(p.phone) ? "❤️ LIKED!" : "❤️ LIKE";
-    html += `<div class="card">${photoHtml}${isMatch?'<p class="matchbadge">💘 IT\'S A MATCH!</p>':''}<h3>${p.full_name||'No Name'}</h3><p>📍 ${p.city||''} • Age: ${p.age||''}</p><p>❤️ ${p.interests||''}</p><p>📞 ${p.phone||''}</p><button class="likebtn" onclick="doLike('${p.phone}','${(p.full_name||'Friend').replace(/'/g,'')}')">${liked}</button><button class="chatbtn" onclick="openChat('${p.phone}','${(p.full_name||'Friend').replace(/'/g,'')}')">💬 CHAT - NO MATCH NEEDED</button></div>`;
+    let isLiked = likedList.includes(p.phone);
+    let isMatch = likedList.includes(p.phone) && likedMeList.includes(p.phone);
+    html += `<div class="card"><img src="${p.photo || 'https://via.placeholder.com/300'}"><div style="background:#ffe0ec;padding:4px;border-radius:12px">${isMatch ? '❤️ IT\'S A MATCH!' : ''}</div><h3>${p.full_name} - ${p.age}</h3><p>📍 ${p.city}</p><p>${p.interests || ''}</p><button onclick="doLike('${p.phone}','${p.full_name}')">❤️ ${isLiked ? 'LIKED' : 'LIKE'}</button><button onclick="openChat('${p.phone}','${p.full_name}')">💬 CHAT</button></div>`;
   });
-  document.getElementById('people').innerHTML = html || "<p style='text-align:center'>No people here yet ❤️</p>";
+  document.getElementById("people").innerHTML = html || "<p style='text-align:center'>No people here yet</p>";
 }
+
 async function doLike(phone, name){
-  const { data: existing } = await supabaseClient.from('likes').select('*').eq('liker_phone', myPhone).eq('liked_phone', phone);
-  if(existing && existing.length>0){ alert("You already liked "+name+" ❤️"); return; }
-  const { error } = await supabaseClient.from('likes').insert([{liker_phone:myPhone, liked_phone:phone}]);
-  if(error){ alert("Like Error: "+error.message); return; }
-  const { data: back } = await supabaseClient.from('likes').select('*').eq('liker_phone', phone).eq('liked_phone', myPhone);
-  if(back && back.length>0) alert("💘 IT'S A MATCH with "+name+"! ❤️❤️❤️");
-  else alert("You liked "+name+" ❤️ If they like you back, it's a MATCH!");
+  let { data: existing } = await supabaseClient.from("likes").select("*").eq("liker_phone", myPhone).eq("liked_phone", phone);
+  if(existing && existing.length>0){ alert("You already liked " + name); return; }
+  let { error } = await supabaseClient.from("likes").insert([{ liker_phone: myPhone, liked_phone: phone }]);
+  if(error){ alert("Like Error: " + error.message); return; }
+  let { data: back } = await supabaseClient.from("likes").select("*").eq("liker_phone", phone).eq("liked_phone", myPhone);
+  if(back && back.length>0) alert("You liked " + name + " - IT'S A MATCH! ❤️");
+  else alert("You liked " + name);
   showHomeList();
 }
+
 function openChat(phone, name){
-  chatWith=phone; chatWithName=name;
-  document.getElementById('home').style.display="none"; document.getElementById('chatpage').style.display="block";
-  document.getElementById('chattitle').innerText="Chat with "+name+" ❤️";
+  chatWith = phone;
+  document.getElementById("home").style.display="none";
+  document.getElementById("chatpage").style.display="block";
+  document.getElementById("chattitle").innerText = "Chat with " + name;
   loadMessages();
 }
-function backHome(){ document.getElementById('chatpage').style.display="none"; showHome(); }
+
+function backHome(){
+  document.getElementById("chatpage").style.display="none";
+  document.getElementById("editpage").style.display="none";
+  document.getElementById("home").style.display="block";
+  showHomeList();
+}
+
 async function loadMessages(){
-  const { data } = await supabaseClient.from('messages').select('*').or(`and(sender_phone.eq.${myPhone},receiver_phone.eq.${chatWith}),and(sender_phone.eq.${chatWith},receiver_phone.eq.${myPhone})`).order('created_at',{ascending:true});
-  let html=""; if(data){ data.forEach(m=>{ const isMine=m.sender_phone==myPhone; html+=`<div class="msgbox ${isMine?'mine':''}">${m.message}</div>`; }); }
-  document.getElementById('messages').innerHTML = html || "<p style='text-align:center'>Say Hi ❤️</p>";
-  document.getElementById('messages').scrollTop=document.getElementById('messages').scrollHeight;
+  let { data } = await supabaseClient.from("messages").select("*").or(`and(sender_phone.eq.${myPhone},receiver_phone.eq.${chatWith}),and(sender_phone.eq.${chatWith},receiver_phone.eq.${myPhone})`).order("created_at", { ascending: true });
+  let html = "";
+  (data||[]).forEach(m=>{ html += `<div style="text-align:${m.sender_phone==myPhone ? 'right' : 'left'}"><span style="background:${m.sender_phone==myPhone ? '#e91e63' : 'white'};color:${m.sender_phone==myPhone ? 'white' : 'black'};padding:6px;border-radius:10px;display:inline-block">${m.message}</span></div>`; });
+  document.getElementById("messages").innerHTML = html;
+  document.getElementById("messages").scrollTop = document.getElementById("messages").scrollHeight;
 }
+
 async function sendMsg(){
-  const txt=document.getElementById('msginput').value.trim(); if(!txt) return;
-  const { error } = await supabaseClient.from('messages').insert([{sender_phone:myPhone, receiver_phone:chatWith, message:txt}]);
-  if(error){ alert("Chat Error: "+error.message); return; }
-  document.getElementById('msginput').value=""; loadMessages();
+  let txt = document.getElementById("msginput").value.trim(); if(!txt) return;
+  let { error } = await supabaseClient.from("messages").insert([{ sender_phone: myPhone, receiver_phone: chatWith, message: txt }]);
+  if(error){ alert("Chat Error: " + error.message); return; }
+  document.getElementById("msginput").value=""; loadMessages();
 }
-async function doLogout(){ await supabaseClient.auth.signOut(); document.getElementById('auth').style.display="block"; document.getElementById('home').style.display="none"; document.getElementById('chatpage').style.display="none"; }
-supabaseClient.auth.getSession().then(({data})=>{ if(data.session) showHome(); });
-setInterval(()=>{ if(document.getElementById('chatpage').style.display=="block") loadMessages(); }, 3000);
+
+async function showEditProfile(){
+  document.getElementById("home").style.display="none";
+  document.getElementById("editpage").style.display="block";
+  let { data } = await supabaseClient.from("profiles").select("*").eq("phone", myPhone).single();
+  if(data){
+    document.getElementById("edit-name").value = data.full_name || "";
+    document.getElementById("edit-age").value = data.age || "";
+    document.getElementById("edit-city").value = data.city || "";
+    document.getElementById("edit-interests").value = data.interests || "";
+    document.getElementById("edit-photo").value = data.photo || "";
+  }
+}
+
+async function saveProfile(){
+  let { error } = await supabaseClient.from("profiles").update({ full_name: document.getElementById("edit-name").value, age: document.getElementById("edit-age").value, city: document.getElementById("edit-city").value, interests: document.getElementById("edit-interests").value, photo: document.getElementById("edit-photo").value }).eq("phone", myPhone);
+  if(error){ alert("Error: " + error.message); return; }
+  alert("Profile Updated! ❤️");
+  backHome();
+}
+
+async function doLogout(){
+  await supabaseClient.auth.signOut();
+  document.getElementById("auth").style.display="block";
+  document.getElementById("home").style.display="none";
+  document.getElementById("chatpage").style.display="none";
+  document.getElementById("editpage").style.display="none";
+  localStorage.removeItem("my_phone");
+}
 </script>
 </body>
 </html>
