@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+    <!DOCTYPE html>
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -32,7 +32,6 @@ small{color:#eee}
 <body>
 <h2 style="text-align:center">Malawi Love SA ❤️</h2>
 <p id="status" style="text-align:center">Ready</p>
-
 <div id="auth">
 <h2 style="text-align:center">Login / Sign Up</h2>
 <input id="name" placeholder="Full Name">
@@ -41,12 +40,11 @@ small{color:#eee}
 <input id="age" type="number" placeholder="Age">
 <input id="city" placeholder="City - e.g. Durban">
 <input id="interests" placeholder="Interests">
-<input id="photo" placeholder="Photo Link (optional)">
-<small>Photo link: postimages.org > Upload > Copy Direct Link</small>
+<input id="photo" placeholder="Photo Link - Paste postimages link here">
+<small>Photo: postimages.org > Upload > Copy Direct Link > Paste here</small>
 <button class="login" onclick="doLogin()">LOGIN</button>
 <button class="signup" onclick="doSignup()">SIGN UP ❤️</button>
 </div>
-
 <div id="home" style="display:none">
 <div class="tabs">
 <button id="tabPeople" class="active" onclick="showTab('people')">👥 People</button>
@@ -57,14 +55,12 @@ small{color:#eee}
 <div id="people"></div>
 <button class="logout" onclick="doLogout()">LOGOUT</button>
 </div>
-
 <div id="chatpage" style="display:none">
 <h2 id="chattitle" style="text-align:center">Chat ❤️</h2>
 <div id="messages" class="chatwrap"></div>
 <div class="sendrow"><input id="msginput" placeholder="Type message... ❤️"><button onclick="sendMsg()">SEND</button></div>
 <button class="back" onclick="backHome()">← BACK</button>
 </div>
-
 <script>
 const SUPABASE_URL = "https://fzkavixubxtrlptplymq.supabase.co";
 const SUPABASE_KEY = "sb_publishable_SnXO5On70bbqUONRFAX4EA_0JBAw_Sc";
@@ -76,9 +72,8 @@ async function doSignup(){
   const email=getEmail(); const password=document.getElementById('pass').value;
   const { data, error } = await supabaseClient.auth.signUp({ email, password });
   if(error){ alert("Sign Up Error: "+error.message); return; }
-  localStorage.setItem("my_photo_"+document.getElementById('phone').value.trim(), document.getElementById('photo').value.trim());
   localStorage.setItem("my_phone", document.getElementById('phone').value.trim());
-  const { error: err2 } = await supabaseClient.from('profiles').insert([{ id: data.user.id, full_name: document.getElementById('name').value, phone: document.getElementById('phone').value, age: document.getElementById('age').value, city: document.getElementById('city').value, interests: document.getElementById('interests').value }]);
+  const { error: err2 } = await supabaseClient.from('profiles').insert([{ id: data.user.id, full_name: document.getElementById('name').value, phone: document.getElementById('phone').value, age: document.getElementById('age').value, city: document.getElementById('city').value, interests: document.getElementById('interests').value, photo_url: document.getElementById('photo').value.trim() }]);
   if(err2){ alert("Profile Error: "+err2.message); return; }
   alert("SUCCESS! ❤️"); showHome();
 }
@@ -116,8 +111,8 @@ async function showHomeList(){
   let html="";
   list.forEach(p=>{
     if(p.phone==myPhone) return;
-    const photo = localStorage.getItem("my_photo_"+(p.phone||"").trim()) || "";
-    const photoHtml = photo ? `<img src="${photo}">` : `<div style="background:#ffe0e6;padding:40px;border-radius:12px;font-size:50px">❤️</div>`;
+    const photo = p.photo_url || "";
+    const photoHtml = photo ? `<img src="${photo}">` : `<div style="background:#ffe0e6;padding:40px;border-radius:12px;font-size:50px">❤️<br><small style="color:#333;font-size:14px">No Photo Yet</small></div>`;
     const isMatch = theyLikedMe.has(p.phone) && iLiked.has(p.phone);
     const liked = iLiked.has(p.phone) ? "❤️ LIKED!" : "❤️ LIKE";
     html += `<div class="card">${photoHtml}${isMatch?'<p class="matchbadge">💘 IT\'S A MATCH!</p>':''}<h3>${p.full_name||'No Name'}</h3><p>📍 ${p.city||''} • Age: ${p.age||''}</p><p>❤️ ${p.interests||''}</p><p>📞 ${p.phone||''}</p><button class="likebtn" onclick="doLike('${p.phone}','${(p.full_name||'Friend').replace(/'/g,'')}')">${liked}</button><button class="chatbtn" onclick="openChat('${p.phone}','${(p.full_name||'Friend').replace(/'/g,'')}')">💬 CHAT - NO MATCH NEEDED</button></div>`;
@@ -130,7 +125,7 @@ async function doLike(phone, name){
   const { error } = await supabaseClient.from('likes').insert([{liker_phone:myPhone, liked_phone:phone}]);
   if(error){ alert("Like Error: "+error.message); return; }
   const { data: back } = await supabaseClient.from('likes').select('*').eq('liker_phone', phone).eq('liked_phone', myPhone);
-  if(back && back.length>0) alert("💘 IT'S A MATCH with "+name+"! ❤️❤️❤️ You both liked each other!");
+  if(back && back.length>0) alert("💘 IT'S A MATCH with "+name+"! ❤️❤️❤️");
   else alert("You liked "+name+" ❤️ If they like you back, it's a MATCH!");
   showHomeList();
 }
