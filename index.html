@@ -1,4 +1,4 @@
-     <!DOCTYPE html>
+  <!DOCTYPE html>
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -33,7 +33,7 @@ const SUPABASE_URL = "https://fzkavixubxtrlptplymq.supabase.co";
 const SUPABASE_KEY = "sb_publishable_SnXO5On70bbqUONRFAX4EA_0JBAw_Sc";
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 document.getElementById('status').innerText = "Ready ✅ - Tap Sign Up";
-function getEmail(){ return document.getElementById('phone').value.trim() + "@malawilove.app"; }
+function getEmail(){ return document.getElementById('phone').value.trim() + "@gmail.com"; }
 async function doSignup(){
   document.getElementById('msg').innerText = "Creating profile... please wait";
   const email = getEmail();
@@ -52,4 +52,4 @@ async function doLogin(){
 }
 </script>
 </body>
-</html>
+</html>   
