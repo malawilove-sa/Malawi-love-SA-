@@ -7,7 +7,7 @@
 <style>
 body{font-family:Arial;background:linear-gradient(180deg,#ffe0ec,#fff5f8);color:#333;padding:16px;margin:0;min-height:100vh}
 h2{text-align:center;color:#d81b60}
-input{background:white;padding:14px;border:1px solid #ffc1d6;border-radius:14px;width:100%;box-sizing:border-box;margin:6px 0;font-size:15px}
+input,select{background:white;padding:14px;border:1px solid #ffc1d6;border-radius:14px;width:100%;box-sizing:border-box;margin:6px 0;font-size:15px}
 button{background:linear-gradient(90deg,#e91e63,#ff4081);color:white;padding:14px;border:none;border-radius:14px;width:100%;margin:6px 0;font-weight:bold;font-size:15px;box-shadow:0 4px 12px rgba(233,30,99,.3)}
 button:active{transform:scale(.98)}
 .card{background:white;padding:15px;border-radius:20px;margin:14px 0;text-align:center;box-shadow:0 6px 20px rgba(0,0,0,.08)}
@@ -21,7 +21,11 @@ button:active{transform:scale(.98)}
 .eye-btn{position:absolute;right:5px;top:6px;width:40px !important;background:none !important;color:#333 !important;font-size:20px;padding:8px !important;box-shadow:none !important}
 .small-btn{background:white !important;color:#e91e63 !important;box-shadow:none !important;border:1px solid #ffc1d6 !important}
 .danger-btn{background:#ff1744 !important}
+.block-btn{background:#333 !important;box-shadow:none !important}
+.report-btn{background:#ff9800 !important;box-shadow:none !important}
+.search-box{background:white;padding:12px;border-radius:16px;margin:10px 0;box-shadow:0 4px 12px rgba(0,0,0,.06)}
 #photoPreview{width:100%;height:200px;object-fit:cover;border-radius:14px;display:none;margin:6px 0}
+.terms-box{background:#fff3f6;padding:10px;border-radius:12px;font-size:12px;margin:6px 0;border:1px solid #ffc1d6}
 </style>
 </head>
 <body>
@@ -42,8 +46,12 @@ button:active{transform:scale(.98)}
 <label style="font-size:13px;color:#e91e63"><b>📸 Upload Photo Directly:</b></label>
 <input type="file" id="photoFile" accept="image/*" onchange="handlePhotoUpload(event)">
 <img id="photoPreview">
-<input id="photo" placeholder="Photo Link - Or upload above, link will appear here">
+<input id="photo" placeholder="Photo Link - Or upload above">
 <input id="email" placeholder="Email - REAL email for Forgot Password">
+<div class="terms-box">
+<label><input type="checkbox" id="termsCheck" style="width:20px"> <b>I am 18+ years old</b> and I agree to Terms & Privacy: Be respectful, no rude messages, no fake photos. Admin can delete fake/rude accounts. Your data is kept private.</label>
+<br><a href="#" onclick="alert('TERMS: You must be 18+. Be kind. No harassment. No fake photos. No asking for money. Admin can block/delete anyone who breaks rules. Your phone is private, only shown to people you chat with.');return false;">Read Full Terms</a>
+</div>
 <button onclick="doSignup()">SIGN UP</button>
 <button onclick="doLogin()">LOGIN</button>
 <button class="small-btn" onclick="forgotPassword()">🔑 FORGOT PASSWORD?</button>
@@ -55,10 +63,37 @@ button:active{transform:scale(.98)}
 <button id="tabLiked" onclick="showTab('liked')">Liked By Me</button>
 <button id="tabMatches" onclick="showTab('matches')">Matches</button>
 </div>
+
+<div class="search-box">
+<b>🔍 Search</b>
+<select id="filterCity">
+<option value="">All Cities</option>
+<option value="Durban">Durban</option>
+<option value="Johannesburg">Johannesburg</option>
+<option value="Joburg">Joburg</option>
+<option value="Cape Town">Cape Town</option>
+<option value="Pretoria">Pretoria</option>
+<option value="Lilongwe">Lilongwe</option>
+<option value="Blantyre">Blantyre</option>
+<option value="Mzuzu">Mzuzu</option>
+</select>
+<div style="display:flex;gap:6px"><input id="filterMinAge" type="number" placeholder="Min Age e.g. 20"><input id="filterMaxAge" type="number" placeholder="Max Age e.g. 35"></div>
+<button onclick="applySearch()">SEARCH</button>
+<button class="small-btn" onclick="clearSearch()">CLEAR SEARCH</button>
+</div>
+
 <p style="text-align:center"><b id="tabTitle">People near you</b></p>
 <div id="people"></div>
+<button onclick="showMyProfile()">👤 MY PROFILE</button>
 <button onclick="doLogout()">LOGOUT</button>
 <button onclick="showEditProfile()">EDIT MY PROFILE</button>
+</div>
+
+<div id="myprofilepage" style="display:none">
+<h2>My Profile</h2>
+<div id="myProfileCard"></div>
+<button onclick="showEditProfile()">EDIT MY PROFILE</button>
+<button onclick="backHome()">BACK</button>
 </div>
 
 <div id="editpage" style="display:none">
@@ -90,58 +125,84 @@ const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 let myPhone = "";
 let currentTab = "people";
 let chatWith = "";
+let searchCity = "";
+let searchMin = "";
+let searchMax = "";
 
 function togglePass(){ let p=document.getElementById("pass"); p.type=p.type==="password"?"text":"password"; }
-function getEmail(){
-  let real = document.getElementById("email").value.trim();
-  if(real && real.includes("@")) return real;
-  return document.getElementById("phone").value.trim() + "@gmail.com";
-}
+function getEmail(){ let real=document.getElementById("email").value.trim(); if(real && real.includes("@")) return real; return document.getElementById("phone").value.trim() + "@gmail.com"; }
 function cleanName(n){ if(!n || n==="null" || n==="NULL") return "No Name"; return n; }
 function cleanPhoto(p){ if(!p || p==="null" || p.trim()==="") return "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"; return p; }
 
-// PHOTO UPLOAD - Direct from phone
 function handlePhotoUpload(e){
-  let file = e.target.files[0]; if(!file) return;
-  if(file.size > 2000000){ alert("Photo too big! Please pick a smaller photo under 2MB"); return; }
-  let reader = new FileReader();
-  reader.onload = function(ev){
-    document.getElementById("photo").value = ev.target.result;
-    let prev = document.getElementById("photoPreview"); prev.src = ev.target.result; prev.style.display="block";
-    alert("Photo ready! ✅ Now click SIGN UP");
-  };
+  let file=e.target.files[0]; if(!file) return;
+  if(file.size>2000000){ alert("Photo too big! Pick smaller photo under 2MB"); return; }
+  let reader=new FileReader();
+  reader.onload=function(ev){ document.getElementById("photo").value=ev.target.result; let prev=document.getElementById("photoPreview"); prev.src=ev.target.result; prev.style.display="block"; alert("Photo ready! ✅ Now click SIGN UP"); };
   reader.readAsDataURL(file);
 }
 function handleEditPhotoUpload(e){
-  let file = e.target.files[0]; if(!file) return;
-  if(file.size > 2000000){ alert("Photo too big! Pick smaller photo"); return; }
-  let reader = new FileReader();
-  reader.onload = function(ev){
-    document.getElementById("edit-photo").value = ev.target.result;
-    let prev = document.getElementById("editPhotoPreview"); prev.src = ev.target.result; prev.style.display="block";
-    alert("New photo ready! Click SAVE CHANGES");
-  };
+  let file=e.target.files[0]; if(!file) return;
+  if(file.size>2000000){ alert("Photo too big! Pick smaller photo"); return; }
+  let reader=new FileReader();
+  reader.onload=function(ev){ document.getElementById("edit-photo").value=ev.target.result; let prev=document.getElementById("editPhotoPreview"); prev.src=ev.target.result; prev.style.display="block"; alert("New photo ready! Click SAVE CHANGES"); };
   reader.readAsDataURL(file);
 }
 
-// FORGOT PASSWORD
 async function forgotPassword(){
-  let email = prompt("Enter your REAL email you used to Sign Up:");
+  let email=prompt("Enter your REAL email you used to Sign Up:");
   if(!email || !email.includes("@")){ alert("Please enter a valid email"); return; }
   const { error } = await supabaseClient.auth.resetPasswordForEmail(email, { redirectTo: window.location.href });
-  if(error){ alert("Error: " + error.message + "\n\nTip: If you signed up with Phone only, your email is Phone@gmail.com - but you can't receive mail there. Next time use a REAL email!"); return; }
-  alert("Check your email inbox! We sent a reset link to " + email + " ❤️");
+  if(error){ alert("Error: "+error.message); return; }
+  alert("Check your email inbox! We sent a reset link to "+email+" ❤️");
 }
 
-// DELETE PROFILE
+// BLOCK + REPORT
+async function doBlock(phone,name){
+  if(!confirm("Block "+name+"? You will never see them again. They cannot chat you.")) return;
+  let { error } = await supabaseClient.from("blocks").insert([{ blocker_phone:myPhone, blocked_phone:phone }]);
+  if(error){ alert("Block Error: "+error.message+"\n\nDADA: You must create 'blocks' table in Supabase! See instructions below."); return; }
+  alert(name+" blocked 🚫"); showHomeList();
+}
+async function doReport(phone,name){
+  let reason=prompt("Why report "+name+"? Type: Rude / Fake Photo / Scam / Asking Money");
+  if(!reason) return;
+  let { error } = await supabaseClient.from("reports").insert([{ reporter_phone:myPhone, reported_phone:phone, reason:reason }]);
+  if(error){ alert("Report Error: "+error.message+"\n\nDADA: You must create 'reports' table in Supabase! See instructions below."); return; }
+  alert("Thank you! "+name+" reported. Admin will check. We also blocked them for your safety.");
+  await supabaseClient.from("blocks").insert([{ blocker_phone:myPhone, blocked_phone:phone }]);
+  showHomeList();
+}
+async function unblockAll(){
+  if(!confirm("Unblock everyone?")) return;
+  await supabaseClient.from("blocks").delete().eq("blocker_phone",myPhone);
+  alert("All unblocked"); showHomeList();
+}
+
+// SEARCH
+function applySearch(){
+  searchCity=document.getElementById("filterCity").value;
+  searchMin=document.getElementById("filterMinAge").value;
+  searchMax=document.getElementById("filterMaxAge").value;
+  showHomeList();
+}
+function clearSearch(){
+  searchCity=""; searchMin=""; searchMax="";
+  document.getElementById("filterCity").value="";
+  document.getElementById("filterMinAge").value="";
+  document.getElementById("filterMaxAge").value="";
+  showHomeList();
+}
+
 async function deleteProfile(){
   if(!confirm("Are you SURE? This will delete your profile, likes and chats FOREVER!")) return;
   if(!confirm("Last chance! Delete forever?")) return;
   document.getElementById("status").innerText="Deleting...";
   await supabaseClient.from("likes").delete().or(`liker_phone.eq.${myPhone},liked_phone.eq.${myPhone}`);
   await supabaseClient.from("messages").delete().or(`sender_phone.eq.${myPhone},receiver_phone.eq.${myPhone}`);
-  let { error } = await supabaseClient.from("profiles").delete().eq("phone", myPhone);
-  if(error){ alert("Delete Error: " + error.message); return; }
+  await supabaseClient.from("blocks").delete().or(`blocker_phone.eq.${myPhone},blocked_phone.eq.${myPhone}`);
+  let { error } = await supabaseClient.from("profiles").delete().eq("phone",myPhone);
+  if(error){ alert("Delete Error: "+error.message); return; }
   await supabaseClient.auth.signOut();
   localStorage.removeItem("my_phone");
   document.getElementById("editpage").style.display="none";
@@ -155,16 +216,19 @@ async function doSignup(){
   let nm=document.getElementById("name").value.trim();
   let ph=document.getElementById("phone").value.trim();
   let pw=document.getElementById("pass").value;
+  let ageVal=document.getElementById("age").value;
+  if(!document.getElementById("termsCheck").checked){ alert("You must tick 'I am 18+' to Sign Up!"); return; }
   if(!nm){ alert("Please enter your Full Name!"); return; }
   if(!ph){ alert("Please enter your Phone!"); return; }
   if(!pw || pw.length<6){ alert("Password must be at least 6 characters!"); return; }
+  if(ageVal && parseInt(ageVal)<18){ alert("You must be 18+ to join!"); return; }
   document.getElementById("status").innerText="Creating profile...";
   let email=getEmail();
   const { data, error } = await supabaseClient.auth.signUp({ email, password: pw });
-  if(error){ alert("Sign Up Error: " + error.message); document.getElementById("status").innerText="Ready"; return; }
+  if(error){ alert("Sign Up Error: "+error.message); document.getElementById("status").innerText="Ready"; return; }
   let user_id=data.user?data.user.id:null;
-  const { error:e2 } = await supabaseClient.from("profiles").insert([{ id:user_id, phone:ph, full_name:nm, age:document.getElementById("age").value, city:document.getElementById("city").value, interests:document.getElementById("interests").value, photo:document.getElementById("photo").value }]);
-  if(e2){ alert("Profile error: " + e2.message); document.getElementById("status").innerText="Ready"; return; }
+  const { error:e2 } = await supabaseClient.from("profiles").insert([{ id:user_id, phone:ph, full_name:nm, age:ageVal, city:document.getElementById("city").value, interests:document.getElementById("interests").value, photo:document.getElementById("photo").value }]);
+  if(e2){ alert("Profile error: "+e2.message); document.getElementById("status").innerText="Ready"; return; }
   localStorage.setItem("my_phone", ph);
   document.getElementById("status").innerText="Welcome "+nm+" ❤️";
   alert("SUCCESS! Welcome "+nm); showHome();
@@ -174,7 +238,7 @@ async function doLogin(){
   document.getElementById("status").innerText="Logging in...";
   let email=getEmail();
   const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password:document.getElementById("pass").value });
-  if(error){ alert("Login Error: " + error.message); document.getElementById("status").innerText="Ready"; return; }
+  if(error){ alert("Login Error: "+error.message); document.getElementById("status").innerText="Ready"; return; }
   localStorage.setItem("my_phone", document.getElementById("phone").value.trim());
   document.getElementById("status").innerText="Welcome back! ❤️";
   alert("Welcome back!"); showHome();
@@ -192,6 +256,7 @@ async function showHome(){
   document.getElementById("auth").style.display="none";
   document.getElementById("chatpage").style.display="none";
   document.getElementById("editpage").style.display="none";
+  document.getElementById("myprofilepage").style.display="none";
   document.getElementById("home").style.display="block";
   myPhone=localStorage.getItem("my_phone")||document.getElementById("phone").value.trim();
   showHomeList();
@@ -200,9 +265,18 @@ async function showHomeList(){
   let { data } = await supabaseClient.from("profiles").select("*");
   let { data:likes } = await supabaseClient.from("likes").select("*").eq("liker_phone", myPhone);
   let { data:likedMe } = await supabaseClient.from("likes").select("*").eq("liked_phone", myPhone);
+  let { data:blocks } = await supabaseClient.from("blocks").select("*").or(`blocker_phone.eq.${myPhone},blocked_phone.eq.${myPhone}`);
+  let blockedPhones=[];
+  if(blocks){ blocks.forEach(b=>{ if(b.blocker_phone==myPhone) blockedPhones.push(b.blocked_phone); if(b.blocked_phone==myPhone) blockedPhones.push(b.blocker_phone); }); }
   let likedList=likes?likes.map(l=>l.liked_phone):[];
   let likedMeList=likedMe?likedMe.map(l=>l.liker_phone):[];
   let list=data||[];
+  // BLOCK filter - hide blocked people
+  list=list.filter(p=>!blockedPhones.includes(p.phone));
+  // SEARCH filter
+  if(searchCity) list=list.filter(p=>p.city && p.city.toLowerCase().includes(searchCity.toLowerCase()));
+  if(searchMin) list=list.filter(p=>p.age && parseInt(p.age)>=parseInt(searchMin));
+  if(searchMax) list=list.filter(p=>p.age && parseInt(p.age)<=parseInt(searchMax));
   if(currentTab=="liked") list=list.filter(p=>likedList.includes(p.phone));
   if(currentTab=="matches") list=list.filter(p=>likedList.includes(p.phone)&&likedMeList.includes(p.phone));
   let html="";
@@ -214,8 +288,9 @@ async function showHomeList(){
     let displayPhoto=cleanPhoto(p.photo);
     let displayCity=p.city||"Unknown City";
     let displayAge=p.age||"?";
-    html+=`<div class="card"><img src="${displayPhoto}"><div style="background:#ffe0ec;padding:4px;border-radius:12px">${isMatch?'❤️ IT\'S A MATCH!':''}</div><h3>${displayName} - ${displayAge}</h3><p>📍 ${displayCity}</p><p>${p.interests||''}</p><button onclick="doLike('${p.phone}','${displayName}')">❤️ ${isLiked?'LIKED':'LIKE'}</button><button onclick="openChat('${p.phone}','${displayName}')">💬 CHAT</button></div>`;
+    html+=`<div class="card"><img src="${displayPhoto}"><div style="background:#ffe0ec;padding:4px;border-radius:12px">${isMatch?'❤️ IT\'S A MATCH!':''}</div><h3>${displayName} - ${displayAge}</h3><p>📍 ${displayCity}</p><p>${p.interests||''}</p><button onclick="doLike('${p.phone}','${displayName}')">❤️ ${isLiked?'LIKED':'LIKE'}</button><button onclick="openChat('${p.phone}','${displayName}')">💬 CHAT</button><button class="block-btn" onclick="doBlock('${p.phone}','${displayName}')">🚫 BLOCK</button><button class="report-btn" onclick="doReport('${p.phone}','${displayName}')">🚨 REPORT</button></div>`;
   });
+  html+=`<button class="small-btn" onclick="unblockAll()">Unblock Everyone</button>`;
   document.getElementById("people").innerHTML=html||"<p style='text-align:center'>No people here yet</p>";
 }
 async function doLike(phone,name){
@@ -238,8 +313,19 @@ function openChat(phone,name){
 function backHome(){
   document.getElementById("chatpage").style.display="none";
   document.getElementById("editpage").style.display="none";
+  document.getElementById("myprofilepage").style.display="none";
   document.getElementById("home").style.display="block";
   showHomeList();
+}
+async function showMyProfile(){
+  document.getElementById("home").style.display="none";
+  document.getElementById("myprofilepage").style.display="block";
+  let { data } = await supabaseClient.from("profiles").select("*").eq("phone",myPhone).single();
+  if(data){
+    document.getElementById("myProfileCard").innerHTML=`<div class="card"><img src="${cleanPhoto(data.photo)}"><h3>${cleanName(data.full_name)} - ${data.age||'?'}</h3><p>📍 ${data.city||'Unknown'}</p><p>${data.interests||''}</p><p style="font-size:12px;color:#999">Phone: ${data.phone} - This is how others see you</p></div>`;
+  } else {
+    document.getElementById("myProfileCard").innerHTML="<p>No profile found</p>";
+  }
 }
 async function loadMessages(){
   let { data } = await supabaseClient.from("messages").select("*").or(`and(sender_phone.eq.${myPhone},receiver_phone.eq.${chatWith}),and(sender_phone.eq.${chatWith},receiver_phone.eq.${myPhone})`).order("created_at",{ascending:true});
@@ -256,6 +342,7 @@ async function sendMsg(){
 }
 async function showEditProfile(){
   document.getElementById("home").style.display="none";
+  document.getElementById("myprofilepage").style.display="none";
   document.getElementById("editpage").style.display="block";
   let { data } = await supabaseClient.from("profiles").select("*").eq("phone",myPhone).single();
   if(data){
@@ -280,6 +367,7 @@ async function doLogout(){
   document.getElementById("home").style.display="none";
   document.getElementById("chatpage").style.display="none";
   document.getElementById("editpage").style.display="none";
+  document.getElementById("myprofilepage").style.display="none";
   document.getElementById("status").innerText="Ready";
   localStorage.removeItem("my_phone");
 }
