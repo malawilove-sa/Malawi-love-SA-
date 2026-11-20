@@ -1,4 +1,4 @@
-     <!DOCTYPE html>
+  <!DOCTYPE html>
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -25,7 +25,7 @@ button{background:#e91e63;color:white;padding:13px;border:none;border-radius:12p
 
 <div id="auth">
 <h2>Sign Up / Login</h2>
-<input id="name" placeholder="Full Name">
+<input id="name" placeholder="Full Name * Required">
 <input id="phone" placeholder="Phone e.g. 0781234567">
 <div class="pass-wrap">
 <input id="pass" type="password" placeholder="Password">
@@ -82,27 +82,36 @@ function togglePass(){
   let p = document.getElementById("pass");
   p.type = p.type === "password" ? "text" : "password";
 }
-
 function getEmail(){ return document.getElementById("phone").value.trim() + "@gmail.com"; }
+function cleanName(n){ if(!n || n==="null" || n==="NULL") return "No Name"; return n; }
+function cleanPhoto(p){ if(!p || p==="null" || p.trim()==="") return "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"; return p; }
 
 async function doSignup(){
+  let nm = document.getElementById("name").value.trim();
+  let ph = document.getElementById("phone").value.trim();
+  let pw = document.getElementById("pass").value;
+  if(!nm){ alert("Please enter your Full Name!"); return; }
+  if(!ph){ alert("Please enter your Phone!"); return; }
+  if(!pw || pw.length < 6){ alert("Password must be at least 6 characters!"); return; }
   document.getElementById("status").innerText="Creating profile...";
   let email = getEmail();
-  const { data, error } = await supabaseClient.auth.signUp({ email, password: document.getElementById("pass").value });
-  if(error){ alert("Sign Up Error: " + error.message); return; }
+  const { data, error } = await supabaseClient.auth.signUp({ email, password: pw });
+  if(error){ alert("Sign Up Error: " + error.message); document.getElementById("status").innerText="Ready"; return; }
   let user_id = data.user ? data.user.id : null;
-  const { error: e2 } = await supabaseClient.from("profiles").insert([{ id: user_id, phone: document.getElementById("phone").value.trim(), full_name: document.getElementById("name").value, age: document.getElementById("age").value, city: document.getElementById("city").value, interests: document.getElementById("interests").value, photo: document.getElementById("photo").value }]);
-  if(e2){ alert("Profile error: " + e2.message); return; }
-  localStorage.setItem("my_phone", document.getElementById("phone").value.trim());
-  alert("SUCCESS!"); showHome();
+  const { error: e2 } = await supabaseClient.from("profiles").insert([{ id: user_id, phone: ph, full_name: nm, age: document.getElementById("age").value, city: document.getElementById("city").value, interests: document.getElementById("interests").value, photo: document.getElementById("photo").value }]);
+  if(e2){ alert("Profile error: " + e2.message); document.getElementById("status").innerText="Ready"; return; }
+  localStorage.setItem("my_phone", ph);
+  document.getElementById("status").innerText="Welcome " + nm + " ❤️";
+  alert("SUCCESS! Welcome " + nm); showHome();
 }
 
 async function doLogin(){
   document.getElementById("status").innerText="Logging in...";
   let email = getEmail();
   const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password: document.getElementById("pass").value });
-  if(error){ alert("Login Error: " + error.message); return; }
+  if(error){ alert("Login Error: " + error.message); document.getElementById("status").innerText="Ready"; return; }
   localStorage.setItem("my_phone", document.getElementById("phone").value.trim());
+  document.getElementById("status").innerText="Welcome back! ❤️";
   alert("Welcome back!"); showHome();
 }
 
@@ -138,7 +147,11 @@ async function showHomeList(){
     if(p.phone==myPhone) return;
     let isLiked = likedList.includes(p.phone);
     let isMatch = likedList.includes(p.phone) && likedMeList.includes(p.phone);
-    html += `<div class="card"><img src="${p.photo || 'https://via.placeholder.com/300'}"><div style="background:#ffe0ec;padding:4px;border-radius:12px">${isMatch ? '❤️ IT\'S A MATCH!' : ''}</div><h3>${p.full_name} - ${p.age}</h3><p>📍 ${p.city}</p><p>${p.interests || ''}</p><button onclick="doLike('${p.phone}','${p.full_name}')">❤️ ${isLiked ? 'LIKED' : 'LIKE'}</button><button onclick="openChat('${p.phone}','${p.full_name}')">💬 CHAT</button></div>`;
+    let displayName = cleanName(p.full_name);
+    let displayPhoto = cleanPhoto(p.photo);
+    let displayCity = p.city || "Unknown City";
+    let displayAge = p.age || "?";
+    html += `<div class="card"><img src="${displayPhoto}"><div style="background:#ffe0ec;padding:4px;border-radius:12px">${isMatch ? '❤️ IT\'S A MATCH!' : ''}</div><h3>${displayName} - ${displayAge}</h3><p>📍 ${displayCity}</p><p>${p.interests || ''}</p><button onclick="doLike('${p.phone}','${displayName}')">❤️ ${isLiked ? 'LIKED' : 'LIKE'}</button><button onclick="openChat('${p.phone}','${displayName}')">💬 CHAT</button></div>`;
   });
   document.getElementById("people").innerHTML = html || "<p style='text-align:center'>No people here yet</p>";
 }
@@ -198,7 +211,9 @@ async function showEditProfile(){
 }
 
 async function saveProfile(){
-  let { error } = await supabaseClient.from("profiles").update({ full_name: document.getElementById("edit-name").value, age: document.getElementById("edit-age").value, city: document.getElementById("edit-city").value, interests: document.getElementById("edit-interests").value, photo: document.getElementById("edit-photo").value }).eq("phone", myPhone);
+  let newName = document.getElementById("edit-name").value.trim();
+  if(!newName){ alert("Name cannot be empty!"); return; }
+  let { error } = await supabaseClient.from("profiles").update({ full_name: newName, age: document.getElementById("edit-age").value, city: document.getElementById("edit-city").value, interests: document.getElementById("edit-interests").value, photo: document.getElementById("edit-photo").value }).eq("phone", myPhone);
   if(error){ alert("Error: " + error.message); return; }
   alert("Profile Updated! ❤️");
   backHome();
@@ -210,6 +225,7 @@ async function doLogout(){
   document.getElementById("home").style.display="none";
   document.getElementById("chatpage").style.display="none";
   document.getElementById("editpage").style.display="none";
+  document.getElementById("status").innerText="Ready";
   localStorage.removeItem("my_phone");
 }
 </script>
