@@ -30,27 +30,42 @@ button{width:100%;padding:12px;border:0;border-radius:12px;font-size:16px;font-w
 <button id="tabLogin" class="tabBtn tabInactive" onclick="showTab('login')">LOGIN</button>
 </div>
 
-<!-- SIGN UP FORM -->
+<!-- SIGN UP -->
 <div id="signupForm">
 <input id="a_name" placeholder="Your Name">
 <input id="a_age" type="number" placeholder="Age">
 <select id="a_city"><option value="">Select City</option><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Polokwane</option><option>Blantyre</option><option>Lilongwe</option><option>Other</option></select>
-<input id="a_about" placeholder="About you">
+<input id="a_phone" type="tel" placeholder="Phone Number - e.g. 0712345678">
+<input id="a_about" placeholder="About you - NO phone number here">
 <input id="a_pass" type="password" placeholder="Create Password">
+<input id="a_secret" type="text" placeholder="Secret Word for Forgot Password - e.g. Mango">
+<p class="small" style="text-align:left">🔑 Remember your Secret Word! You need it if you forget password. E.g. your mother's name or favourite food.</p>
 <label style="display:block;text-align:left;font-size:14px;margin:8px"><input id="a_18" type="checkbox" style="width:auto"> I am 18+ years old and I agree to Terms & Privacy</label>
 <label style="display:block">Your Photo:<input id="a_photo" type="file" accept="image/*"></label>
 <img id="a_preview" class="hidden" style="margin:auto">
 <button class="pink" onclick="doSignup()">CREATE ACCOUNT ❤️</button>
-<p class="small">New here? Fill all and press CREATE ACCOUNT.<br>⚠️ Don't put phone number in About. 18+ only.</p>
+<p class="small">🔒 Your phone is SECRET - only for login. Never shown to others.<br>Don't put phone in About. 18+ only.</p>
 </div>
 
-<!-- LOGIN FORM -->
+<!-- LOGIN -->
 <div id="loginForm" class="hidden">
-<input id="l_name" placeholder="Your Name">
+<input id="l_phone" type="tel" placeholder="Your Phone Number">
 <input id="l_pass" type="password" placeholder="Your Password">
 <button class="black" onclick="doLogin()">LOGIN ➡️</button>
-<p class="small">Already have account? Type your Name + Password and press LOGIN.<br>Forgot password? You must create new account with different name.</p>
+<button class="orange" onclick="showForgot()">🔑 FORGOT PASSWORD?</button>
+<p class="small">Login with <b>Phone Number + Password</b></p>
 <button class="grey" onclick="showTab('signup')">Don't have account? Go to SIGN UP</button>
+</div>
+
+<!-- FORGOT PASSWORD -->
+<div id="forgotForm" class="hidden">
+<h3>🔑 Forgot Password</h3>
+<input id="f_phone" type="tel" placeholder="Your Phone Number">
+<input id="f_secret" type="text" placeholder="Your Secret Word">
+<input id="f_newpass" type="password" placeholder="New Password">
+<button class="green" onclick="doForgot()">RESET PASSWORD ✅</button>
+<button class="grey" onclick="hideForgot()">⬅️ Back to LOGIN</button>
+<p class="small">Type phone + secret word you chose when you signed up. Then set new password.</p>
 </div>
 </div>
 
@@ -106,12 +121,14 @@ let filter={city:'',min:'',max:''};
 let photoData='';
 let editPhotoData='';
 function cleanPhone(t){if(!t) return t; if(/\d{9,}/.test(t)) return 'Hi ❤️'; return t;}
+function normPhone(p){return String(p||'').replace(/\D/g,'');}
 users.forEach(u=>{u.about=cleanPhone(u.about); if(!u.photo||u.photo.includes('via.placeholder')) u.photo=DEFAULT_PHOTO;});
 if(me){me.about=cleanPhone(me.about); if(!me.photo||me.photo.includes('via.placeholder')) me.photo=DEFAULT_PHOTO;}
 localStorage.setItem('ml_users',JSON.stringify(users));
 if(me) localStorage.setItem('ml_me',JSON.stringify(me));
 if(me) showMain();
 function showTab(which){
+document.getElementById('forgotForm').classList.add('hidden');
 if(which=='signup'){
 document.getElementById('signupForm').classList.remove('hidden');
 document.getElementById('loginForm').classList.add('hidden');
@@ -124,26 +141,48 @@ document.getElementById('tabSignup').className='tabBtn tabInactive';
 document.getElementById('tabLogin').className='tabBtn tabActive';
 }
 }
+function showForgot(){
+document.getElementById('signupForm').classList.add('hidden');
+document.getElementById('loginForm').classList.add('hidden');
+document.getElementById('forgotForm').classList.remove('hidden');
+}
+function hideForgot(){
+document.getElementById('forgotForm').classList.add('hidden');
+document.getElementById('loginForm').classList.remove('hidden');
+}
 document.getElementById('a_photo').addEventListener('change',e=>{let r=new FileReader();r.onload=()=>{photoData=r.result;let p=document.getElementById('a_preview');p.src=photoData;p.classList.remove('hidden')};r.readAsDataURL(e.target.files[0])});
 document.getElementById('e_photo').addEventListener('change',e=>{let r=new FileReader();r.onload=()=>{editPhotoData=r.result;document.getElementById('e_preview').src=editPhotoData};r.readAsDataURL(e.target.files[0])});
 function save(){localStorage.setItem('ml_users',JSON.stringify(users));localStorage.setItem('ml_me',JSON.stringify(me));localStorage.setItem('ml_blocks',JSON.stringify(blocks));localStorage.setItem('ml_likes',JSON.stringify(likes));localStorage.setItem('ml_reports',JSON.stringify(reports));}
 function doSignup(){
-let n=document.getElementById('a_name').value.trim(),a=document.getElementById('a_age').value,c=document.getElementById('a_city').value,ab=document.getElementById('a_about').value.trim(),p=document.getElementById('a_pass').value;
+let n=document.getElementById('a_name').value.trim(),a=document.getElementById('a_age').value,c=document.getElementById('a_city').value,ph=normPhone(document.getElementById('a_phone').value),ab=document.getElementById('a_about').value.trim(),p=document.getElementById('a_pass').value,sec=document.getElementById('a_secret').value.trim();
 if(!document.getElementById('a_18').checked) return alert("You must tick 'I am 18+'");
-if(!n||!a||!c||!p) return alert("Fill Name, Age, City, Password");
+if(!n||!a||!c||!ph||!p||!sec) return alert("Fill Name, Age, City, Phone, Password, Secret Word");
 if(a<18) return alert("Must be 18+");
-let found=users.find(u=>u.name.toLowerCase()==n.toLowerCase());
-if(found) return alert("This name already exists! Go to LOGIN tab and login, or use another name.");
-if(/\d{9,}/.test(ab)){alert("⚠️ Phone number removed from About for your safety."); ab='Hi ❤️';}
-me={id:Date.now(),name:n,age:a,city:c,about:ab||'Hi ❤️',photo:photoData||DEFAULT_PHOTO,pass:p};users.push(me);save();showMain();alert("Welcome "+me.name+" ❤️ Account created!");
+if(ph.length<9) return alert("Enter a valid Phone Number");
+let found=users.find(u=>normPhone(u.phone)==ph);
+if(found) return alert("This phone number already has account! Go to LOGIN tab.");
+if(/\d{9,}/.test(ab)){alert("⚠️ Phone number removed from About for safety."); ab='Hi ❤️';}
+me={id:Date.now(),name:n,age:a,city:c,phone:ph,about:ab||'Hi ❤️',photo:photoData||DEFAULT_PHOTO,pass:p,secret:sec.toLowerCase()};users.push(me);save();showMain();alert("Welcome "+me.name+" ❤️ Account created! Remember secret word: "+sec);
 }
 function doLogin(){
-let n=document.getElementById('l_name').value.trim(),p=document.getElementById('l_pass').value;
-if(!n||!p) return alert("Type Name + Password");
-let found=users.find(u=>u.name.toLowerCase()==n.toLowerCase());
-if(!found) return alert("No account with name '"+n+"'. Go to SIGN UP tab first!");
-if(found.pass!==p) return alert("Wrong password! Try again.");
+let ph=normPhone(document.getElementById('l_phone').value),p=document.getElementById('l_pass').value;
+if(!ph||!p) return alert("Type Phone Number + Password");
+let found=users.find(u=>normPhone(u.phone)==ph);
+if(!found) return alert("No account with phone '"+ph+"'. Go to SIGN UP first!");
+if(found.pass!==p) return alert("Wrong password! Press FORGOT PASSWORD? if you forgot.");
 me=found; me.about=cleanPhone(me.about); save(); showMain(); alert("Welcome back "+me.name+" ❤️");
+}
+function doForgot(){
+let ph=normPhone(document.getElementById('f_phone').value),sec=document.getElementById('f_secret').value.trim().toLowerCase(),np=document.getElementById('f_newpass').value;
+if(!ph||!sec||!np) return alert("Fill Phone + Secret Word + New Password");
+let found=users.find(u=>normPhone(u.phone)==ph);
+if(!found) return alert("No account with that phone number.");
+if(!found.secret){
+  // Old accounts without secret - allow reset with phone only once, then set secret
+  found.pass=np; found.secret=sec; save(); alert("Password reset! Old account had no secret, now your secret is: "+sec); hideForgot(); return;
+}
+if(found.secret!==sec) return alert("Wrong Secret Word! Try again. Hint: It was what you typed when you signed up.");
+found.pass=np; save(); alert("✅ Password changed! Now login with your NEW password."); hideForgot();
 }
 function showMain(){document.getElementById('authBox').classList.add('hidden');document.getElementById('mainBox').classList.remove('hidden');showHome();}
 function showHome(){document.getElementById('myProfileBox').classList.add('hidden');document.getElementById('editBox').classList.add('hidden');document.getElementById('likesBox').classList.add('hidden');document.getElementById('list').classList.remove('hidden');render();}
@@ -164,7 +203,7 @@ function chatUser(name){alert("Chat with "+name);}
 function blockUser(id,name){if(confirm("Block "+name+"?")){blocks.push(id);save();render();}}
 function unblockAll(){blocks=[];save();render();alert("Everyone unblocked");}
 function reportUser(id,name){let r=prompt("Why report "+name+"?");if(r){reports.push({from:me.id,to:id,reason:r});save();alert("Reported. Thank you 🚨");}}
-function showMyProfile(){document.getElementById('list').classList.add('hidden');document.getElementById('likesBox').classList.add('hidden');document.getElementById('editBox').classList.add('hidden');let b=document.getElementById('myProfileBox');b.classList.remove('hidden');document.getElementById('myProfileView').innerHTML=`<img src="${me.photo}" onerror="this.src='${DEFAULT_PHOTO}'"><h2>${me.name} - ${me.age}</h2><p>📍 ${me.city}</p><p>${me.about}</p>`;}
+function showMyProfile(){document.getElementById('list').classList.add('hidden');document.getElementById('likesBox').classList.add('hidden');document.getElementById('editBox').classList.add('hidden');let b=document.getElementById('myProfileBox');b.classList.remove('hidden');document.getElementById('myProfileView').innerHTML=`<img src="${me.photo}" onerror="this.src='${DEFAULT_PHOTO}'"><h2>${me.name} - ${me.age}</h2><p>📍 ${me.city}</p><p>${me.about}</p><p class="small">🔒 Your phone ${me.phone||''} is private, not shown to others</p>`;}
 function openEdit(){document.getElementById('myProfileBox').classList.add('hidden');let e=document.getElementById('editBox');e.classList.remove('hidden');document.getElementById('e_name').value=me.name;document.getElementById('e_age').value=me.age;document.getElementById('e_city').value=me.city;document.getElementById('e_about').value=me.about;document.getElementById('e_preview').src=me.photo;editPhotoData=me.photo;}
 function closeEdit(){document.getElementById('editBox').classList.add('hidden');showMyProfile();}
 function saveEdit(){let n=document.getElementById('e_name').value.trim(),a=document.getElementById('e_age').value;if(!n||!a) return alert("Fill Name and Age");if(a<18) return alert("Must be 18+");let ab=document.getElementById('e_about').value;if(/\d{9,}/.test(ab)){alert("Phone number removed for safety");ab='Hi ❤️';}me.name=n;me.age=a;me.city=document.getElementById('e_city').value;me.about=ab;me.photo=editPhotoData||me.photo;let idx=users.findIndex(u=>u.id==me.id);users[idx]=me;save();alert("✅ Profile Updated!");closeEdit();render();}
