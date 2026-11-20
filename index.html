@@ -1,4 +1,16 @@
-     <!DOCTYPE html>
+   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = "https://fzkavixubxtrlptplymq.supabase.co";
+  const SUPABASE_KEY = "PASTE_YOUR_PUBLISHABLE_KEY_HERE";
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  // Test connection
+  async function testSupabase() {
+    const { data } = await supabase.from('profiles').select('*').limit(1);
+    console.log("Supabase connected!", data);
+  }
+  testSupabase();
+                                         </script>  <!DOCTYPE html>
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
