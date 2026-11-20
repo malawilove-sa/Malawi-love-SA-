@@ -1,4 +1,4 @@
-     <!DOCTYPE html>
+  <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -117,8 +117,17 @@ const firebaseConfig = {
 let useFirebase=true; let db=null;
 try{ firebase.initializeApp(firebaseConfig); db=firebase.database(); document.getElementById('connStatus').textContent='● ONLINE - Real Chat ON'; document.getElementById('connStatus').style.color='#b6ffc2'; }catch(e){ useFirebase=false; document.getElementById('connStatus').textContent='● OFFLINE'; }
 const DEFAULT_PHOTO="data:image/svg+xml;utf8,[STRIPPED]";
-let users=JSON.parse(localStorage.getItem('ml_users')||'[]');
+function isValidUser(u){
+  if(!u) return false;
+  if(!u.name || u.name==='undefined' || u.name==='null' || String(u.name).trim()==='') return false;
+  if(!u.age || u.age==='undefined' || u.age==='null') return false;
+  if(!u.city || u.city==='undefined' || u.city==='null') return false;
+  if(!u.phone || u.phone==='undefined' || u.phone==='null' || String(u.phone).trim()==='') return false;
+  return true;
+}
+let users=JSON.parse(localStorage.getItem('ml_users')||'[]').filter(isValidUser);
 let me=JSON.parse(localStorage.getItem('ml_me')||'null');
+if(me && !isValidUser(me)){ me=null; localStorage.removeItem('ml_me'); }
 let blocks=JSON.parse(localStorage.getItem('ml_blocks')||'[]');
 let likes=JSON.parse(localStorage.getItem('ml_likes')||'[]');
 let reports=JSON.parse(localStorage.getItem('ml_reports')||'[]');
@@ -129,6 +138,7 @@ function toggleEye(id,btn){let inp=document.getElementById(id);if(inp.type==='pa
 function cleanPhone(t){if(!t) return t; if(/\d{9,}/.test(t)) return 'Hi ❤️'; return t;}
 function normPhone(p){return String(p||'').replace(/\D/g,'');}
 function safeAbout(u){ if(!u || !u.about || u.about==="undefined" || u.about==="null" || u.about==="") return "No bio yet ❤️"; return u.about; }
+function safeName(u){ if(!u || !u.name || u.name==="undefined") return "Someone"; return u.name; }
 function openPhoto(src){ document.getElementById('bigPhoto').src=src||DEFAULT_PHOTO; let m=document.getElementById('photoModal'); m.style.display='flex'; }
 function onlineText(u){
   if(!u) return '';
@@ -137,13 +147,27 @@ function onlineText(u){
   return '<span class="offline">Offline</span>';
 }
 function startPresence(){
-  if(!useFirebase||!db||!me) return;
+  if(!useFirebase||!db||!me || !isValidUser(me)) return;
   try{
-    db.ref('users/'+me.id+'/online').set(true);
-    db.ref('users/'+me.id+'/online').onDisconnect().set(false);
-    db.ref('users/'+me.id+'/lastSeen').onDisconnect().set(Date.now());
-    setInterval(()=>{ if(me && db){ db.ref('users/'+me.id+'/online').set(true); db.ref('users/'+me.id+'/lastSeen').set(Date.now()); } },30000);
+    // Only update online flag, NEVER create a new user node if it doesn't exist
+    db.ref('users/'+me.id).once('value', snap=>{
+      if(!snap.exists()){ db.ref('users/'+me.id).set(me); return; }
+      db.ref('users/'+me.id+'/online').set(true);
+      db.ref('users/'+me.id+'/online').onDisconnect().set(false);
+      db.ref('users/'+me.id+'/lastSeen').onDisconnect().set(Date.now());
+    });
+    setInterval(()=>{ if(me && db && isValidUser(me)){ db.ref('users/'+me.id+'/online').set(true); db.ref('users/'+me.id+'/lastSeen').set(Date.now()); } },30000);
   }catch(e){}
+}
+function cleanGhostsFromFirebase(allUsersObj){
+  if(!useFirebase||!db||!allUsersObj) return;
+  Object.keys(allUsersObj).forEach(k=>{
+    let u=allUsersObj[k];
+    if(!isValidUser(u)){
+      // Don't delete yourself if you are mid-signup - only delete if it has NO phone AND NO name
+      if(!u.name && !u.phone){ db.ref('users/'+k).remove(); }
+    }
+  });
 }
 users.forEach(u=>{u.about=cleanPhone(u.about); if(!u.photo||u.photo.includes('via.placeholder')) u.photo=DEFAULT_PHOTO;});
 if(me){me.about=cleanPhone(me.about); if(!me.photo||me.photo.includes('via.placeholder')) me.photo=DEFAULT_PHOTO;}
@@ -152,10 +176,12 @@ if(me) localStorage.setItem('ml_me',JSON.stringify(me));
 if(me) showMain();
 if(useFirebase && db){
   db.ref('users').on('value', snap=>{
-    let fbUsers = snap.val() ? Object.values(snap.val()) : [];
+    let raw = snap.val()||{};
+    cleanGhostsFromFirebase(raw);
+    let fbUsers = Object.values(raw).filter(isValidUser);
     if(fbUsers.length){
       let map={};
-      [...users, ...fbUsers].forEach(u=>{ map[normPhone(u.phone)]=u; });
+      [...users.filter(isValidUser), ...fbUsers].forEach(u=>{ if(isValidUser(u)) map[normPhone(u.phone)]=u; });
       users=Object.values(map);
       localStorage.setItem('ml_users',JSON.stringify(users));
       if(me && !document.getElementById('mainBox').classList.contains('hidden')) render();
@@ -172,7 +198,7 @@ if(useFirebase && db){
     Object.keys(all).forEach(cid=>{
       let parts=cid.split('_'); if(!parts.includes(String(me.id))) return;
       let msgs=Object.values(all[cid]||{});
-      msgs.forEach(m=>{ if(m.to==me.id && !m.seen){ let otherId=parts.find(p=>p!=String(me.id)); let u=users.find(x=>String(x.id)==String(otherId)); if(u && !unreadNames.includes(u.name)) unreadNames.push(u.name); } });
+      msgs.forEach(m=>{ if(m.to==me.id && !m.seen){ let otherId=parts.find(p=>p!=String(me.id)); let u=users.find(x=>String(x.id)==String(otherId)); if(u && isValidUser(u) && !unreadNames.includes(u.name)) unreadNames.push(u.name); } });
     });
     let alertBox=document.getElementById('newMsgAlert');
     let topBtn=document.getElementById('chatsTopBtn');
@@ -191,8 +217,8 @@ function showForgot(){document.getElementById('signupForm').classList.add('hidde
 function hideForgot(){document.getElementById('forgotForm').classList.add('hidden');document.getElementById('loginForm').classList.remove('hidden');}
 document.getElementById('a_photo').addEventListener('change',e=>{let r=new FileReader();r.onload=()=>{photoData=r.result;let p=document.getElementById('a_preview');p.src=photoData;p.classList.remove('hidden')};r.readAsDataURL(e.target.files[0])});
 document.getElementById('e_photo').addEventListener('change',e=>{let r=new FileReader();r.onload=()=>{editPhotoData=r.result;document.getElementById('e_preview').src=editPhotoData};r.readAsDataURL(e.target.files[0])});
-function save(){localStorage.setItem('ml_users',JSON.stringify(users));localStorage.setItem('ml_me',JSON.stringify(me));localStorage.setItem('ml_blocks',JSON.stringify(blocks));localStorage.setItem('ml_likes',JSON.stringify(likes));localStorage.setItem('ml_reports',JSON.stringify(reports));localStorage.setItem('ml_chats',JSON.stringify(chats));}
-function pushUserToFirebase(u){ if(useFirebase && db){ db.ref('users/'+u.id).set(u); } }
+function save(){localStorage.setItem('ml_users',JSON.stringify(users.filter(isValidUser)));localStorage.setItem('ml_me',JSON.stringify(me));localStorage.setItem('ml_blocks',JSON.stringify(blocks));localStorage.setItem('ml_likes',JSON.stringify(likes));localStorage.setItem('ml_reports',JSON.stringify(reports));localStorage.setItem('ml_chats',JSON.stringify(chats));}
+function pushUserToFirebase(u){ if(useFirebase && db && isValidUser(u)){ db.ref('users/'+u.id).set(u); } }
 function pushLikeToFirebase(){ if(useFirebase && db){ db.ref('likes').set(likes); } }
 function doSignup(){
 let n=document.getElementById('a_name').value.trim(),a=document.getElementById('a_age').value,c=document.getElementById('a_city').value,ph=normPhone(document.getElementById('a_phone').value),ab=document.getElementById('a_about').value.trim(),p=document.getElementById('a_pass').value,sec=document.getElementById('a_secret').value.trim();
@@ -235,7 +261,7 @@ function hideAllSections(){
 function showHome(){hideAllSections();document.getElementById('homeArea').classList.remove('hidden');render();}
 function logout(){ if(useFirebase&&db&&me){ db.ref('users/'+me.id+'/online').set(false); db.ref('users/'+me.id+'/lastSeen').set(Date.now()); } me=null;localStorage.removeItem('ml_me');location.reload();}
 function render(){
-let html='';let list=users.filter(u=>u.id!==me.id && !blocks.includes(u.id));
+let html='';let list=users.filter(u=>isValidUser(u) && u.id!==me.id && !blocks.includes(u.id));
 if(filter.city) list=list.filter(u=>u.city==filter.city);
 if(filter.min) list=list.filter(u=>Number(u.age)>=Number(filter.min));
 if(filter.max) list=list.filter(u=>Number(u.age)<=Number(filter.max));
@@ -244,7 +270,7 @@ list.forEach(u=>{
 let iLiked=likes.some(l=>l.from==me.id&&l.to==u.id);
 let theyLiked=likes.some(l=>l.from==u.id&&l.to==me.id);
 let isMatch=iLiked&&theyLiked;
-html+=`<div class="card ${isMatch?'matchCard':''}"><img src="${u.photo}" onclick="openPhoto('${u.photo}')" onerror="this.src='${DEFAULT_PHOTO}'"><h2>${u.name} - ${u.age}</h2><p>${onlineText(u)}</p><p>📍 ${u.city}</p><p>${safeAbout(u)}</p>${isMatch?'<p style="color:#ff2e63;font-weight:bold">💘 IT\'S A MATCH!</p>':''}<button class="pink" onclick="likeUser(${u.id},'${u.name}')">❤️ LIKE</button><button class="pink" onclick="openChat(${u.id})">💬 CHAT</button><button class="black" onclick="blockUser(${u.id},'${u.name}')">🚫 BLOCK</button><button class="orange" onclick="reportUser(${u.id},'${u.name}')">🚨 REPORT</button></div>`;});
+html+=`<div class="card ${isMatch?'matchCard':''}"><img src="${u.photo}" onclick="openPhoto('${u.photo}')" onerror="this.src='${DEFAULT_PHOTO}'"><h2>${safeName(u)} - ${u.age}</h2><p>${onlineText(u)}</p><p>📍 ${u.city}</p><p>${safeAbout(u)}</p>${isMatch?'<p style="color:#ff2e63;font-weight:bold">💘 IT\'S A MATCH!</p>':''}<button class="pink" onclick="likeUser(${u.id},'${safeName(u)}')">❤️ LIKE</button><button class="pink" onclick="openChat(${u.id})">💬 CHAT</button><button class="black" onclick="blockUser(${u.id},'${safeName(u)}')">🚫 BLOCK</button><button class="orange" onclick="reportUser(${u.id},'${safeName(u)}')">🚨 REPORT</button></div>`;});
 document.getElementById('list').innerHTML=html;
 }
 function doSearch(){filter={city:document.getElementById('s_city').value,min:document.getElementById('s_min').value,max:document.getElementById('s_max').value};render();}
@@ -263,7 +289,7 @@ function blockInChat(){
   let oid=currentChatOtherId||Number(document.getElementById('chatBox').dataset.other);
   if(!oid) return alert("No chat open");
   let u=users.find(x=>x.id==oid);
-  if(confirm("Block "+(u?u.name:'this person')+"? You will not see them again.")){ if(!blocks.includes(oid)) blocks.push(oid); save(); backToChats(); alert("Blocked ✅"); }
+  if(confirm("Block "+(u?safeName(u):'this person')+"? You will not see them again.")){ if(!blocks.includes(oid)) blocks.push(oid); save(); backToChats(); alert("Blocked ✅"); }
 }
 function reportInChat(){
   let oid=currentChatOtherId||Number(document.getElementById('chatBox').dataset.other);
@@ -271,7 +297,7 @@ function reportInChat(){
   let r=prompt("Why report this person?");
   if(r){ reports.push({from:me.id,to:oid,reason:r}); save(); if(useFirebase&&db) db.ref('reports').push({from:me.id,to:oid,reason:r,time:Date.now()}); alert("Reported. Thank you 🚨"); }
 }
-function showMyProfile(){hideAllSections();let b=document.getElementById('myProfileBox');b.classList.remove('hidden');document.getElementById('myProfileView').innerHTML=`<img src="${me.photo}" onclick="openPhoto('${me.photo}')" onerror="this.src='${DEFAULT_PHOTO}'"><h2>${me.name} - ${me.age}</h2><p>${onlineText(me)}</p><p>📍 ${me.city}</p><p>${safeAbout(me)}</p>`;}
+function showMyProfile(){hideAllSections();let b=document.getElementById('myProfileBox');b.classList.remove('hidden');document.getElementById('myProfileView').innerHTML=`<img src="${me.photo}" onclick="openPhoto('${me.photo}')" onerror="this.src='${DEFAULT_PHOTO}'"><h2>${safeName(me)} - ${me.age}</h2><p>${onlineText(me)}</p><p>📍 ${me.city}</p><p>${safeAbout(me)}</p>`;}
 function openEdit(){hideAllSections();document.getElementById('editBox').classList.remove('hidden');document.getElementById('e_name').value=me.name;document.getElementById('e_age').value=me.age;document.getElementById('e_city').value=me.city;document.getElementById('e_about').value=me.about;document.getElementById('e_preview').src=me.photo;editPhotoData='';}
 function closeEdit(){hideAllSections();showMyProfile();}
 function saveEdit(){
@@ -285,8 +311,8 @@ if(editPhotoData) me.photo=editPhotoData;
 let idx=users.findIndex(u=>u.id==me.id); if(idx>=0) users[idx]=me;
 save(); pushUserToFirebase(me); alert("Saved ✅"); showMyProfile();
 }
-function showLikes(){hideAllSections();document.getElementById('likesBox').classList.remove('hidden');let who=likes.filter(l=>l.to==me.id).map(l=>users.find(u=>u.id==l.from)).filter(Boolean);let html='';if(!who.length) html='<p>No likes yet. Keep shining! ❤️</p>';who.forEach(u=>{html+=`<div class="card"><img src="${u.photo}" onclick="openPhoto('${u.photo}')"><h3>${u.name} - ${u.age}</h3><p>${onlineText(u)}</p><p>📍 ${u.city}</p><button class="pink" onclick="likeUser(${u.id},'${u.name}')">❤️ LIKE BACK</button><button class="pink" onclick="openChat(${u.id})">💬 CHAT</button></div>`});document.getElementById('likesList').innerHTML=html;}
-function showMatches(){hideAllSections();document.getElementById('matchesBox').classList.remove('hidden');let ms=users.filter(u=>u.id!==me.id && likes.some(l=>l.from==me.id&&l.to==u.id) && likes.some(l=>l.from==u.id&&l.to==me.id));let html='';if(!ms.length) html='<p>No matches yet. Like people and they like you back! 💘</p>';ms.forEach(u=>{html+=`<div class="card matchCard"><img src="${u.photo}" onclick="openPhoto('${u.photo}')"><h3>${u.name} - ${u.age}</h3><p>${onlineText(u)}</p><p>📍 ${u.city}</p><button class="pink" onclick="openChat(${u.id})">💬 CHAT NOW</button></div>`});document.getElementById('matchesList').innerHTML=html;}
+function showLikes(){hideAllSections();document.getElementById('likesBox').classList.remove('hidden');let who=likes.filter(l=>l.to==me.id).map(l=>users.find(u=>u.id==l.from)).filter(u=>isValidUser(u));let html='';if(!who.length) html='<p>No likes yet. Keep shining! ❤️</p>';who.forEach(u=>{html+=`<div class="card"><img src="${u.photo}" onclick="openPhoto('${u.photo}')"><h3>${safeName(u)} - ${u.age}</h3><p>${onlineText(u)}</p><p>📍 ${u.city}</p><button class="pink" onclick="likeUser(${u.id},'${safeName(u)}')">❤️ LIKE BACK</button><button class="pink" onclick="openChat(${u.id})">💬 CHAT</button></div>`});document.getElementById('likesList').innerHTML=html;}
+function showMatches(){hideAllSections();document.getElementById('matchesBox').classList.remove('hidden');let ms=users.filter(u=>isValidUser(u) && u.id!==me.id && likes.some(l=>l.from==me.id&&l.to==u.id) && likes.some(l=>l.from==u.id&&l.to==me.id));let html='';if(!ms.length) html='<p>No matches yet. Like people and they like you back! 💘</p>';ms.forEach(u=>{html+=`<div class="card matchCard"><img src="${u.photo}" onclick="openPhoto('${u.photo}')"><h3>${safeName(u)} - ${u.age}</h3><p>${onlineText(u)}</p><p>📍 ${u.city}</p><button class="pink" onclick="openChat(${u.id})">💬 CHAT NOW</button></div>`});document.getElementById('matchesList').innerHTML=html;}
 function renderChatsList(all){
   let ids=new Set(); let unreadMap={};
   Object.keys(all||{}).forEach(cid=>{
@@ -297,12 +323,12 @@ function renderChatsList(all){
       if(unread>0) unreadMap[other]=unread;
     }
   });
-  users.forEach(u=>{ if(u.id!==me.id && likes.some(l=>l.from==me.id&&l.to==u.id)) ids.add(u.id); });
+  users.forEach(u=>{ if(isValidUser(u) && u.id!==me.id && likes.some(l=>l.from==me.id&&l.to==u.id)) ids.add(u.id); });
   let html=''; if(!ids.size) html='<p>No chats yet. Go to Home and tap CHAT! 💬</p>';
   ids.forEach(id=>{
-    let u=users.find(x=>x.id==id); if(!u) return;
+    let u=users.find(x=>x.id==id); if(!u || !isValidUser(u)) return;
     let badge=unreadMap[String(id)]?`<span class="newBadge">🔴 ${unreadMap[String(id)]} NEW</span>`:'';
-    html+=`<div class="card"><img src="${u.photo}" onclick="openPhoto('${u.photo}')" style="width:80px;height:80px"><h3>${u.name} ${badge}</h3><p>${onlineText(u)}</p><button class="pink" onclick="openChat(${u.id})">💬 OPEN CHAT</button></div>`;
+    html+=`<div class="card"><img src="${u.photo}" onclick="openPhoto('${u.photo}')" style="width:80px;height:80px"><h3>${safeName(u)} ${badge}</h3><p>${onlineText(u)}</p><button class="pink" onclick="openChat(${u.id})">💬 OPEN CHAT</button></div>`;
   });
   document.getElementById('chatsList').innerHTML=html;
 }
@@ -325,7 +351,7 @@ function openChat(otherId){
   if(chatListener && db){ try{ db.ref(chatListener).off(); }catch(e){} }
   hideAllSections();
   box.classList.remove('hidden');
-  document.getElementById('chatTitle').textContent='💬 Chat with '+(other?other.name:'');
+  document.getElementById('chatTitle').textContent='💬 Chat with '+(other?safeName(other):'');
   document.getElementById('chatStatus').textContent='Live Chat ❤️';
   document.getElementById('chatOnline').innerHTML=onlineText(other);
   document.getElementById('chatMessages').innerHTML='<p class="small">Loading messages...</p>';
