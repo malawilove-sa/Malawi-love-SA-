@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+    <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -21,22 +21,20 @@ button{width:100%;padding:12px;border:0;border-radius:12px;font-size:16px;font-w
 <body>
 <div class="header">MalawiLove SA ❤️<div style="font-size:12px;font-weight:normal">Find Love in South Africa</div></div>
 
-<!-- AUTH -->
 <div id="authBox" class="card">
 <h2>Welcome ❤️</h2>
 <input id="a_name" placeholder="Your Name">
 <input id="a_age" type="number" placeholder="Age">
 <select id="a_city"><option value="">Select City</option><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Polokwane</option><option>Blantyre</option><option>Lilongwe</option><option>Other</option></select>
-<input id="a_about" placeholder="About you e.g. Singing, Loving">
+<input id="a_about" placeholder="About you - NEVER put your phone number!">
 <input id="a_pass" type="password" placeholder="Create Password">
 <label style="display:block;text-align:left;font-size:14px;margin:8px"><input id="a_18" type="checkbox" style="width:auto"> I am 18+ years old and I agree to Terms & Privacy</label>
 <label style="display:block">Your Photo:<input id="a_photo" type="file" accept="image/*"></label>
 <img id="a_preview" class="hidden" style="margin:auto">
 <button class="pink" onclick="signup()">SIGN UP / LOGIN</button>
-<p class="small">By signing up you confirm you are 18+. <a href="#" onclick="alert('MalawiLove Terms: 18+ only. Be respectful. No fake profiles. Block/Report abuse. Your data stays on your phone.')">Read Full Terms</a></p>
+<p class="small">⚠️ Never put your phone number or WhatsApp in your profile. Keep safe! 18+ only.</p>
 </div>
 
-<!-- MAIN -->
 <div id="mainBox" class="hidden">
 <div class="topbar">
 <button class="grey" onclick="showHome()">🏠 Home</button>
@@ -55,7 +53,6 @@ button{width:100%;padding:12px;border:0;border-radius:12px;font-size:16px;font-w
 
 <div id="list"></div>
 
-<!-- MY PROFILE + EDIT -->
 <div id="myProfileBox" class="card hidden">
 <h2>👤 My Profile</h2>
 <div id="myProfileView"></div>
@@ -64,13 +61,12 @@ button{width:100%;padding:12px;border:0;border-radius:12px;font-size:16px;font-w
 <button class="red" onclick="deleteAccount()">🗑️ DELETE MY ACCOUNT</button>
 </div>
 
-<!-- EDIT FORM -->
 <div id="editBox" class="card hidden">
 <h2>✏️ Edit My Profile</h2>
 <input id="e_name" placeholder="Name">
 <input id="e_age" type="number" placeholder="Age">
 <select id="e_city"><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Polokwane</option><option>Blantyre</option><option>Lilongwe</option><option>Other</option></select>
-<input id="e_about" placeholder="About you">
+<input id="e_about" placeholder="About you - NO phone number!">
 <label>Change Photo:<input id="e_photo" type="file" accept="image/*"></label>
 <img id="e_preview" style="width:120px;height:120px;border-radius:50%;object-fit:cover">
 <button class="green" onclick="saveEdit()">✅ SAVE CHANGES</button>
@@ -81,6 +77,8 @@ button{width:100%;padding:12px;border:0;border-radius:12px;font-size:16px;font-w
 </div>
 
 <script>
+const DEFAULT_PHOTO="data:image/svg+xml;utf8,"+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="150" height="150"><circle cx="75" cy="75" r="75" fill="#ffc0d0"/><circle cx="75" cy="60" r="28" fill="#fff"/><ellipse cx="75" cy="115" rx="45" ry="30" fill="#fff"/><text x="75" y="145" text-anchor="middle" font-size="12" fill="#ff2e63">MalawiLove</text></svg>`);
+function goodPhoto(p){ if(!p || p.includes("via.placeholder") || p.includes("150x150")) return DEFAULT_PHOTO; return p; }
 let users=JSON.parse(localStorage.getItem('ml_users')||'[]');
 let me=JSON.parse(localStorage.getItem('ml_me')||'null');
 let blocks=JSON.parse(localStorage.getItem('ml_blocks')||'[]');
@@ -89,28 +87,27 @@ let reports=JSON.parse(localStorage.getItem('ml_reports')||'[]');
 let filter={city:'',min:'',max:''};
 let photoData='';
 let editPhotoData='';
+users=users.map(u=>({...u,photo:goodPhoto(u.photo)}));
+if(me) me.photo=goodPhoto(me.photo);
 
 if(me) showMain();
 document.getElementById('a_photo').addEventListener('change',e=>{let r=new FileReader();r.onload=()=>{photoData=r.result;let p=document.getElementById('a_preview');p.src=photoData;p.classList.remove('hidden')};r.readAsDataURL(e.target.files[0])});
 document.getElementById('e_photo').addEventListener('change',e=>{let r=new FileReader();r.onload=()=>{editPhotoData=r.result;document.getElementById('e_preview').src=editPhotoData};r.readAsDataURL(e.target.files[0])});
-
 function save(){localStorage.setItem('ml_users',JSON.stringify(users));localStorage.setItem('ml_me',JSON.stringify(me));localStorage.setItem('ml_blocks',JSON.stringify(blocks));localStorage.setItem('ml_likes',JSON.stringify(likes));localStorage.setItem('ml_reports',JSON.stringify(reports));}
-
 function signup(){
 let n=document.getElementById('a_name').value.trim(),a=document.getElementById('a_age').value,c=document.getElementById('a_city').value,ab=document.getElementById('a_about').value.trim(),p=document.getElementById('a_pass').value;
 if(!document.getElementById('a_18').checked) return alert("You must tick 'I am 18+'");
 if(!n||!a||!c||!p) return alert("Fill Name, Age, City, Password");
 if(a<18) return alert("Must be 18+");
+if(/\d{9,}/.test(ab)) return alert("⚠️ Do NOT put phone number in About! Remove it for safety.");
 let found=users.find(u=>u.name.toLowerCase()==n.toLowerCase());
 if(found){if(found.pass!==p) return alert("Wrong password for this name"); me=found;}
-else{me={id:Date.now(),name:n,age:a,city:c,about:ab||'Hi ❤️',photo:photoData||'https://via.placeholder.com/150',pass:p};users.push(me);}
+else{me={id:Date.now(),name:n,age:a,city:c,about:ab||'Hi ❤️',photo:photoData||DEFAULT_PHOTO,pass:p};users.push(me);}
 save();showMain();alert("Welcome "+me.name+" ❤️");
 }
-
 function showMain(){document.getElementById('authBox').classList.add('hidden');document.getElementById('mainBox').classList.remove('hidden');showHome();}
 function showHome(){document.getElementById('myProfileBox').classList.add('hidden');document.getElementById('editBox').classList.add('hidden');document.getElementById('likesBox').classList.add('hidden');document.getElementById('list').classList.remove('hidden');render();}
 function logout(){me=null;localStorage.removeItem('ml_me');location.reload();}
-
 function render(){
 let html='';
 let list=users.filter(u=>u.id!==me.id && !blocks.includes(u.id));
@@ -119,7 +116,7 @@ if(filter.min) list=list.filter(u=>Number(u.age)>=Number(filter.min));
 if(filter.max) list=list.filter(u=>Number(u.age)<=Number(filter.max));
 if(!list.length) html='<div class="card">No people found. Try CLEAR SEARCH.</div>';
 list.forEach(u=>{
-html+=`<div class="card"><img src="${u.photo}"><h2>${u.name} - ${u.age}</h2><p>📍 ${u.city}</p><p>${u.about}</p>
+html+=`<div class="card"><img src="${goodPhoto(u.photo)}" onerror="this.src='${DEFAULT_PHOTO}'"><h2>${u.name} - ${u.age}</h2><p>📍 ${u.city}</p><p>${u.about}</p>
 <button class="pink" onclick="likeUser(${u.id})">❤️ LIKE</button>
 <button class="pink" onclick="chatUser('${u.name}')">💬 CHAT</button>
 <button class="black" onclick="blockUser(${u.id},'${u.name}')">🚫 BLOCK</button>
@@ -129,39 +126,39 @@ document.getElementById('list').innerHTML=html;
 }
 function doSearch(){filter={city:document.getElementById('s_city').value,min:document.getElementById('s_min').value,max:document.getElementById('s_max').value};render();}
 function clearSearch(){filter={city:'',min:'',max:''};document.getElementById('s_city').value='';document.getElementById('s_min').value='';document.getElementById('s_max').value='';render();}
-function likeUser(id){if(likes.find(l=>l.to==me.id && l.from==id)){} likes.push({from:me.id,to:id});save();alert("Liked ❤️");render();}
-function chatUser(name){alert("Chat with "+name+" - Send them a message on WhatsApp / In App Chat coming soon!");}
-function blockUser(id,name){if(confirm("Block "+name+"? They will disappear.")){blocks.push(id);save();render();}}
+function likeUser(id){likes.push({from:me.id,to:id});save();alert("Liked ❤️");render();}
+function chatUser(name){alert("Chat with "+name);}
+function blockUser(id,name){if(confirm("Block "+name+"?")){blocks.push(id);save();render();}}
 function unblockAll(){blocks=[];save();render();alert("Everyone unblocked");}
-function reportUser(id,name){let r=prompt("Why report "+name+"? (rude/fake/scam)");if(r){reports.push({from:me.id,to:id,reason:r});save();alert("Reported. Thank you, we will review. 🚨");}}
-
+function reportUser(id,name){let r=prompt("Why report "+name+"?");if(r){reports.push({from:me.id,to:id,reason:r});save();alert("Reported. Thank you 🚨");}}
 function showMyProfile(){
 document.getElementById('list').classList.add('hidden');document.getElementById('likesBox').classList.add('hidden');document.getElementById('editBox').classList.add('hidden');
 let b=document.getElementById('myProfileBox');b.classList.remove('hidden');
-document.getElementById('myProfileView').innerHTML=`<img src="${me.photo}"><h2>${me.name} - ${me.age}</h2><p>📍 ${me.city}</p><p>${me.about}</p>`;
+document.getElementById('myProfileView').innerHTML=`<img src="${goodPhoto(me.photo)}" onerror="this.src='${DEFAULT_PHOTO}'"><h2>${me.name} - ${me.age}</h2><p>📍 ${me.city}</p><p>${me.about}</p>`;
 }
 function openEdit(){
 document.getElementById('myProfileBox').classList.add('hidden');
 let e=document.getElementById('editBox');e.classList.remove('hidden');
-document.getElementById('e_name').value=me.name;document.getElementById('e_age').value=me.age;document.getElementById('e_city').value=me.city;document.getElementById('e_about').value=me.about;document.getElementById('e_preview').src=me.photo;editPhotoData=me.photo;
+document.getElementById('e_name').value=me.name;document.getElementById('e_age').value=me.age;document.getElementById('e_city').value=me.city;document.getElementById('e_about').value=me.about;document.getElementById('e_preview').src=goodPhoto(me.photo);editPhotoData=me.photo;
 }
 function closeEdit(){document.getElementById('editBox').classList.add('hidden');showMyProfile();}
 function saveEdit(){
-let n=document.getElementById('e_name').value.trim(),a=document.getElementById('e_age').value;
+let n=document.getElementById('e_name').value.trim(),a=document.getElementById('e_age').value,ab=document.getElementById('e_about').value;
 if(!n||!a) return alert("Fill Name and Age"); if(a<18) return alert("Must be 18+");
-me.name=n;me.age=a;me.city=document.getElementById('e_city').value;me.about=document.getElementById('e_about').value;me.photo=editPhotoData||me.photo;
+if(/\d{9,}/.test(ab)) return alert("⚠️ Remove phone number from About! Not safe.");
+me.name=n;me.age=a;me.city=document.getElementById('e_city').value;me.about=ab;me.photo=editPhotoData||me.photo;
 let idx=users.findIndex(u=>u.id==me.id);users[idx]=me;save();alert("✅ Profile Updated!");closeEdit();render();
 }
 function deleteAccount(){
-if(confirm("DELETE your account forever? This cannot be undone!")){
-users=users.filter(u=>u.id!==me.id);me=null;blocks=[];save();localStorage.removeItem('ml_me');alert("Account deleted. Bye 😢");location.reload();
+if(confirm("DELETE your account forever?")){
+users=users.filter(u=>u.id!==me.id);me=null;blocks=[];save();localStorage.removeItem('ml_me');alert("Account deleted.");location.reload();
 }}
 function showLikes(){
 document.getElementById('list').classList.add('hidden');document.getElementById('myProfileBox').classList.add('hidden');document.getElementById('editBox').classList.add('hidden');
 let b=document.getElementById('likesBox');b.classList.remove('hidden');
 let myLikes=likes.filter(l=>l.to==me.id);
 if(!myLikes.length) document.getElementById('likesList').innerHTML="No likes yet. Keep shining! ❤️";
-else{let h='';myLikes.forEach(l=>{let u=users.find(x=>x.id==l.from);if(u) h+=`<div class="card"><img src="${u.photo}" style="width:80px;height:80px"><b>${u.name} - ${u.age} - ${u.city}</b></div>`});document.getElementById('likesList').innerHTML=h;}
+else{let h='';myLikes.forEach(l=>{let u=users.find(x=>x.id==l.from);if(u) h+=`<div class="card"><img src="${goodPhoto(u.photo)}" style="width:80px;height:80px"><b>${u.name} - ${u.age} - ${u.city}</b></div>`});document.getElementById('likesList').innerHTML=h;}
 }
 </script>
 </body>
