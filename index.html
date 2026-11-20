@@ -11,14 +11,20 @@ body{margin:0;font-family:Arial;background:#ffe6ef;padding:0 0 80px}
 .card img{width:150px;height:150px;object-fit:cover;border-radius:50%;background:#eee}
 input,select,textarea{width:95%;padding:11px;margin:6px 0;border:1px solid #ddd;border-radius:10px;font-size:15px;box-sizing:border-box}
 button{width:100%;padding:12px;border:0;border-radius:12px;font-size:16px;font-weight:bold;margin:5px 0;cursor:pointer}
-.pink{background:#ff2e63;color:#fff}.black{background:#222;color:#fff}.orange{background:#ff9500;color:#fff}.grey{background:#eee}.red{background:#ff3b30;color:#fff}.green{background:#25D366;color:#fff}
+.pink{background:#ff2e63;color:#fff}.black{background:#222;color:#fff}.orange{background:#ff9500;color:#fff}.grey{background:#eee}.red{background:#ff3b30;color:#fff}.green{background:#25D366;color:#fff}.purple{background:#9b59b6;color:#fff}
 .row{display:flex;gap:8px}.row button{flex:1}
 .hidden{display:none}
-.topbar{display:flex;gap:6px;padding:10px}.topbar button{font-size:13px;padding:9px}
+.topbar{display:flex;gap:6px;padding:10px;flex-wrap:wrap}.topbar button{font-size:11px;padding:9px;flex:1}
 .small{font-size:13px;color:#555}
 .tabBtn{flex:1;padding:12px;border-radius:12px 12px 0 0}
 .tabActive{background:#ff2e63;color:#fff}.tabInactive{background:#eee;color:#333}
 .passwrap{position:relative;width:95%;margin:6px auto}.passwrap input{width:100%;padding-right:45px;margin:0}.eyeBtn{position:absolute;right:5px;top:50%;transform:translateY(-50%);width:38px;padding:8px;background:transparent;font-size:18px;border:0;cursor:pointer}
+.chatBox{height:300px;overflow-y:auto;text-align:left;background:#fff5f8;border-radius:12px;padding:10px;margin:10px 0}
+.msg{max-width:75%;padding:8px 10px;border-radius:12px;margin:5px 0;font-size:14px;word-wrap:break-word}
+.msgMine{background:#ff2e63;color:#fff;margin-left:auto;text-align:right}
+.msgTheirs{background:#eee;color:#000}
+.chatInputRow{display:flex;gap:6px}.chatInputRow input{flex:1}.chatInputRow button{width:70px}
+.matchCard{border:3px solid #ff2e63;background:linear-gradient(180deg,#fff,#ffe6ef)}
 </style>
 </head>
 <body>
@@ -30,8 +36,6 @@ button{width:100%;padding:12px;border:0;border-radius:12px;font-size:16px;font-w
 <button id="tabSignup" class="tabBtn tabActive" onclick="showTab('signup')">SIGN UP</button>
 <button id="tabLogin" class="tabBtn tabInactive" onclick="showTab('login')">LOGIN</button>
 </div>
-
-<!-- SIGN UP -->
 <div id="signupForm">
 <input id="a_name" placeholder="Your Name">
 <input id="a_age" type="number" placeholder="Age">
@@ -45,20 +49,15 @@ button{width:100%;padding:12px;border:0;border-radius:12px;font-size:16px;font-w
 <label style="display:block">Your Photo:<input id="a_photo" type="file" accept="image/*"></label>
 <img id="a_preview" class="hidden" style="margin:auto">
 <button class="pink" onclick="doSignup()">CREATE ACCOUNT ❤️</button>
-<p class="small">🔒 Your phone is SECRET - only for login. Never shown to others.<br>Don't put phone in About. 18+ only.</p>
+<p class="small">🔒 Your phone is SECRET - only for login. Never shown to others.</p>
 </div>
-
-<!-- LOGIN -->
 <div id="loginForm" class="hidden">
 <input id="l_phone" type="tel" placeholder="Your Phone Number">
 <div class="passwrap"><input id="l_pass" type="password" placeholder="Your Password"><button type="button" class="eyeBtn" onclick="toggleEye('l_pass',this)">👁️</button></div>
 <button class="black" onclick="doLogin()">LOGIN ➡️</button>
 <button class="orange" onclick="showForgot()">🔑 FORGOT PASSWORD?</button>
-<p class="small">Login with <b>Phone Number + Password</b><br>Press 👁️ to see your password</p>
 <button class="grey" onclick="showTab('signup')">Don't have account? Go to SIGN UP</button>
 </div>
-
-<!-- FORGOT PASSWORD -->
 <div id="forgotForm" class="hidden">
 <h3>🔑 Forgot Password</h3>
 <input id="f_phone" type="tel" placeholder="Your Phone Number">
@@ -66,18 +65,20 @@ button{width:100%;padding:12px;border:0;border-radius:12px;font-size:16px;font-w
 <div class="passwrap"><input id="f_newpass" type="password" placeholder="New Password"><button type="button" class="eyeBtn" onclick="toggleEye('f_newpass',this)">👁️</button></div>
 <button class="green" onclick="doForgot()">RESET PASSWORD ✅</button>
 <button class="grey" onclick="hideForgot()">⬅️ Back to LOGIN</button>
-<p class="small">Type phone + secret word you chose when you signed up. Then set new password.</p>
 </div>
 </div>
 
 <div id="mainBox" class="hidden">
 <div class="topbar">
 <button class="grey" onclick="showHome()">🏠 Home</button>
-<button class="grey" onclick="showMyProfile()">👤 My Profile</button>
-<button class="grey" onclick="showLikes()">❤️ Who Liked Me</button>
+<button class="grey" onclick="showMyProfile()">👤 Profile</button>
+<button class="grey" onclick="showLikes()">❤️ Likes</button>
+<button class="purple" onclick="showMatches()">💘 Matches</button>
+<button class="pink" onclick="showChats()">💬 Chats</button>
 <button class="red" onclick="logout()">Logout</button>
 </div>
 
+<div id="homeArea">
 <div class="card">
 <h3>🔍 Search</h3>
 <select id="s_city"><option value="">All Cities</option><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Polokwane</option><option>Blantyre</option><option>Lilongwe</option><option>Other</option></select>
@@ -85,8 +86,8 @@ button{width:100%;padding:12px;border:0;border-radius:12px;font-size:16px;font-w
 <button class="pink" onclick="doSearch()">SEARCH</button>
 <button class="grey" onclick="clearSearch()">CLEAR SEARCH</button>
 </div>
-
 <div id="list"></div>
+</div>
 
 <div id="myProfileBox" class="card hidden">
 <h2>👤 My Profile</h2>
@@ -108,7 +109,23 @@ button{width:100%;padding:12px;border:0;border-radius:12px;font-size:16px;font-w
 <button class="grey" onclick="closeEdit()">Cancel</button>
 </div>
 
-<div id="likesBox" class="card hidden"><h2>❤️ Who Liked You</h2><div id="likesList"></div></div>
+<div id="likesBox" class="card hidden"><h2>❤️ Who Liked You</h2><p class="small">These people liked you. Like them back to make a MATCH! 💘</p><div id="likesList"></div></div>
+
+<div id="matchesBox" class="card hidden"><h2>💘 Your Matches</h2><p class="small">Both liked each other! You can chat now! 💬</p><div id="matchesList"></div></div>
+
+<div id="chatsBox" class="card hidden">
+<h2>💬 My Chats</h2>
+<div id="chatsList"></div>
+<button class="grey" onclick="showHome()">⬅️ Back to Home</button>
+</div>
+
+<div id="chatBox" class="card hidden">
+<h2 id="chatTitle">💬 Chat</h2>
+<div id="chatMessages" class="chatBox"></div>
+<div class="chatInputRow"><input id="chatInput" placeholder="Type message... ❤️"><button class="pink" onclick="sendMsg()">Send</button></div>
+<button class="grey" onclick="backToChats()">⬅️ Back to Chats</button>
+</div>
+
 </div>
 
 <script>
@@ -118,13 +135,12 @@ let me=JSON.parse(localStorage.getItem('ml_me')||'null');
 let blocks=JSON.parse(localStorage.getItem('ml_blocks')||'[]');
 let likes=JSON.parse(localStorage.getItem('ml_likes')||'[]');
 let reports=JSON.parse(localStorage.getItem('ml_reports')||'[]');
+let chats=JSON.parse(localStorage.getItem('ml_chats')||'[]');
 let filter={city:'',min:'',max:''};
 let photoData='';
 let editPhotoData='';
-function toggleEye(id,btn){
-let inp=document.getElementById(id);
-if(inp.type==='password'){inp.type='text';btn.textContent='🙈';}else{inp.type='password';btn.textContent='👁️';}
-}
+let currentChatId=null;
+function toggleEye(id,btn){let inp=document.getElementById(id);if(inp.type==='password'){inp.type='text';btn.textContent='🙈';}else{inp.type='password';btn.textContent='👁️';}}
 function cleanPhone(t){if(!t) return t; if(/\d{9,}/.test(t)) return 'Hi ❤️'; return t;}
 function normPhone(p){return String(p||'').replace(/\D/g,'');}
 users.forEach(u=>{u.about=cleanPhone(u.about); if(!u.photo||u.photo.includes('via.placeholder')) u.photo=DEFAULT_PHOTO;});
@@ -134,30 +150,13 @@ if(me) localStorage.setItem('ml_me',JSON.stringify(me));
 if(me) showMain();
 function showTab(which){
 document.getElementById('forgotForm').classList.add('hidden');
-if(which=='signup'){
-document.getElementById('signupForm').classList.remove('hidden');
-document.getElementById('loginForm').classList.add('hidden');
-document.getElementById('tabSignup').className='tabBtn tabActive';
-document.getElementById('tabLogin').className='tabBtn tabInactive';
-}else{
-document.getElementById('signupForm').classList.add('hidden');
-document.getElementById('loginForm').classList.remove('hidden');
-document.getElementById('tabSignup').className='tabBtn tabInactive';
-document.getElementById('tabLogin').className='tabBtn tabActive';
+if(which=='signup'){document.getElementById('signupForm').classList.remove('hidden');document.getElementById('loginForm').classList.add('hidden');document.getElementById('tabSignup').className='tabBtn tabActive';document.getElementById('tabLogin').className='tabBtn tabInactive';}else{document.getElementById('signupForm').classList.add('hidden');document.getElementById('loginForm').classList.remove('hidden');document.getElementById('tabSignup').className='tabBtn tabInactive';document.getElementById('tabLogin').className='tabBtn tabActive';}
 }
-}
-function showForgot(){
-document.getElementById('signupForm').classList.add('hidden');
-document.getElementById('loginForm').classList.add('hidden');
-document.getElementById('forgotForm').classList.remove('hidden');
-}
-function hideForgot(){
-document.getElementById('forgotForm').classList.add('hidden');
-document.getElementById('loginForm').classList.remove('hidden');
-}
+function showForgot(){document.getElementById('signupForm').classList.add('hidden');document.getElementById('loginForm').classList.add('hidden');document.getElementById('forgotForm').classList.remove('hidden');}
+function hideForgot(){document.getElementById('forgotForm').classList.add('hidden');document.getElementById('loginForm').classList.remove('hidden');}
 document.getElementById('a_photo').addEventListener('change',e=>{let r=new FileReader();r.onload=()=>{photoData=r.result;let p=document.getElementById('a_preview');p.src=photoData;p.classList.remove('hidden')};r.readAsDataURL(e.target.files[0])});
 document.getElementById('e_photo').addEventListener('change',e=>{let r=new FileReader();r.onload=()=>{editPhotoData=r.result;document.getElementById('e_preview').src=editPhotoData};r.readAsDataURL(e.target.files[0])});
-function save(){localStorage.setItem('ml_users',JSON.stringify(users));localStorage.setItem('ml_me',JSON.stringify(me));localStorage.setItem('ml_blocks',JSON.stringify(blocks));localStorage.setItem('ml_likes',JSON.stringify(likes));localStorage.setItem('ml_reports',JSON.stringify(reports));}
+function save(){localStorage.setItem('ml_users',JSON.stringify(users));localStorage.setItem('ml_me',JSON.stringify(me));localStorage.setItem('ml_blocks',JSON.stringify(blocks));localStorage.setItem('ml_likes',JSON.stringify(likes));localStorage.setItem('ml_reports',JSON.stringify(reports));localStorage.setItem('ml_chats',JSON.stringify(chats));}
 function doSignup(){
 let n=document.getElementById('a_name').value.trim(),a=document.getElementById('a_age').value,c=document.getElementById('a_city').value,ph=normPhone(document.getElementById('a_phone').value),ab=document.getElementById('a_about').value.trim(),p=document.getElementById('a_pass').value,sec=document.getElementById('a_secret').value.trim();
 if(!document.getElementById('a_18').checked) return alert("You must tick 'I am 18+'");
@@ -167,7 +166,7 @@ if(ph.length<9) return alert("Enter a valid Phone Number");
 let found=users.find(u=>normPhone(u.phone)==ph);
 if(found) return alert("This phone number already has account! Go to LOGIN tab.");
 if(/\d{9,}/.test(ab)){alert("⚠️ Phone number removed from About for safety."); ab='Hi ❤️';}
-me={id:Date.now(),name:n,age:a,city:c,phone:ph,about:ab||'Hi ❤️',photo:photoData||DEFAULT_PHOTO,pass:p,secret:sec.toLowerCase()};users.push(me);save();showMain();alert("Welcome "+me.name+" ❤️ Account created! Remember secret word: "+sec);
+me={id:Date.now(),name:n,age:a,city:c,phone:ph,about:ab||'Hi ❤️',photo:photoData||DEFAULT_PHOTO,pass:p,secret:sec.toLowerCase()};users.push(me);save();showMain();alert("Welcome "+me.name+" ❤️ Account created!");
 }
 function doLogin(){
 let ph=normPhone(document.getElementById('l_phone').value),p=document.getElementById('l_pass').value;
@@ -182,14 +181,13 @@ let ph=normPhone(document.getElementById('f_phone').value),sec=document.getEleme
 if(!ph||!sec||!np) return alert("Fill Phone + Secret Word + New Password");
 let found=users.find(u=>normPhone(u.phone)==ph);
 if(!found) return alert("No account with that phone number.");
-if(!found.secret){
-  found.pass=np; found.secret=sec; save(); alert("Password reset! Old account had no secret, now your secret is: "+sec); hideForgot(); return;
-}
+if(!found.secret){found.pass=np; found.secret=sec; save(); alert("Password reset!"); hideForgot(); return;}
 if(found.secret!==sec) return alert("Wrong Secret Word! Try again.");
 found.pass=np; save(); alert("✅ Password changed! Now login with your NEW password."); hideForgot();
 }
 function showMain(){document.getElementById('authBox').classList.add('hidden');document.getElementById('mainBox').classList.remove('hidden');showHome();}
-function showHome(){document.getElementById('myProfileBox').classList.add('hidden');document.getElementById('editBox').classList.add('hidden');document.getElementById('likesBox').classList.add('hidden');document.getElementById('list').classList.remove('hidden');render();}
+function hideAllSections(){document.getElementById('homeArea').classList.add('hidden');document.getElementById('myProfileBox').classList.add('hidden');document.getElementById('editBox').classList.add('hidden');document.getElementById('likesBox').classList.add('hidden');document.getElementById('matchesBox').classList.add('hidden');document.getElementById('chatsBox').classList.add('hidden');document.getElementById('chatBox').classList.add('hidden');}
+function showHome(){hideAllSections();document.getElementById('homeArea').classList.remove('hidden');render();}
 function logout(){me=null;localStorage.removeItem('ml_me');location.reload();}
 function render(){
 let html='';let list=users.filter(u=>u.id!==me.id && !blocks.includes(u.id));
@@ -197,22 +195,85 @@ if(filter.city) list=list.filter(u=>u.city==filter.city);
 if(filter.min) list=list.filter(u=>Number(u.age)>=Number(filter.min));
 if(filter.max) list=list.filter(u=>Number(u.age)<=Number(filter.max));
 if(!list.length) html='<div class="card">No people found. Try CLEAR SEARCH.</div>';
-list.forEach(u=>{html+=`<div class="card"><img src="${u.photo}" onerror="this.src='${DEFAULT_PHOTO}'"><h2>${u.name} - ${u.age}</h2><p>📍 ${u.city}</p><p>${u.about}</p><button class="pink" onclick="likeUser(${u.id})">❤️ LIKE</button><button class="pink" onclick="chatUser('${u.name}')">💬 CHAT</button><button class="black" onclick="blockUser(${u.id},'${u.name}')">🚫 BLOCK</button><button class="orange" onclick="reportUser(${u.id},'${u.name}')">🚨 REPORT</button></div>`;});
+list.forEach(u=>{
+let iLiked=likes.some(l=>l.from==me.id&&l.to==u.id);
+let theyLiked=likes.some(l=>l.from==u.id&&l.to==me.id);
+let isMatch=iLiked&&theyLiked;
+html+=`<div class="card ${isMatch?'matchCard':''}"><img src="${u.photo}" onerror="this.src='${DEFAULT_PHOTO}'"><h2>${u.name} - ${u.age}</h2><p>📍 ${u.city}</p><p>${u.about}</p>${isMatch?'<p style="color:#ff2e63;font-weight:bold">💘 IT\'S A MATCH!</p>':''}<button class="pink" onclick="likeUser(${u.id},'${u.name}')">${iLiked?'❤️ LIKED ✓':'❤️ LIKE'}</button><button class="pink" onclick="openChat(${u.id})">💬 CHAT</button><button class="black" onclick="blockUser(${u.id},'${u.name}')">🚫 BLOCK</button><button class="orange" onclick="reportUser(${u.id},'${u.name}')">🚨 REPORT</button></div>`;});
 document.getElementById('list').innerHTML=html;
 }
 function doSearch(){filter={city:document.getElementById('s_city').value,min:document.getElementById('s_min').value,max:document.getElementById('s_max').value};render();}
 function clearSearch(){filter={city:'',min:'',max:''};document.getElementById('s_city').value='';document.getElementById('s_min').value='';document.getElementById('s_max').value='';render();}
-function likeUser(id){likes.push({from:me.id,to:id});save();alert("Liked ❤️");render();}
-function chatUser(name){alert("Chat with "+name);}
+function isMatchWith(otherId){
+return likes.some(l=>l.from==me.id&&l.to==otherId) && likes.some(l=>l.from==otherId&&l.to==me.id);
+}
+function likeUser(id,name){
+if(likes.some(l=>l.from==me.id&&l.to==id)) return alert("You already liked "+name+" ❤️");
+likes.push({from:me.id,to:id});save();
+if(likes.some(l=>l.from==id&&l.to==me.id)){
+alert("💘💘💘 IT'S A MATCH with "+name+"! 💘💘💘\nYou both liked each other! Go to Matches and CHAT now!");
+}else{
+alert("Liked "+name+" ❤️ If she likes you back, it will become a MATCH!");
+}
+render();
+}
 function blockUser(id,name){if(confirm("Block "+name+"?")){blocks.push(id);save();render();}}
 function unblockAll(){blocks=[];save();render();alert("Everyone unblocked");}
 function reportUser(id,name){let r=prompt("Why report "+name+"?");if(r){reports.push({from:me.id,to:id,reason:r});save();alert("Reported. Thank you 🚨");}}
-function showMyProfile(){document.getElementById('list').classList.add('hidden');document.getElementById('likesBox').classList.add('hidden');document.getElementById('editBox').classList.add('hidden');let b=document.getElementById('myProfileBox');b.classList.remove('hidden');document.getElementById('myProfileView').innerHTML=`<img src="${me.photo}" onerror="this.src='${DEFAULT_PHOTO}'"><h2>${me.name} - ${me.age}</h2><p>📍 ${me.city}</p><p>${me.about}</p><p class="small">🔒 Your phone ${me.phone||''} is private, not shown to others</p>`;}
-function openEdit(){document.getElementById('myProfileBox').classList.add('hidden');let e=document.getElementById('editBox');e.classList.remove('hidden');document.getElementById('e_name').value=me.name;document.getElementById('e_age').value=me.age;document.getElementById('e_city').value=me.city;document.getElementById('e_about').value=me.about;document.getElementById('e_preview').src=me.photo;editPhotoData=me.photo;}
-function closeEdit(){document.getElementById('editBox').classList.add('hidden');showMyProfile();}
-function saveEdit(){let n=document.getElementById('e_name').value.trim(),a=document.getElementById('e_age').value;if(!n||!a) return alert("Fill Name and Age");if(a<18) return alert("Must be 18+");let ab=document.getElementById('e_about').value;if(/\d{9,}/.test(ab)){alert("Phone number removed for safety");ab='Hi ❤️';}me.name=n;me.age=a;me.city=document.getElementById('e_city').value;me.about=ab;me.photo=editPhotoData||me.photo;let idx=users.findIndex(u=>u.id==me.id);users[idx]=me;save();alert("✅ Profile Updated!");closeEdit();render();}
+function showMyProfile(){hideAllSections();let b=document.getElementById('myProfileBox');b.classList.remove('hidden');document.getElementById('myProfileView').innerHTML=`<img src="${me.photo}" onerror="this.src='${DEFAULT_PHOTO}'"><h2>${me.name} - ${me.age}</h2><p>📍 ${me.city}</p><p>${me.about}</p><p class="small">🔒 Your phone ${me.phone||''} is private, not shown to others</p>`;}
+function openEdit(){hideAllSections();let e=document.getElementById('editBox');e.classList.remove('hidden');document.getElementById('e_name').value=me.name;document.getElementById('e_age').value=me.age;document.getElementById('e_city').value=me.city;document.getElementById('e_about').value=me.about;document.getElementById('e_preview').src=me.photo;editPhotoData=me.photo;}
+function closeEdit(){showMyProfile();}
+function saveEdit(){let n=document.getElementById('e_name').value.trim(),a=document.getElementById('e_age').value;if(!n||!a) return alert("Fill Name and Age");if(a<18) return alert("Must be 18+");let ab=document.getElementById('e_about').value;if(/\d{9,}/.test(ab)){alert("Phone number removed for safety");ab='Hi ❤️';}me.name=n;me.age=a;me.city=document.getElementById('e_city').value;me.about=ab;me.photo=editPhotoData||me.photo;let idx=users.findIndex(u=>u.id==me.id);users[idx]=me;save();alert("✅ Profile Updated!");showMyProfile();render();}
 function deleteAccount(){if(confirm("DELETE your account forever?")){users=users.filter(u=>u.id!==me.id);me=null;blocks=[];save();localStorage.removeItem('ml_me');alert("Account deleted. Bye 😢");location.reload();}}
-function showLikes(){document.getElementById('list').classList.add('hidden');document.getElementById('myProfileBox').classList.add('hidden');document.getElementById('editBox').classList.add('hidden');let b=document.getElementById('likesBox');b.classList.remove('hidden');let myLikes=likes.filter(l=>l.to==me.id);if(!myLikes.length) document.getElementById('likesList').innerHTML="No likes yet. Keep shining! ❤️";else{let h='';myLikes.forEach(l=>{let u=users.find(x=>x.id==l.from);if(u) h+=`<div class="card"><img src="${u.photo}" style="width:80px;height:80px"><b>${u.name} - ${u.age} - ${u.city}</b></div>`});document.getElementById('likesList').innerHTML=h;}}
+function showLikes(){hideAllSections();let b=document.getElementById('likesBox');b.classList.remove('hidden');let myLikes=likes.filter(l=>l.to==me.id);if(!myLikes.length) document.getElementById('likesList').innerHTML="No likes yet. Keep shining! ❤️";else{let h='';myLikes.forEach(l=>{let u=users.find(x=>x.id==l.from);if(u){let iLiked=likes.some(x=>x.from==me.id&&x.to==u.id);h+=`<div class="card ${iLiked?'matchCard':''}"><img src="${u.photo}" style="width:80px;height:80px"><b>${u.name} - ${u.age} - ${u.city}</b><p>${iLiked?'💘 IT\'S A MATCH!':'Liked you - Like back to MATCH!'}</p><button class="pink" onclick="likeUser(${u.id},'${u.name}')">${iLiked?'❤️ LIKED ✓':'❤️ LIKE BACK'}</button><button class="pink" onclick="openChat(${u.id})">💬 CHAT</button></div>`}});document.getElementById('likesList').innerHTML=h;}}
+function showMatches(){hideAllSections();let b=document.getElementById('matchesBox');b.classList.remove('hidden');let matchedIds=users.filter(u=>isMatchWith(u.id)).map(u=>u.id);if(!matchedIds.length){document.getElementById('matchesList').innerHTML='<p>No matches yet 😢<br>Like people, and if they like you back, they will appear here! 💘<br><br>Go to Likes and LIKE BACK people who liked you!</p>';return;}let h='';matchedIds.forEach(id=>{let u=users.find(x=>x.id==id);h+=`<div class="card matchCard"><img src="${u.photo}" style="width:100px;height:100px"><h3>💘 MATCH! ${u.name} - ${u.age}</h3><p>📍 ${u.city}</p><p>${u.about}</p><button class="pink" onclick="openChat(${u.id})">💬 CHAT NOW</button></div>`});document.getElementById('matchesList').innerHTML=h;}
+function getChatKey(otherId){return [me.id,otherId].sort().join('_');}
+function openChat(otherId){
+currentChatId=otherId;
+let u=users.find(x=>x.id==otherId);
+if(!u) return alert("User not found");
+hideAllSections();
+document.getElementById('chatBox').classList.remove('hidden');
+document.getElementById('chatTitle').textContent='💬 Chat with '+u.name;
+renderChat();
+}
+function renderChat(){
+let key=getChatKey(currentChatId);
+let msgs=chats.filter(c=>c.key==key);
+let box=document.getElementById('chatMessages');
+if(!msgs.length) box.innerHTML='<p class="small" style="text-align:center">Say Hi ❤️ Start chatting!</p>';
+else{box.innerHTML=msgs.map(m=>`<div class="msg ${m.from==me.id?'msgMine':'msgTheirs'}">${m.text}<div style="font-size:11px;opacity:0.7">${m.time}</div></div>`).join('');}
+box.scrollTop=box.scrollHeight;
+}
+function sendMsg(){
+let inp=document.getElementById('chatInput');
+let txt=inp.value.trim();
+if(!txt) return;
+let now=new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+chats.push({key:getChatKey(currentChatId),from:me.id,to:currentChatId,text:txt,time:now});
+save(); inp.value=''; renderChat();
+setTimeout(()=>{
+let u=users.find(x=>x.id==currentChatId);
+if(u){chats.push({key:getChatKey(currentChatId),from:currentChatId,to:me.id,text:"Hi ❤️ Thanks for messaging me!",time:new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})});save(); renderChat();}
+},1200);
+}
+document.getElementById('chatInput').addEventListener('keypress',e=>{if(e.key==='Enter') sendMsg();});
+function showChats(){
+hideAllSections();
+document.getElementById('chatsBox').classList.remove('hidden');
+let keys=[...new Set(chats.filter(c=>c.from==me.id||c.to==me.id).map(c=>c.key))];
+if(!keys.length){document.getElementById('chatsList').innerHTML='<p>No chats yet. Go Home and press CHAT on someone! ❤️</p>';return;}
+let h='';
+keys.forEach(k=>{
+let otherId=k.split('_').find(id=>id!=me.id);
+let u=users.find(x=>x.id==otherId);
+if(!u) u={name:'Unknown',photo:DEFAULT_PHOTO,age:''};
+let last=chats.filter(c=>c.key==k).slice(-1)[0];
+h+=`<div class="card"><img src="${u.photo}" style="width:60px;height:60px"><b>${u.name}</b><p class="small">${last?last.text:''}</p><button class="pink" onclick="openChat(${u.id})">💬 OPEN CHAT</button></div>`;
+});
+document.getElementById('chatsList').innerHTML=h;
+}
+function backToChats(){showChats();}
 </script>
 </body>
-</html> 
+</html>     
