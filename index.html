@@ -95,7 +95,7 @@ button{width:100%;padding:12px;border:0;border-radius:12px;font-size:16px;font-w
 <div id="likesBox" class="card hidden"><h2>❤️ Who Liked You</h2><p class="small">Like them back to make a MATCH! 💘</p><div id="likesList"></div></div>
 <div id="matchesBox" class="card hidden"><h2>💘 Your Matches</h2><p class="small">Both liked each other! Chat now! 💬</p><div id="matchesList"></div></div>
 <div id="chatsBox" class="card hidden"><h2>💬 My Chats</h2><div id="chatsList"></div><button class="grey" onclick="showHome()">⬅️ Back to Home</button></div>
-<div id="chatBox" class="card hidden"><h2 id="chatTitle">💬 Chat</h2><p class="small" id="chatStatus">Connecting...</p><div id="chatMessages" class="chatBox"></div><div class="chatInputRow"><input id="chatInput" placeholder="Type message... ❤️"><button class="pink" onclick="sendMsg()">Send</button></div><button class="grey" onclick="backToChats()">⬅️ Back to Chats</button></div>
+<div id="chatBox" class="card hidden" data-chatid="" data-other=""><h2 id="chatTitle">💬 Chat</h2><p class="small" id="chatStatus">Connecting...</p><div id="chatMessages" class="chatBox"></div><div class="chatInputRow"><input id="chatInput" placeholder="Type message... ❤️"><button class="pink" onclick="sendMsg()">Send</button></div><button class="grey" onclick="backToChats()">⬅️ Back to Chats</button></div>
 </div>
 <div id="photoModal" onclick="this.style.display='none'" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:999;align-items:center;justify-content:center;flex-direction:column">
 <img id="bigPhoto" style="max-width:95%;max-height:85%;border-radius:15px;object-fit:contain">
@@ -186,7 +186,6 @@ if(found.secret!==sec) return alert("Wrong Secret Word! Try again.");
 found.pass=np; save(); pushUserToFirebase(found); alert("✅ Password changed! Now login with your NEW password."); hideForgot();
 }
 function showMain(){document.getElementById('authBox').classList.add('hidden');document.getElementById('mainBox').classList.remove('hidden');showHome();}
-// FIXED: hideAllSections does NOT touch chatListener or currentChatId - that was the bug!
 function hideAllSections(){
   document.getElementById('homeArea').classList.add('hidden');
   document.getElementById('myProfileBox').classList.add('hidden');
@@ -240,7 +239,6 @@ save(); pushUserToFirebase(me); alert("Saved ✅"); showMyProfile();
 function showLikes(){hideAllSections();document.getElementById('likesBox').classList.remove('hidden');let who=likes.filter(l=>l.to==me.id).map(l=>users.find(u=>u.id==l.from)).filter(Boolean);let html='';if(!who.length) html='<p>No likes yet. Keep shining! ❤️</p>';who.forEach(u=>{html+=`<div class="card"><img src="${u.photo}" onclick="openPhoto('${u.photo}')"><h3>${u.name} - ${u.age}</h3><p>📍 ${u.city}</p><button class="pink" onclick="likeUser(${u.id},'${u.name}')">❤️ LIKE BACK</button><button class="pink" onclick="openChat(${u.id})">💬 CHAT</button></div>`});document.getElementById('likesList').innerHTML=html;}
 function showMatches(){hideAllSections();document.getElementById('matchesBox').classList.remove('hidden');let ms=users.filter(u=>u.id!==me.id && likes.some(l=>l.from==me.id&&l.to==u.id) && likes.some(l=>l.from==u.id&&l.to==me.id));let html='';if(!ms.length) html='<p>No matches yet. Like people and they like you back! 💘</p>';ms.forEach(u=>{html+=`<div class="card matchCard"><img src="${u.photo}" onclick="openPhoto('${u.photo}')"><h3>${u.name} - ${u.age}</h3><p>📍 ${u.city}</p><button class="pink" onclick="openChat(${u.id})">💬 CHAT NOW</button></div>`});document.getElementById('matchesList').innerHTML=html;}
 function showChats(){
-  // Stop old chat listener ONLY when leaving chat to Chats list
   if(chatListener && db){ try{ db.ref(chatListener).off(); }catch(e){} chatListener=null; }
   hideAllSections();document.getElementById('chatsBox').classList.remove('hidden');
   if(!useFirebase||!db){document.getElementById('chatsList').innerHTML='<p>Chats need internet.</p>';return;}
@@ -264,12 +262,15 @@ function getChatId(otherId){ return [String(me.id), String(otherId)].sort().join
 function openChat(otherId){
   currentChatOtherId=otherId;
   currentChatId=getChatId(otherId);
+  window.myChatId=currentChatId; window.myOther=otherId;
   localStorage.setItem('ml_currentChatId', currentChatId);
   localStorage.setItem('ml_currentOther', otherId);
+  let box=document.getElementById('chatBox');
+  box.dataset.chatid=currentChatId; box.dataset.other=String(otherId);
   let other=users.find(u=>u.id==otherId);
   if(chatListener && db){ try{ db.ref(chatListener).off(); }catch(e){} }
   hideAllSections();
-  document.getElementById('chatBox').classList.remove('hidden');
+  box.classList.remove('hidden');
   document.getElementById('chatTitle').textContent='💬 Chat with '+(other?other.name:'');
   document.getElementById('chatStatus').textContent='Live Chat ❤️';
   document.getElementById('chatMessages').innerHTML='<p class="small">Loading messages...</p>';
@@ -289,7 +290,7 @@ function openChat(otherId){
           html+=`<div class="msg msgTheirs">${m.text||''}</div>`;
         }
       });
-      let box=document.getElementById('chatMessages'); box.innerHTML=html; box.scrollTop=box.scrollHeight;
+      let b=document.getElementById('chatMessages'); b.innerHTML=html; b.scrollTop=b.scrollHeight;
       keys.forEach(k=>{
         let m=data[k];
         if(m.to==me.id && !m.seen){ db.ref(chatListener+'/'+k+'/seen').set(true); }
@@ -300,19 +301,30 @@ function openChat(otherId){
 function sendMsg(){
   let inp=document.getElementById('chatInput');
   let txt=inp.value.trim(); if(!txt) return;
-  if(!currentChatId){
-    currentChatId = localStorage.getItem('ml_currentChatId');
-    currentChatOtherId = Number(localStorage.getItem('ml_currentOther'));
+  // ULTRA FIX: get chat from 4 places - box, window, variable, title
+  let box=document.getElementById('chatBox');
+  let cid = box.dataset.chatid || window.myChatId || currentChatId || localStorage.getItem('ml_currentChatId');
+  let oid = box.dataset.other || window.myOther || currentChatOtherId || localStorage.getItem('ml_currentOther');
+  // Last resort: find person from title "Chat with Spahu"
+  if(!cid || !oid){
+    let title=document.getElementById('chatTitle').textContent||'';
+    let name=title.replace('💬 Chat with ','').trim();
+    let found=users.find(u=>u.name && u.name.trim().toLowerCase()===name.toLowerCase());
+    if(found){ oid=found.id; cid=getChatId(found.id); }
   }
-  if(!currentChatId || !currentChatOtherId){ alert("Tap Back to Chats and open chat again"); return; }
+  if(!cid || !oid || oid==='0' || oid==='null'){ alert("Tap Back to Chats and open chat again"); return; }
+  oid=Number(oid);
+  // Save back so next send works
+  currentChatId=cid; currentChatOtherId=oid; window.myChatId=cid; window.myOther=oid;
+  box.dataset.chatid=cid; box.dataset.other=String(oid);
   inp.value='';
   if(useFirebase && db){
-    db.ref('chats/'+currentChatId).push({from:me.id, to:currentChatOtherId, text:txt, time:Date.now(), seen:false});
+    db.ref('chats/'+cid).push({from:me.id, to:oid, text:txt, time:Date.now(), seen:false});
   }
 }
 document.getElementById('chatInput').addEventListener('keydown', e=>{ if(e.key==='Enter') sendMsg(); });
-function backToChats(){ if(chatListener && db){ try{ db.ref(chatListener).off(); }catch(e){} chatListener=null; } currentChatId=null; currentChatOtherId=null; localStorage.removeItem('ml_currentChatId'); localStorage.removeItem('ml_currentOther'); showChats(); }
+function backToChats(){ if(chatListener && db){ try{ db.ref(chatListener).off(); }catch(e){} chatListener=null; } currentChatId=null; currentChatOtherId=null; window.myChatId=null; window.myOther=null; document.getElementById('chatBox').dataset.chatid=''; document.getElementById('chatBox').dataset.other=''; localStorage.removeItem('ml_currentChatId'); localStorage.removeItem('ml_currentOther'); showChats(); }
 function deleteAccount(){ if(!confirm("Delete your account forever?")) return; if(useFirebase&&db) db.ref('users/'+me.id).remove(); users=users.filter(u=>u.id!==me.id); me=null; localStorage.removeItem('ml_me'); save(); location.reload(); }
 </script>
 </body>
-</html>   
+</html>
