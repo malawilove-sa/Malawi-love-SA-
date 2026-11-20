@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+  <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -30,6 +30,8 @@ button{width:100%;padding:12px;border:0;border-radius:12px;font-size:16px;font-w
 .tickSent{color:#ffd6e0}
 .chatInputRow{display:flex;gap:6px}.chatInputRow input{flex:1}.chatInputRow button{width:70px}
 .matchCard{border:3px solid #ff2e63;background:linear-gradient(180deg,#fff,#ffe6ef)}
+.newBadge{background:#ff3b30;color:#fff;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:bold;animation:blink 1s infinite}
+@keyframes blink{50%{opacity:0.5}}
 </style>
 </head>
 <body>
@@ -77,11 +79,11 @@ button{width:100%;padding:12px;border:0;border-radius:12px;font-size:16px;font-w
 <button class="grey" onclick="showMyProfile()">👤 Profile</button>
 <button class="grey" onclick="showLikes()">❤️ Likes</button>
 <button class="purple" onclick="showMatches()">💘 Matches</button>
-<button class="pink" onclick="showChats()">💬 Chats</button>
+<button class="pink" id="chatsTopBtn" onclick="showChats()">💬 Chats</button>
 <button class="red" onclick="logout()">Logout</button>
 </div>
 <div id="homeArea">
-<div class="card"><p class="small" id="peopleCount">Loading people...</p>
+<div class="card"><p class="small" id="peopleCount">Loading people...</p><div id="newMsgAlert"></div>
 <h3>🔍 Search</h3>
 <select id="s_city"><option value="">All Cities</option><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Polokwane</option><option>Blantyre</option><option>Lilongwe</option><option>Other</option></select>
 <div class="row"><input id="s_min" type="number" placeholder="Min Age"><input id="s_max" type="number" placeholder="Max Age"></div>
@@ -94,7 +96,7 @@ button{width:100%;padding:12px;border:0;border-radius:12px;font-size:16px;font-w
 <div id="editBox" class="card hidden"><h2>✏️ Edit My Profile</h2><input id="e_name" placeholder="Name"><input id="e_age" type="number" placeholder="Age"><select id="e_city"><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Polokwane</option><option>Blantyre</option><option>Lilongwe</option><option>Other</option></select><input id="e_about" placeholder="About you"><label>Change Photo:<input id="e_photo" type="file" accept="image/*"></label><img id="e_preview" style="width:120px;height:120px;border-radius:50%;object-fit:cover"><button class="green" onclick="saveEdit()">✅ SAVE CHANGES</button><button class="grey" onclick="closeEdit()">Cancel</button></div>
 <div id="likesBox" class="card hidden"><h2>❤️ Who Liked You</h2><p class="small">Like them back to make a MATCH! 💘</p><div id="likesList"></div></div>
 <div id="matchesBox" class="card hidden"><h2>💘 Your Matches</h2><p class="small">Both liked each other! Chat now! 💬</p><div id="matchesList"></div></div>
-<div id="chatsBox" class="card hidden"><h2>💬 My Chats</h2><div id="chatsList"></div><button class="grey" onclick="showHome()">⬅️ Back to Home</button></div>
+<div id="chatsBox" class="card hidden"><h2>💬 My Chats</h2><p class="small">Tap OPEN CHAT to see new messages!</p><div id="chatsList"></div><button class="grey" onclick="showHome()">⬅️ Back to Home</button></div>
 <div id="chatBox" class="card hidden" data-chatid="" data-other=""><h2 id="chatTitle">💬 Chat</h2><p class="small" id="chatStatus">Connecting...</p><div id="chatMessages" class="chatBox"></div><div class="chatInputRow"><input id="chatInput" placeholder="Type message... ❤️"><button class="pink" onclick="sendMsg()">Send</button></div><button class="grey" onclick="backToChats()">⬅️ Back to Chats</button></div>
 </div>
 <div id="photoModal" onclick="this.style.display='none'" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:999;align-items:center;justify-content:center;flex-direction:column">
@@ -122,6 +124,7 @@ let reports=JSON.parse(localStorage.getItem('ml_reports')||'[]');
 let chats=JSON.parse(localStorage.getItem('ml_chats')||'[]');
 let filter={city:'',min:'',max:''};
 let photoData=''; let editPhotoData=''; let currentChatId=null; let chatListener=null; let currentChatOtherId=null;
+let chatsListenerOn=false;
 function toggleEye(id,btn){let inp=document.getElementById(id);if(inp.type==='password'){inp.type='text';btn.textContent='🙈';}else{inp.type='password';btn.textContent='👁️';}}
 function cleanPhone(t){if(!t) return t; if(/\d{9,}/.test(t)) return 'Hi ❤️'; return t;}
 function normPhone(p){return String(p||'').replace(/\D/g,'');}
@@ -147,6 +150,28 @@ if(useFirebase && db){
   db.ref('likes').on('value', snap=>{
     let fbLikes = snap.val() ? Object.values(snap.val()) : [];
     if(fbLikes.length){ likes=fbLikes; localStorage.setItem('ml_likes',JSON.stringify(likes)); if(me) render(); }
+  });
+  // LIVE CHATS WATCHER - shows NEW MESSAGE badge even on Home
+  db.ref('chats').on('value', snap=>{
+    if(!me) return;
+    let all=snap.val()||{}; let unreadNames=[];
+    Object.keys(all).forEach(cid=>{
+      let parts=cid.split('_'); if(!parts.includes(String(me.id))) return;
+      let msgs=Object.values(all[cid]||{});
+      msgs.forEach(m=>{ if(m.to==me.id && !m.seen){ let otherId=parts.find(p=>p!=String(me.id)); let u=users.find(x=>String(x.id)==String(otherId)); if(u && !unreadNames.includes(u.name)) unreadNames.push(u.name); } });
+    });
+    let alertBox=document.getElementById('newMsgAlert');
+    let topBtn=document.getElementById('chatsTopBtn');
+    if(unreadNames.length){
+      if(alertBox) alertBox.innerHTML=`<div style="background:#ff3b30;color:#fff;padding:12px;border-radius:12px;font-weight:bold;margin:10px 0">🔔 NEW MESSAGE from ${unreadNames.join(', ')}! <br><button class="black" onclick="showChats()">👉 TAP TO READ</button></div>`;
+      if(topBtn) topBtn.textContent='💬 Chats 🔴 '+unreadNames.length;
+      if(alertBox && !document.getElementById('chatBox').classList.contains('hidden')){} else {}
+    } else {
+      if(alertBox) alertBox.innerHTML='';
+      if(topBtn) topBtn.textContent='💬 Chats';
+    }
+    // If chats list is open, refresh it live
+    if(!document.getElementById('chatsBox').classList.contains('hidden')) renderChatsList(all);
   });
 }
 function showTab(which){document.getElementById('forgotForm').classList.add('hidden');if(which=='signup'){document.getElementById('signupForm').classList.remove('hidden');document.getElementById('loginForm').classList.add('hidden');document.getElementById('tabSignup').className='tabBtn tabActive';document.getElementById('tabLogin').className='tabBtn tabInactive';}else{document.getElementById('signupForm').classList.add('hidden');document.getElementById('loginForm').classList.remove('hidden');document.getElementById('tabSignup').className='tabBtn tabInactive';document.getElementById('tabLogin').className='tabBtn tabActive';}}
@@ -238,25 +263,30 @@ save(); pushUserToFirebase(me); alert("Saved ✅"); showMyProfile();
 }
 function showLikes(){hideAllSections();document.getElementById('likesBox').classList.remove('hidden');let who=likes.filter(l=>l.to==me.id).map(l=>users.find(u=>u.id==l.from)).filter(Boolean);let html='';if(!who.length) html='<p>No likes yet. Keep shining! ❤️</p>';who.forEach(u=>{html+=`<div class="card"><img src="${u.photo}" onclick="openPhoto('${u.photo}')"><h3>${u.name} - ${u.age}</h3><p>📍 ${u.city}</p><button class="pink" onclick="likeUser(${u.id},'${u.name}')">❤️ LIKE BACK</button><button class="pink" onclick="openChat(${u.id})">💬 CHAT</button></div>`});document.getElementById('likesList').innerHTML=html;}
 function showMatches(){hideAllSections();document.getElementById('matchesBox').classList.remove('hidden');let ms=users.filter(u=>u.id!==me.id && likes.some(l=>l.from==me.id&&l.to==u.id) && likes.some(l=>l.from==u.id&&l.to==me.id));let html='';if(!ms.length) html='<p>No matches yet. Like people and they like you back! 💘</p>';ms.forEach(u=>{html+=`<div class="card matchCard"><img src="${u.photo}" onclick="openPhoto('${u.photo}')"><h3>${u.name} - ${u.age}</h3><p>📍 ${u.city}</p><button class="pink" onclick="openChat(${u.id})">💬 CHAT NOW</button></div>`});document.getElementById('matchesList').innerHTML=html;}
+function renderChatsList(all){
+  let ids=new Set(); let unreadMap={};
+  Object.keys(all||{}).forEach(cid=>{
+    let parts=cid.split('_'); if(parts.includes(String(me.id))){
+      let other=parts.find(p=>p!=String(me.id)); if(other) ids.add(Number(other));
+      let msgs=Object.values(all[cid]||{});
+      let unread=msgs.filter(m=>m.to==me.id && !m.seen).length;
+      if(unread>0) unreadMap[other]=unread;
+    }
+  });
+  users.forEach(u=>{ if(u.id!==me.id && likes.some(l=>l.from==me.id&&l.to==u.id)) ids.add(u.id); });
+  let html=''; if(!ids.size) html='<p>No chats yet. Go to Home and tap CHAT! 💬</p>';
+  ids.forEach(id=>{
+    let u=users.find(x=>x.id==id); if(!u) return;
+    let badge=unreadMap[String(id)]?`<span class="newBadge">🔴 ${unreadMap[String(id)]} NEW</span>`:'';
+    html+=`<div class="card"><img src="${u.photo}" onclick="openPhoto('${u.photo}')" style="width:80px;height:80px"><h3>${u.name} ${badge}</h3><button class="pink" onclick="openChat(${u.id})">💬 OPEN CHAT</button></div>`;
+  });
+  document.getElementById('chatsList').innerHTML=html;
+}
 function showChats(){
   if(chatListener && db){ try{ db.ref(chatListener).off(); }catch(e){} chatListener=null; }
   hideAllSections();document.getElementById('chatsBox').classList.remove('hidden');
   if(!useFirebase||!db){document.getElementById('chatsList').innerHTML='<p>Chats need internet.</p>';return;}
-  db.ref('chats').once('value', snap=>{
-    let all=snap.val()||{}; let ids=new Set();
-    Object.keys(all).forEach(cid=>{
-      let parts=cid.split('_'); if(parts.includes(String(me.id))){
-        let other=parts.find(p=>p!=String(me.id)); if(other) ids.add(Number(other));
-      }
-    });
-    users.forEach(u=>{ if(u.id!==me.id && likes.some(l=>l.from==me.id&&l.to==u.id)) ids.add(u.id); });
-    let html=''; if(!ids.size) html='<p>No chats yet. Go to Home and tap CHAT! 💬</p>';
-    ids.forEach(id=>{
-      let u=users.find(x=>x.id==id); if(!u) return;
-      html+=`<div class="card"><img src="${u.photo}" onclick="openPhoto('${u.photo}')" style="width:80px;height:80px"><h3>${u.name}</h3><button class="pink" onclick="openChat(${u.id})">💬 OPEN CHAT</button></div>`;
-    });
-    document.getElementById('chatsList').innerHTML=html;
-  });
+  db.ref('chats').once('value', snap=>{ renderChatsList(snap.val()||{}); });
 }
 function getChatId(otherId){ return [String(me.id), String(otherId)].sort().join('_'); }
 function openChat(otherId){
@@ -301,11 +331,9 @@ function openChat(otherId){
 function sendMsg(){
   let inp=document.getElementById('chatInput');
   let txt=inp.value.trim(); if(!txt) return;
-  // ULTRA FIX: get chat from 4 places - box, window, variable, title
   let box=document.getElementById('chatBox');
   let cid = box.dataset.chatid || window.myChatId || currentChatId || localStorage.getItem('ml_currentChatId');
   let oid = box.dataset.other || window.myOther || currentChatOtherId || localStorage.getItem('ml_currentOther');
-  // Last resort: find person from title "Chat with Spahu"
   if(!cid || !oid){
     let title=document.getElementById('chatTitle').textContent||'';
     let name=title.replace('💬 Chat with ','').trim();
@@ -314,7 +342,6 @@ function sendMsg(){
   }
   if(!cid || !oid || oid==='0' || oid==='null'){ alert("Tap Back to Chats and open chat again"); return; }
   oid=Number(oid);
-  // Save back so next send works
   currentChatId=cid; currentChatOtherId=oid; window.myChatId=cid; window.myOther=oid;
   box.dataset.chatid=cid; box.dataset.other=String(oid);
   inp.value='';
