@@ -1,55 +1,93 @@
-  <!DOCTYPE html>
+ <!DOCTYPE html>
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Malawi Love SA</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-body{background:#ffeef5;font-family:sans-serif;padding:15px}
-.card{background:white;padding:20px;border-radius:20px}
-input{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:1px solid #ddd;box-sizing:border-box}
+body{font-family:Arial;background:#ff6b81;color:white;padding:20px}
+input{background:white;padding:14px;border:none;border-radius:12px;width:100%;box-sizing:border-box;margin:6px 0}
 button{width:100%;padding:14px;border:none;border-radius:12px;font-weight:bold;margin-top:10px}
-.login{background:#ff2e88;color:white}
-.signup{background:#00c853;color:white}
+.login{background:#ff4757;color:white}
+.signup{background:#2ed573;color:white}
+.card{background:white;color:#333;padding:15px;border-radius:15px;margin:10px 0}
+.logout{background:#57606f;color:white}
 </style>
 </head>
 <body>
 <h2 style="text-align:center">Malawi Love SA ❤️</h2>
-<p id="status" style="text-align:center">Connecting...</p>
-<div class="card">
+<p id="status" style="text-align:center">Ready</p>
+
+<div id="auth">
 <h2 style="text-align:center">Login / Sign Up</h2>
-<input id="name" placeholder="Full Name">
-<input id="phone" placeholder="Phone - e.g 0994655709">
+<input id="name" placeholder="Full Name - e.g. Muhammad Alie">
+<input id="phone" placeholder="Phone - e.g. 0799455789">
 <input id="pass" type="password" placeholder="Password">
 <input id="age" type="number" placeholder="Age">
-<input id="city" placeholder="City - e.g Durban">
-<input id="interests" placeholder="Interests - e.g Singing">
+<input id="city" placeholder="City - e.g. Durban">
+<input id="interests" placeholder="Interests - e.g. Singing">
 <button class="login" onclick="doLogin()">LOGIN</button>
-<button class="signup" onclick="doSignup()">SIGN UP - CREATE MY PROFILE ❤️</button>
+<button class="signup" onclick="doSignup()">SIGN UP ❤️ CREATE MY PROFILE</button>
 </div>
-<p id="msg" style="text-align:center;font-weight:bold"></p>
+
+<div id="home" style="display:none">
+<h2 id="welcome" style="text-align:center"></h2>
+<p style="text-align:center">People near you ❤️</p>
+<div id="people"></div>
+<button class="logout" onclick="doLogout()">LOGOUT</button>
+</div>
+
 <script>
 const SUPABASE_URL = "https://fzkavixubxtrlptplymq.supabase.co";
 const SUPABASE_KEY = "sb_publishable_SnXO5On70bbqUONRFAX4EA_0JBAw_Sc";
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-document.getElementById('status').innerText = "Ready ✅ - Tap Sign Up";
+
 function getEmail(){ return document.getElementById('phone').value.trim() + "@gmail.com"; }
+
 async function doSignup(){
-  document.getElementById('msg').innerText = "Creating profile... please wait";
+  document.getElementById('status').innerText = "Creating profile... please wait";
   const email = getEmail();
   const password = document.getElementById('pass').value;
-  const {data, error} = await supabaseClient.auth.signUp({email: email, password: password});
-  if(error){ document.getElementById('msg').innerText = "Error: " + error.message; alert("Error: " + error.message); return; }
-  const user = data.user;
-  const {error: err2} = await supabaseClient.from('profiles').insert([{id: user.id, full_name: document.getElementById('name').value, phone: document.getElementById('phone').value, age: parseInt(document.getElementById('age').value), city: document.getElementById('city').value, interests: document.getElementById('interests').value}]);
-  if(err2){ document.getElementById('msg').innerText = "Profile Error: " + err2.message; alert("Profile Error: " + err2.message); return; }
-  document.getElementById('msg').innerText = "SUCCESS! Profile Created ❤️";
-  alert("SUCCESS! Your profile is created!");
+  const { data, error } = await supabaseClient.auth.signUp({ email: email, password: password });
+  if(error){ alert("Sign Up Error: " + error.message); return; }
+  const { error: err2 } = await supabaseClient.from('profiles').insert([{ id: data.user.id, full_name: document.getElementById('name').value, phone: document.getElementById('phone').value, age: document.getElementById('age').value, city: document.getElementById('city').value, interests: document.getElementById('interests').value }]);
+  if(err2){ alert("Profile Error: " + err2.message); return; }
+  alert("SUCCESS! Your profile is created ❤️");
+  showHome();
 }
+
 async function doLogin(){
-  const {data, error} = await supabaseClient.auth.signInWithPassword({email: getEmail(), password: document.getElementById('pass').value});
-  if(error){ alert("Login Error: " + error.message); } else { alert("Welcome back! Logged in ❤️"); }
+  document.getElementById('status').innerText = "Logging in...";
+  const email = getEmail();
+  const password = document.getElementById('pass').value;
+  const { data, error } = await supabaseClient.auth.signInWithPassword({ email: email, password: password });
+  if(error){ alert("Login Error: " + error.message); return; }
+  alert("Welcome back! Logged in ❤️");
+  showHome();
 }
+
+async function showHome(){
+  document.getElementById('auth').style.display = "none";
+  document.getElementById('home').style.display = "block";
+  document.getElementById('status').innerText = "You are inside ❤️";
+  document.getElementById('welcome').innerText = "Welcome! ❤️";
+  const { data: people } = await supabaseClient.from('profiles').select('*');
+  let html = "";
+  if(people){
+    people.forEach(p => {
+      html += `<div class="card"><h3>${p.full_name || 'No Name'}</h3><p>📍 ${p.city || ''} • Age: ${p.age || ''}</p><p>❤️ ${p.interests || ''}</p><p>📞 ${p.phone || ''}</p></div>`;
+    });
+  }
+  document.getElementById('people').innerHTML = html || "<p>No people yet</p>";
+}
+
+async function doLogout(){
+  await supabaseClient.auth.signOut();
+  document.getElementById('auth').style.display = "block";
+  document.getElementById('home').style.display = "none";
+}
+
+supabaseClient.auth.getSession().then(({data}) => { if(data.session) showHome(); });
 </script>
 </body>
-</html>   
+</html>
