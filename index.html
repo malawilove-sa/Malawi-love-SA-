@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -18,6 +18,7 @@ button{width:100%;padding:12px;border:0;border-radius:12px;font-size:16px;font-w
 .small{font-size:13px;color:#555}
 .tabBtn{flex:1;padding:12px;border-radius:12px 12px 0 0}
 .tabActive{background:#ff2e63;color:#fff}.tabInactive{background:#eee;color:#333}
+.passwrap{position:relative;width:95%;margin:6px auto}.passwrap input{width:100%;padding-right:45px;margin:0}.eyeBtn{position:absolute;right:5px;top:50%;transform:translateY(-50%);width:38px;padding:8px;background:transparent;font-size:18px;border:0;cursor:pointer}
 </style>
 </head>
 <body>
@@ -37,9 +38,9 @@ button{width:100%;padding:12px;border:0;border-radius:12px;font-size:16px;font-w
 <select id="a_city"><option value="">Select City</option><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Polokwane</option><option>Blantyre</option><option>Lilongwe</option><option>Other</option></select>
 <input id="a_phone" type="tel" placeholder="Phone Number - e.g. 0712345678">
 <input id="a_about" placeholder="About you - NO phone number here">
-<input id="a_pass" type="password" placeholder="Create Password">
+<div class="passwrap"><input id="a_pass" type="password" placeholder="Create Password"><button type="button" class="eyeBtn" onclick="toggleEye('a_pass',this)">👁️</button></div>
 <input id="a_secret" type="text" placeholder="Secret Word for Forgot Password - e.g. Mango">
-<p class="small" style="text-align:left">🔑 Remember your Secret Word! You need it if you forget password. E.g. your mother's name or favourite food.</p>
+<p class="small" style="text-align:left">🔑 Remember your Secret Word! You need it if you forget password.</p>
 <label style="display:block;text-align:left;font-size:14px;margin:8px"><input id="a_18" type="checkbox" style="width:auto"> I am 18+ years old and I agree to Terms & Privacy</label>
 <label style="display:block">Your Photo:<input id="a_photo" type="file" accept="image/*"></label>
 <img id="a_preview" class="hidden" style="margin:auto">
@@ -50,10 +51,10 @@ button{width:100%;padding:12px;border:0;border-radius:12px;font-size:16px;font-w
 <!-- LOGIN -->
 <div id="loginForm" class="hidden">
 <input id="l_phone" type="tel" placeholder="Your Phone Number">
-<input id="l_pass" type="password" placeholder="Your Password">
+<div class="passwrap"><input id="l_pass" type="password" placeholder="Your Password"><button type="button" class="eyeBtn" onclick="toggleEye('l_pass',this)">👁️</button></div>
 <button class="black" onclick="doLogin()">LOGIN ➡️</button>
 <button class="orange" onclick="showForgot()">🔑 FORGOT PASSWORD?</button>
-<p class="small">Login with <b>Phone Number + Password</b></p>
+<p class="small">Login with <b>Phone Number + Password</b><br>Press 👁️ to see your password</p>
 <button class="grey" onclick="showTab('signup')">Don't have account? Go to SIGN UP</button>
 </div>
 
@@ -62,7 +63,7 @@ button{width:100%;padding:12px;border:0;border-radius:12px;font-size:16px;font-w
 <h3>🔑 Forgot Password</h3>
 <input id="f_phone" type="tel" placeholder="Your Phone Number">
 <input id="f_secret" type="text" placeholder="Your Secret Word">
-<input id="f_newpass" type="password" placeholder="New Password">
+<div class="passwrap"><input id="f_newpass" type="password" placeholder="New Password"><button type="button" class="eyeBtn" onclick="toggleEye('f_newpass',this)">👁️</button></div>
 <button class="green" onclick="doForgot()">RESET PASSWORD ✅</button>
 <button class="grey" onclick="hideForgot()">⬅️ Back to LOGIN</button>
 <p class="small">Type phone + secret word you chose when you signed up. Then set new password.</p>
@@ -120,6 +121,10 @@ let reports=JSON.parse(localStorage.getItem('ml_reports')||'[]');
 let filter={city:'',min:'',max:''};
 let photoData='';
 let editPhotoData='';
+function toggleEye(id,btn){
+let inp=document.getElementById(id);
+if(inp.type==='password'){inp.type='text';btn.textContent='🙈';}else{inp.type='password';btn.textContent='👁️';}
+}
 function cleanPhone(t){if(!t) return t; if(/\d{9,}/.test(t)) return 'Hi ❤️'; return t;}
 function normPhone(p){return String(p||'').replace(/\D/g,'');}
 users.forEach(u=>{u.about=cleanPhone(u.about); if(!u.photo||u.photo.includes('via.placeholder')) u.photo=DEFAULT_PHOTO;});
@@ -178,10 +183,9 @@ if(!ph||!sec||!np) return alert("Fill Phone + Secret Word + New Password");
 let found=users.find(u=>normPhone(u.phone)==ph);
 if(!found) return alert("No account with that phone number.");
 if(!found.secret){
-  // Old accounts without secret - allow reset with phone only once, then set secret
   found.pass=np; found.secret=sec; save(); alert("Password reset! Old account had no secret, now your secret is: "+sec); hideForgot(); return;
 }
-if(found.secret!==sec) return alert("Wrong Secret Word! Try again. Hint: It was what you typed when you signed up.");
+if(found.secret!==sec) return alert("Wrong Secret Word! Try again.");
 found.pass=np; save(); alert("✅ Password changed! Now login with your NEW password."); hideForgot();
 }
 function showMain(){document.getElementById('authBox').classList.add('hidden');document.getElementById('mainBox').classList.remove('hidden');showHome();}
@@ -211,4 +215,4 @@ function deleteAccount(){if(confirm("DELETE your account forever?")){users=users
 function showLikes(){document.getElementById('list').classList.add('hidden');document.getElementById('myProfileBox').classList.add('hidden');document.getElementById('editBox').classList.add('hidden');let b=document.getElementById('likesBox');b.classList.remove('hidden');let myLikes=likes.filter(l=>l.to==me.id);if(!myLikes.length) document.getElementById('likesList').innerHTML="No likes yet. Keep shining! ❤️";else{let h='';myLikes.forEach(l=>{let u=users.find(x=>x.id==l.from);if(u) h+=`<div class="card"><img src="${u.photo}" style="width:80px;height:80px"><b>${u.name} - ${u.age} - ${u.city}</b></div>`});document.getElementById('likesList').innerHTML=h;}}
 </script>
 </body>
-</html>
+</html> 
