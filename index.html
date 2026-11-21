@@ -1,4 +1,4 @@
-       <!DOCTYPE html>
+      <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -163,77 +163,4 @@ function render(){
   var list=document.getElementById('list');
   var shown=users.filter(function(u){return String(u.id)!==String(me.id)&&blocks.indexOf(u.id)===-1&&u.name&&u.photo;});
   if(filter.city)shown=shown.filter(function(u){return u.city===filter.city});
-  if(filter.gender)shown=shown.filter(function(u){return u.gender===filter.gender});
-  if(filter.min)shown=shown.filter(function(u){return Number(u.age)>=Number(filter.min)});
-  if(filter.max)shown=shown.filter(function(u){return Number(u.age)<=Number(filter.max)});
-  if(!shown.length){list.innerHTML='<div class="card"><div class="cardBody" style="text-align:center"><h3>Be the first! ❤️</h3><p class="small">Share MalawiLove SA with friends in SA!</p><button class="pink" onclick="clearSearch()">Show Everyone</button></div></div>';return;}
-  var h='';
-  for(var i=0;i<shown.length;i++){var u=shown[i];var liked=alreadyLiked(u.id);var isMatch=false;var ms=getMatches();for(var k=0;k<ms.length;k++)if(ms[k].id===u.id)isMatch=true;
-    h+='<div class="card"><img class="profile" src="'+u.photo+'"><div class="cardBody"><h3 style="margin:0">'+u.name+', '+u.age+' <span class="verified">✓ Verified</span>'+(isMatch?' <span style="background:#ff2e63;color:#fff;padding:3px 8px;border-radius:12px;font-size:11px">💘 MATCH</span>':'')+'</h3><p class="small">📍 '+u.city+' • '+u.gender+' • '+(u.looking||'')+'</p><p>'+(u.about||'')+'</p><div class="row"><button class="pink likeBtn '+(liked?'liked':'')+'" onclick="likeUser(\''+u.id+'\',this)">'+(liked?'✅ Liked ❤️':'❤️ Like')+'</button><button class="black" onclick="openChat(\''+u.id+'\')">💬 Message</button></div></div></div>';}
-  list.innerHTML=h;
-}
-function showMyProfile(){hideAll();document.getElementById('myProfileBox').classList.remove('hidden');document.getElementById('myProfileView').innerHTML='<img class="avatar" src="'+me.photo+'"><h3>'+me.name+', '+me.age+'</h3><span class="genderTag">'+me.gender+'</span> <span class="genderTag">📍 '+me.city+'</span> <span class="genderTag">'+me.looking+'</span><p>'+me.about+'</p>';}
-function openEdit(){hideAll();document.getElementById('editBox').classList.remove('hidden');document.getElementById('e_name').value=me.name;document.getElementById('e_age').value=me.age;document.getElementById('e_gender').value=me.gender;document.getElementById('e_looking').value=me.looking;document.getElementById('e_city').value=me.city;document.getElementById('e_about').value=me.about;document.getElementById('e_preview').src=me.photo;}
-function closeEdit(){showMyProfile();}
-function saveEdit(){me.name=document.getElementById('e_name').value;me.age=document.getElementById('e_age').value;me.gender=document.getElementById('e_gender').value;me.looking=document.getElementById('e_looking').value;me.city=document.getElementById('e_city').value;me.about=document.getElementById('e_about').value;if(editPhotoData)me.photo=editPhotoData;for(var i=0;i<users.length;i++)if(users[i].id===me.id)users[i]=me;saveAll();showMyProfile();toast('Profile updated ✅');}
-function deleteAccount(){if(!confirm('Delete account?'))return;users=users.filter(function(u){return u.id!==me.id});me=null;saveAll();location.reload();}
-// ===== LIKE =====
-function likeUser(id,btn){
-  if(!me){toast('Please log in first');return;}
-  var o=getUser(id);if(!o){toast('User not found');return;}
-  if(alreadyLiked(id)){toast('You already liked '+o.name+' ❤️');return;}
-  likes.push({from:me.id,to:id,time:Date.now()});saveAll();
-  if(btn){btn.textContent='✅ Liked ❤️';btn.classList.add('liked');}
-  updateCounts();
-  var theyLikedMe=false;for(var i=0;i<likes.length;i++)if(likes[i].from===id&&String(likes[i].to)===String(me.id))theyLikedMe=true;
-  if(theyLikedMe){
-    lastMatch=o;
-    document.getElementById('matchPhoto').src=o.photo;
-    document.getElementById('matchName').textContent=o.name+', '+o.age;
-    document.getElementById('matchModal').style.display='flex';
-    toast('It\'s a Match with '+o.name+'! 💘');
-  }else{
-    toast('You liked '+o.name+' ❤️ If they like you back = MATCH!');
-  }
-  render();
-}
-function closeMatch(){document.getElementById('matchModal').style.display='none';}
-function goChatFromMatch(){closeMatch();if(lastMatch)openChat(lastMatch.id);}
-function showLikes(){hideAll();document.getElementById('likesBox').classList.remove('hidden');updateCounts();var who=[];for(var i=0;i<likes.length;i++)if(String(likes[i].to)===String(me.id)){var u=getUser(likes[i].from);if(u)who.push(u);}var h='';if(!who.length)h='<p>No likes yet. Your profile is live ❤️</p>';else for(var k=0;k<who.length;k++)h+='<div style="padding:12px 0;border-bottom:1px solid #eee"><b>'+who[k].name+', '+who[k].age+' • '+who[k].city+'</b><br><div class="row"><button class="pink" onclick="likeUser(\''+who[k].id+'\',this)">❤️ Like Back</button><button class="black" onclick="openChat(\''+who[k].id+'\')">💬 Message</button></div></div>';document.getElementById('likesList').innerHTML=h;}
-function showMatches(){hideAll();document.getElementById('matchesBox').classList.remove('hidden');var m=getMatches();var h='';if(!m.length)h='<p>No matches yet. Like someone - if they like you back, you match! ❤️</p>';else for(var k=0;k<m.length;k++)h+='<div style="padding:12px 0;border-bottom:1px solid #eee"><b>💘 '+m[k].name+', '+m[k].age+' • '+m[k].city+'</b><br><button class="pink" onclick="openChat(\''+m[k].id+'\')">💬 Message Your Match</button></div>';document.getElementById('matchesList').innerHTML=h;}
-function showChats(){hideAll();document.getElementById('chatsBox').classList.remove('hidden');var ids=[];for(var key in chats){if(key.indexOf(me.id)>-1){var p=key.split('___');var o=p[0]===me.id?p[1]:p[0];if(ids.indexOf(o)===-1)ids.push(o);}}for(var i=0;i<likes.length;i++){var oid=likes[i].from===me.id?likes[i].to:likes[i].from;if(ids.indexOf(oid)===-1)ids.push(oid);}var h='';if(!ids.length)h='<p>No chats yet. Tap Message on someone ❤️</p>';else for(var k=0;k<ids.length;k++){var u=getUser(ids[k]);if(u){var cid=[me.id,u.id].sort().join('___');var ms=chats[cid]||[];var last=ms.length?ms[ms.length-1].text:'Say hi ❤️';h+='<div style="padding:12px 0;border-bottom:1px solid #eee"><b>'+u.name+'</b><div class="small">'+last+'</div><button class="pink" onclick="openChat(\''+u.id+'\')">Open Chat 💬</button></div>';}}document.getElementById('chatsList').innerHTML=h;}
-function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-function renderChat(){var msgs=chats[curChatId]||[];var h='';if(!msgs.length)h='<p class="small" style="text-align:center">Say hi to '+curOtherName+' ❤️<br>Be respectful. Never send money.</p>';for(var i=0;i<msgs.length;i++)h+='<div class="msg '+(String(msgs[i].from)===String(me.id)?'msgMine':'msgTheirs')+'">'+esc(msgs[i].text)+'</div>';document.getElementById('chatMessages').innerHTML=h;document.getElementById('chatMessages').scrollTop=99999;}
-// ===== MESSAGE - OPEN + TYPE + SEND =====
-function openChat(id){
-  if(!me){toast('Please log in first');return;}
-  var o=getUser(id);if(!o){toast('User not found');return;}
-  curOtherId=id;curOtherName=o.name;curChatId=[me.id,id].sort().join('___');
-  if(!chats[curChatId])chats[curChatId]=[];
-  hideAll();document.getElementById('chatBox').classList.remove('hidden');
-  document.getElementById('chatTitle').textContent='💬 '+o.name+' • '+o.city;
-  var inp=document.getElementById('chatInput');inp.value='';inp.disabled=false;inp.placeholder='Type a message to '+o.name+'...';
-  renderChat();toast('Chat opened with '+o.name+' 💬 - type below');
-  setTimeout(function(){inp.focus();},300);
-}
-function sendMsg(){
-  var inp=document.getElementById('chatInput');
-  var t=inp.value.trim();
-  if(!t){toast('Type a message first ✍️');inp.focus();return;}
-  if(!curChatId||!curOtherId){toast('Open a chat first');return;}
-  var m={from:me.id,to:curOtherId,text:t,time:Date.now()};
-  if(!chats[curChatId])chats[curChatId]=[];
-  chats[curChatId].push(m);saveAll();renderChat();inp.value='';inp.focus();
-  toast('Message sent ✅');
-}
-document.getElementById('chatInput').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();sendMsg();}});
-function backToChats(){showChats();}
-function reportUser(){toast('Reported. Thank you 🛡️');}
-function blockUser(){if(!curOtherId)return;if(!confirm('Block this user?'))return;blocks.push(curOtherId);saveAll();toast('Blocked 🚫');backToChats();}
-function handlePhoto(file,pid,sid,isEdit){if(!file)return;var st=document.getElementById(sid);if(st)st.textContent='Loading...';var r=new FileReader();r.onload=function(){var data=r.result;if(isEdit)editPhotoData=data;else photoData=data;var p=document.getElementById(pid);p.src=data;p.classList.remove('hidden');if(st)st.textContent='✅ Photo ready!';try{var img=new Image();img.onload=function(){try{var c=document.createElement('canvas');var max=500,w=img.width,h=img.height;if(w>max){h=h*max/w;w=max;}c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);var small=c.toDataURL('image/jpeg',0.65);if(isEdit)editPhotoData=small;else photoData=small;}catch(e){}};img.src=data;}catch(e){}};r.readAsDataURL(file);}
-document.getElementById('a_photo').addEventListener('change',function(e){if(e.target.files[0])handlePhoto(e.target.files[0],'a_preview','photoStatus',false);});
-document.getElementById('e_photo').addEventListener('change',function(e){if(e.target.files[0])handlePhoto(e.target.files[0],'e_preview','photoStatus',true);});
-if(me&&me.name&&me.phone){try{showMain();}catch(e){}}
-</script>
-</body>
-</html>
+  if(filter.gender)shown=shown.filter(function(u){return u.gender===filter.gender}
