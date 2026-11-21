@@ -1,4 +1,4 @@
-     <!DOCTYPE html>
+  <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -25,20 +25,19 @@ button{width:100%;padding:12px;border:0;border-radius:12px;font-size:16px;font-w
 .msg{max-width:75%;padding:8px 10px;border-radius:12px;margin:5px 0;font-size:14px;word-wrap:break-word}
 .msgMine{background:#ff2e63;color:#fff;margin-left:auto;text-align:right}
 .msgTheirs{background:#eee;color:#000}
-.tick{font-size:11px;display:block;margin-top:3px}
-.tickSeen{color:#7ee2ff;font-weight:bold}
-.tickSent{color:#ffd6e0}
+.tick{font-size:11px;display:block;margin-top:3px}.tickSeen{color:#7ee2ff;font-weight:bold}.tickSent{color:#ffd6e0}
 .chatInputRow{display:flex;gap:6px}.chatInputRow input{flex:1}.chatInputRow button{width:70px}
 .matchCard{border:3px solid #ff2e63;background:linear-gradient(180deg,#fff,#ffe6ef)}
-.newBadge{background:#ff3b30;color:#fff;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:bold;animation:blink 1s infinite}
-@keyframes blink{50%{opacity:0.5}}
 .online{color:#00c853;font-weight:bold;font-size:13px}.offline{color:#999;font-size:12px}
+.verified{background:#00c853;color:#fff;padding:2px 8px;border-radius:10px;font-size:11px}
+.safetyBox{background:#fff3cd;border:2px solid #ff9500;border-radius:12px;padding:10px;margin:10px 0;text-align:left;font-size:13px}
 </style>
 </head>
 <body>
 <div class="header">MalawiLove SA ❤️<div style="font-size:12px;font-weight:normal">Find Love in South Africa <span id="connStatus" style="font-size:11px">● Connecting...</span></div></div>
 <div id="authBox" class="card">
 <h2>Welcome ❤️</h2>
+<div class="safetyBox">🛡️ <b>Safe Dating:</b> No fake profiles. Real photo required. Phone is NEVER shown. Report fakes - 3 reports = auto removed.</div>
 <div class="row" style="margin-bottom:10px">
 <button id="tabSignup" class="tabBtn tabActive" onclick="showTab('signup')">SIGN UP</button>
 <button id="tabLogin" class="tabBtn tabInactive" onclick="showTab('login')">LOGIN</button>
@@ -53,7 +52,7 @@ button{width:100%;padding:12px;border:0;border-radius:12px;font-size:16px;font-w
 <input id="a_secret" type="text" placeholder="Secret Word for Forgot Password - e.g. Mango">
 <p class="small" style="text-align:left">🔑 Remember your Secret Word!</p>
 <label style="display:block;text-align:left;font-size:14px;margin:8px"><input id="a_18" type="checkbox" style="width:auto"> I am 18+ years old and I agree to Terms & Privacy</label>
-<label style="display:block">Your Photo:<input id="a_photo" type="file" accept="image/*"></label>
+<label style="display:block;text-align:left"><b>📸 Your Photo - REQUIRED:</b><br><span class="small">Must be your real face. No photo = No account. No cartoon, no celebrity.</span><input id="a_photo" type="file" accept="image/*"></label>
 <img id="a_preview" class="hidden" style="margin:auto">
 <button class="pink" onclick="doSignup()">CREATE ACCOUNT ❤️</button>
 <p class="small">🔒 Your phone is SECRET - only for login. Never shown to others.</p>
@@ -85,6 +84,7 @@ button{width:100%;padding:12px;border:0;border-radius:12px;font-size:16px;font-w
 </div>
 <div id="homeArea">
 <div class="card"><p class="small" id="peopleCount">Loading people...</p><div id="newMsgAlert"></div>
+<div class="safetyBox">🛡️ <b>Stay Safe:</b> Never send money. Never share your phone / address in chat. Meet in public first. If someone asks for money = REPORT + BLOCK.</div>
 <h3>🔍 Search</h3>
 <select id="s_city"><option value="">All Cities</option><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Polokwane</option><option>Blantyre</option><option>Lilongwe</option><option>Other</option></select>
 <div class="row"><input id="s_min" type="number" placeholder="Min Age"><input id="s_max" type="number" placeholder="Max Age"></div>
@@ -93,124 +93,58 @@ button{width:100%;padding:12px;border:0;border-radius:12px;font-size:16px;font-w
 </div>
 <div id="list"></div>
 </div>
-<div id="myProfileBox" class="card hidden"><h2>👤 My Profile</h2><div id="myProfileView"></div><button class="pink" onclick="openEdit()">✏️ EDIT MY PROFILE</button><button class="black" onclick="unblockAll()">Unblock Everyone</button><button class="red" onclick="deleteAccount()">🗑️ DELETE MY ACCOUNT</button></div>
+<div id="myProfileBox" class="card hidden"><h2>👤 My Profile</h2><div id="myProfileView"></div><button class="pink" onclick="openEdit()">✏️ EDIT MY PROFILE</button><button class="black" onclick="openAdmin()">🛡️ ADMIN - Delete Fake Users</button><button class="black" onclick="unblockAll()">Unblock Everyone</button><button class="red" onclick="deleteAccount()">🗑️ DELETE MY ACCOUNT</button></div>
+<div id="adminBox" class="card hidden"><h2>🛡️ ADMIN</h2><p class="small">Only you. Code LOVE123</p><div id="adminList"></div><button class="grey" onclick="showMyProfile()">⬅️ Back</button></div>
 <div id="editBox" class="card hidden"><h2>✏️ Edit My Profile</h2><input id="e_name" placeholder="Name"><input id="e_age" type="number" placeholder="Age"><select id="e_city"><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Polokwane</option><option>Blantyre</option><option>Lilongwe</option><option>Other</option></select><input id="e_about" placeholder="About you"><label>Change Photo:<input id="e_photo" type="file" accept="image/*"></label><img id="e_preview" style="width:120px;height:120px;border-radius:50%;object-fit:cover"><button class="green" onclick="saveEdit()">✅ SAVE CHANGES</button><button class="grey" onclick="closeEdit()">Cancel</button></div>
 <div id="likesBox" class="card hidden"><h2>❤️ Who Liked You</h2><p class="small">Like them back to make a MATCH! 💘</p><div id="likesList"></div></div>
 <div id="matchesBox" class="card hidden"><h2>💘 Your Matches</h2><p class="small">Both liked each other! Chat now! 💬</p><div id="matchesList"></div></div>
 <div id="chatsBox" class="card hidden"><h2>💬 My Chats</h2><p class="small">Tap OPEN CHAT to see new messages!</p><div id="chatsList"></div><button class="grey" onclick="showHome()">⬅️ Back to Home</button></div>
-<div id="chatBox" class="card hidden" data-chatid="" data-other=""><h2 id="chatTitle">💬 Chat</h2><p class="small" id="chatStatus">Connecting...</p><p id="chatOnline" class="small"></p><div class="row"><button class="black" onclick="blockInChat()">🚫 BLOCK</button><button class="orange" onclick="reportInChat()">🚨 REPORT</button></div><div id="chatMessages" class="chatBox"></div><div class="chatInputRow"><input id="chatInput" placeholder="Type message... ❤️"><button class="pink" onclick="sendMsg()">Send</button></div><button class="grey" onclick="backToChats()">⬅️ Back to Chats</button></div>
+<div id="chatBox" class="card hidden" data-chatid="" data-other=""><h2 id="chatTitle">💬 Chat</h2><p class="small" id="chatStatus">Connecting...</p><p id="chatOnline" class="small"></p><div class="row"><button class="black" onclick="blockInChat()">🚫 BLOCK</button><button class="orange" onclick="reportInChat()">🚨 REPORT FAKE / SCAM</button></div><div id="chatMessages" class="chatBox"></div><div class="chatInputRow"><input id="chatInput" placeholder="Type message... ❤️"><button class="pink" onclick="sendMsg()">Send</button></div><button class="grey" onclick="backToChats()">⬅️ Back to Chats</button></div>
 </div>
 
-<!-- MATCH POPUP - ONE FILE VERSION -->
 <div id="matchModal" onclick="closeMatch()" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(255,46,99,0.95);z-index:1000;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:20px;box-sizing:border-box">
-<div style="font-size:50px">🎉🎊🎉</div>
-<h1 style="color:#fff;font-size:32px;margin:10px 0">IT'S A MATCH! 💘</h1>
-<img id="matchPhoto" style="width:150px;height:150px;border-radius:50%;object-fit:cover;border:4px solid #fff">
-<h2 id="matchName" style="color:#fff"></h2>
-<p style="color:#fff">You both liked each other! ❤️</p>
-<button class="black" onclick="event.stopPropagation(); goChatFromMatch()" style="max-width:300px">💬 SEND MESSAGE NOW</button>
-<button class="grey" onclick="closeMatch()" style="max-width:300px">Keep Swiping ➡️</button>
-<p style="color:#fff;font-size:12px">Tap anywhere to close</p>
-</div>
+<div style="font-size:50px">🎉🎊🎉</div><h1 style="color:#fff;font-size:32px;margin:10px 0">IT'S A MATCH! 💘</h1><img id="matchPhoto" style="width:150px;height:150px;border-radius:50%;object-fit:cover;border:4px solid #fff"><h2 id="matchName" style="color:#fff"></h2><p style="color:#fff">You both liked each other! ❤️</p><button class="black" onclick="event.stopPropagation(); goChatFromMatch()" style="max-width:300px">💬 SEND MESSAGE NOW</button><button class="grey" onclick="closeMatch()" style="max-width:300px">Keep Swiping ➡️</button><p style="color:#fff;font-size:12px">Tap anywhere to close</p></div>
 
-<div id="photoModal" onclick="this.style.display='none'" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:999;align-items:center;justify-content:center;flex-direction:column">
-<img id="bigPhoto" style="max-width:95%;max-height:85%;border-radius:15px;object-fit:contain">
-<p style="color:#fff;text-align:center">Tap anywhere to close ✖️</p>
-</div>
+<div id="photoModal" onclick="this.style.display='none'" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:999;align-items:center;justify-content:center;flex-direction:column"><img id="bigPhoto" style="max-width:95%;max-height:85%;border-radius:15px;object-fit:contain"><p style="color:#fff;text-align:center">Tap anywhere to close ✖️</p></div>
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyAcNs2UdpGCZYXSquuwMk2ze3odWd36oP0",
-  authDomain: "malawi-love-sa.firebaseapp.com",
-  databaseURL: "https://malawi-love-sa-default-rtdb.firebaseio.com",
-  projectId: "malawi-love-sa",
-  storageBucket: "malawi-love-sa.firebasestorage.app",
-  messagingSenderId: "44621212737",
-  appId: "1:44621212737:web:15daa656f79505d3eaeac0"
-};
-let useFirebase=true; let db=null;
-try{ firebase.initializeApp(firebaseConfig); db=firebase.database(); document.getElementById('connStatus').textContent='● ONLINE - Real Chat ON'; document.getElementById('connStatus').style.color='#b6ffc2'; }catch(e){ useFirebase=false; document.getElementById('connStatus').textContent='● OFFLINE'; }
-const DEFAULT_PHOTO="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='150' height='150'><circle cx='75' cy='75' r='75' fill='%23ffd6e0'/><text x='75' y='95' font-size='60' text-anchor='middle'>❤️</text></svg>";
-function isValidUser(u){ if(!u) return false; if(!u.name||u.name==='undefined'||String(u.name).trim()==='') return false; if(!u.age) return false; if(!u.city) return false; if(!u.phone||String(u.phone).trim()==='') return false; return true; }
+const firebaseConfig={apiKey:"AIzaSyAcNs2UdpGCZYXSquuwMk2ze3odWd36oP0",authDomain:"malawi-love-sa.firebaseapp.com",databaseURL:"https://malawi-love-sa-default-rtdb.firebaseio.com",projectId:"malawi-love-sa",storageBucket:"malawi-love-sa.firebasestorage.app",messagingSenderId:"44621212737",appId:"1:44621212737:web:15daa656f79505d3eaeac0"};
+let useFirebase=true;let db=null;
+try{firebase.initializeApp(firebaseConfig);db=firebase.database();document.getElementById('connStatus').textContent='● ONLINE';document.getElementById('connStatus').style.color='#b6ffc2';}catch(e){useFirebase=false;document.getElementById('connStatus').textContent='● OFFLINE';}
+const DEFAULT_PHOTO="data:image/svg+xml;utf8,[STRIPPED]";
+const ADMIN_CODE="LOVE123";
+function isValidUser(u){if(!u)return false;if(!u.name||u.name==='undefined'||String(u.name).trim()==='')return false;if(!u.age)return false;if(!u.city)return false;if(!u.phone||String(u.phone).trim()==='')return false;return true;}
+function isRealPhoto(u){ if(!u||!u.photo) return false; if(u.photo===DEFAULT_PHOTO) return false; if(u.photo.includes('via.placeholder')) return false; if(u.photo.includes('placeholder')) return false; if(u.photo.length<500) return false; return true; }
+function isReportedTooMuch(uid){ let count=reports.filter(r=>String(r.target)===String(uid)).length; return count>=3; }
 let users=JSON.parse(localStorage.getItem('ml_users')||'[]').filter(isValidUser);
 let me=JSON.parse(localStorage.getItem('ml_me')||'null');
-if(me && !isValidUser(me)){ me=null; localStorage.removeItem('ml_me'); }
+if(me && !isValidUser(me)){me=null;localStorage.removeItem('ml_me');}
 let blocks=JSON.parse(localStorage.getItem('ml_blocks')||'[]');
 let likes=JSON.parse(localStorage.getItem('ml_likes')||'[]');
 let reports=JSON.parse(localStorage.getItem('ml_reports')||'[]');
 let chats=JSON.parse(localStorage.getItem('ml_chats')||'[]');
 let filter={city:'',min:'',max:''};
-let photoData=''; let editPhotoData=''; let currentChatId=null; let chatListener=null; let currentChatOtherId=null;
-let lastMatchUser=null;
-
-// --- MATCH POPUP ---
-function showMatchPopup(other){
-  lastMatchUser=other;
-  document.getElementById('matchPhoto').src=other.photo||DEFAULT_PHOTO;
-  document.getElementById('matchName').textContent=other.name+', '+other.age;
-  document.getElementById('matchModal').style.display='flex';
-  for(let i=0;i<30;i++){
-    let s=document.createElement('div');
-    s.textContent=['🎉','❤️','💘','🎊','✨'][Math.floor(Math.random()*5)];
-    s.style.cssText='position:fixed;top:-20px;left:'+(Math.random()*100)+'%;font-size:30px;z-index:1001;pointer-events:none';
-    document.body.appendChild(s);
-    s.animate([{transform:'translateY(0) rotate(0deg)'},{transform:'translateY(110vh) rotate(360deg)'}],{duration:2500+Math.random()*1500});
-    setTimeout(()=>s.remove(),4000);
-  }
-  if(navigator.vibrate) navigator.vibrate([200,100,200]);
-}
-function closeMatch(){ document.getElementById('matchModal').style.display='none'; }
-function goChatFromMatch(){ closeMatch(); if(lastMatchUser) openChat(lastMatchUser.id); }
-
+let photoData='';let editPhotoData='';let currentChatId=null;let chatListener=null;let currentChatOtherId=null;let lastMatchUser=null;
+function showMatchPopup(other){lastMatchUser=other;document.getElementById('matchPhoto').src=other.photo||DEFAULT_PHOTO;document.getElementById('matchName').textContent=other.name+', '+other.age;document.getElementById('matchModal').style.display='flex';for(let i=0;i<30;i++){let s=document.createElement('div');s.textContent=['🎉','❤️','💘','🎊','✨'][Math.floor(Math.random()*5)];s.style.cssText='position:fixed;top:-20px;left:'+(Math.random()*100)+'%;font-size:30px;z-index:1001;pointer-events:none';document.body.appendChild(s);s.animate([{transform:'translateY(0) rotate(0deg)'},{transform:'translateY(110vh) rotate(360deg)'}],{duration:2500+Math.random()*1500});setTimeout(()=>s.remove(),4000);}if(navigator.vibrate)navigator.vibrate([200,100,200]);}
+function closeMatch(){document.getElementById('matchModal').style.display='none';}
+function goChatFromMatch(){closeMatch();if(lastMatchUser)openChat(lastMatchUser.id);}
 function toggleEye(id,btn){let inp=document.getElementById(id);if(inp.type==='password'){inp.type='text';btn.textContent='🙈';}else{inp.type='password';btn.textContent='👁️';}}
-function cleanPhone(t){if(!t) return t; if(/\d{9,}/.test(t)) return 'Hi ❤️'; return t;}
+function cleanPhone(t){if(!t)return t;if(/\d{9,}/.test(t))return 'Hi ❤️';return t;}
 function normPhone(p){return String(p||'').replace(/\D/g,'');}
-function safeAbout(u){ if(!u||!u.about||u.about==="undefined"||u.about==="") return "No bio yet ❤️"; return u.about; }
-function safeName(u){ if(!u||!u.name||u.name==="undefined") return "Someone"; return u.name; }
-function openPhoto(src){ document.getElementById('bigPhoto').src=src||DEFAULT_PHOTO; document.getElementById('photoModal').style.display='flex'; }
-function onlineText(u){ if(!u) return ''; if(u.online) return '<span class="online">● Online now</span>'; if(u.lastSeen){ let d=Math.floor((Date.now()-u.lastSeen)/60000); if(d<1) return '<span class="online">● Online now</span>'; if(d<60) return '<span class="offline">Last seen '+d+' min ago</span>'; if(d<1440) return '<span class="offline">Last seen '+Math.floor(d/60)+'h ago</span>'; return '<span class="offline">Last seen '+Math.floor(d/1440)+' days ago</span>'; } return '<span class="offline">Offline</span>'; }
-function startPresence(){ if(!useFirebase||!db||!me||!isValidUser(me)) return; try{ db.ref('users/'+me.id).once('value', snap=>{ if(!snap.exists()){ db.ref('users/'+me.id).set(me); return; } db.ref('users/'+me.id+'/online').set(true); db.ref('users/'+me.id+'/online').onDisconnect().set(false); db.ref('users/'+me.id+'/lastSeen').onDisconnect().set(Date.now()); }); setInterval(()=>{ if(me&&db&&isValidUser(me)){ db.ref('users/'+me.id+'/online').set(true); db.ref('users/'+me.id+'/lastSeen').set(Date.now()); } },30000); }catch(e){} }
-function cleanGhostsFromFirebase(all){ if(!useFirebase||!db||!all) return; Object.keys(all).forEach(k=>{ let u=all[k]; if(!isValidUser(u) && !u.name && !u.phone){ db.ref('users/'+k).remove(); } }); }
-users.forEach(u=>{u.about=cleanPhone(u.about); if(!u.photo||u.photo.includes('via.placeholder')) u.photo=DEFAULT_PHOTO;});
-if(me){me.about=cleanPhone(me.about); if(!me.photo||me.photo.includes('via.placeholder')) me.photo=DEFAULT_PHOTO;}
+function safeAbout(u){if(!u||!u.about||u.about==="undefined"||u.about==="")return "No bio yet ❤️";return u.about;}
+function safeName(u){if(!u||!u.name||u.name==="undefined")return "Someone";return u.name;}
+function openPhoto(src){document.getElementById('bigPhoto').src=src||DEFAULT_PHOTO;document.getElementById('photoModal').style.display='flex';}
+function onlineText(u){if(!u)return '';if(u.online)return '<span class="online">● Online now</span>';if(u.lastSeen){let d=Math.floor((Date.now()-u.lastSeen)/60000);if(d<1)return '<span class="online">● Online now</span>';if(d<60)return '<span class="offline">Last seen '+d+' min ago</span>';if(d<1440)return '<span class="offline">Last seen '+Math.floor(d/60)+'h ago</span>';return '<span class="offline">Last seen '+Math.floor(d/1440)+' days ago</span>';}return '<span class="offline">Offline</span>';}
+function startPresence(){if(!useFirebase||!db||!me||!isValidUser(me))return;try{db.ref('users/'+me.id).once('value',snap=>{if(!snap.exists()){db.ref('users/'+me.id).set(me);return;}db.ref('users/'+me.id+'/online').set(true);db.ref('users/'+me.id+'/online').onDisconnect().set(false);db.ref('users/'+me.id+'/lastSeen').onDisconnect().set(Date.now());});setInterval(()=>{if(me&&db&&isValidUser(me)){db.ref('users/'+me.id+'/online').set(true);db.ref('users/'+me.id+'/lastSeen').set(Date.now());}},30000);}catch(e){}}
+function cleanGhostsFromFirebase(all){if(!useFirebase||!db||!all)return;Object.keys(all).forEach(k=>{let u=all[k];if(!isValidUser(u)&&!u.name&&!u.phone){db.ref('users/'+k).remove();}});}
+if(me){me.about=cleanPhone(me.about);}
 localStorage.setItem('ml_users',JSON.stringify(users));
-if(me) localStorage.setItem('ml_me',JSON.stringify(me));
-if(me) showMain();
-if(useFirebase && db){
-  db.ref('users').on('value', snap=>{
-    let raw=snap.val()||{}; cleanGhostsFromFirebase(raw);
-    let fbUsers=Object.values(raw).filter(isValidUser);
-    if(fbUsers.length){
-      let map={}; [...users.filter(isValidUser), ...fbUsers].forEach(u=>{ if(isValidUser(u)) map[normPhone(u.phone)]=u; });
-      users=Object.values(map); localStorage.setItem('ml_users',JSON.stringify(users));
-      if(me && !document.getElementById('mainBox').classList.contains('hidden')) render();
-      let pc=document.getElementById('peopleCount'); if(pc) pc.textContent=users.length+' people on MalawiLove ❤️ (Live from all phones!)';
-    }
-  });
-  db.ref('likes').on('value', snap=>{
-    let fbLikes=snap.val()?Object.values(snap.val()):[];
-    if(fbLikes.length){ 
-      // Check for NEW mutual match for me
-      fbLikes.forEach(l=>{
-        if(me && l.to==me.id){
-          let iLikedThem = fbLikes.find(x=>x.from==me.id && x.to==l.from);
-          if(iLikedThem && !window._shownMatches) window._shownMatches={};
-          if(iLikedThem && window._shownMatches && !window._shownMatches[l.from]){
-            window._shownMatches[l.from]=true;
-            let u=users.find(x=>String(x.id)==String(l.from));
-            if(u) showMatchPopup(u);
-          }
-        }
-      });
-      likes=fbLikes; localStorage.setItem('ml_likes',JSON.stringify(likes)); if(me) render(); 
-    }
-  });
-  db.ref('chats').on('value', snap=>{
-    if(!me) return; let all=snap.val()||{}; let unreadNames=[];
-    Object.keys(all).forEach(cid=>{ let parts=cid.split('_'); if(!parts.includes(String(me.id))) return; let msgs=Object.values(all[cid]||{}); msgs.forEach(m=>{ if(m.to==me.id && !m.seen){ let otherId=parts.find(p=>p!=String(me.id)); let u=users.find(x=>String(x.id)==String(otherId)); if(u&&isValidUser(u)&&!unreadNames.includes(u.name)) unreadNames.push(u.name); } }); });
-    let alertBox=document.getElementById('newMsgAlert'); let topBtn=document.getElementById('chatsTopBtn');
-    if(unreadNames.length){ if(alertBox) alertBox.innerHTML=`<div style="background:#ff3b30;color:#fff;padding:12px;border-radius:12px;font-weight:bold;margin:10px 0">🔔 NEW MESSAGE from ${unreadNames.join(', ')}! <br><button class="black" onclick="showChats()">👉 TAP TO READ</button></div>`; if(topBtn) topBtn.textContent='💬 Chats 🔴 '+unreadNames.length; } else { if(alertBox) alertBox.innerHTML=''; if(topBtn) topBtn.textContent='💬 Chats'; }
-    if(!document.getElementById('chatsBox').classList.contains('hidden')) renderChatsList(all);
-  });
+if(me)localStorage.setItem('ml_me',JSON.stringify(me));
+if(me)showMain();
+if(useFirebase&&db){
+db.ref('users').on('value',snap=>{let raw=snap.val()||{};cleanGhostsFromFirebase(raw);let fbUsers=Object.values(raw).filter(isValidUser);if(fbUsers.length){let map={};[...users.filter(isValidUser),...fbUsers].forEach(u=>{if(isValidUser(u))map[normPhone(u.phone)]=u;});users=Object.values(map);localStorage.setItem('ml_users',JSON.stringify(users));if(me&&!document.getElementById('mainBox').classList.contains('hidden'))render();let pc=document.getElementById('peopleCount');if(pc)pc.textContent=users.length+' people on MalawiLove ❤️';}});
+db.ref('likes').on('value',snap=>{let fbLikes=snap.val()?Object.values(snap.val()):[];if(fbLikes.length){likes=fbLikes;localStorage.setItem('ml_likes',JSON.stringify(likes));if(me)render();}});
+db.ref('reports').on('value',snap=>{let fbReports=snap.val()?Object.values(snap.val()):[];if(fbReports.length){reports=fbReports;localStorage.setItem('ml_reports',JSON.stringify(reports));if(me)render();}});
+db.ref('chats').on('value',snap=>{if(!me)return;let all=snap.val()||{};let unreadNames=[];Object.keys(all).forEach(cid=>{let parts=cid.split('_');if(!parts.includes(String(me.id)))return;let msgs=Object.values(all[cid]||{});msgs.forEach(m=>{if(m.to==me.id&&!m.seen){let otherId=parts.find(p=>p!=String(me.id));let u=users.find(x=>String(x.id)==String(otherId));if(u&&isValidUser(u)&&!unreadNames.includes(u.name))unreadNames.push(u.name);}});});let alertBox=document.getElementById('newMsgAlert');let topBtn=document.getElementById('chatsTopBtn');if(unreadNames.length){if(alertBox)alertBox.innerHTML=`<div style="background:#ff3b30;color:#fff;padding:12px;border-radius:12px;font-weight:bold;margin:10px 0">🔔 NEW MESSAGE from ${unreadNames.join(', ')}! <br><button class="black" onclick="showChats()">👉 TAP TO READ</button></div>`;if(topBtn)topBtn.textContent='💬 Chats 🔴 '+unreadNames.length;}else{if(alertBox)alertBox.innerHTML='';if(topBtn)topBtn.textContent='💬 Chats';}if(!document.getElementById('chatsBox').classList.contains('hidden'))renderChatsList(all);});
 }
 function showTab(which){document.getElementById('forgotForm').classList.add('hidden');if(which=='signup'){document.getElementById('signupForm').classList.remove('hidden');document.getElementById('loginForm').classList.add('hidden');document.getElementById('tabSignup').className='tabBtn tabActive';document.getElementById('tabLogin').className='tabBtn tabInactive';}else{document.getElementById('signupForm').classList.add('hidden');document.getElementById('loginForm').classList.remove('hidden');document.getElementById('tabSignup').className='tabBtn tabInactive';document.getElementById('tabLogin').className='tabBtn tabActive';}}
 function showForgot(){document.getElementById('signupForm').classList.add('hidden');document.getElementById('loginForm').classList.add('hidden');document.getElementById('forgotForm').classList.remove('hidden');}
@@ -218,94 +152,95 @@ function hideForgot(){document.getElementById('forgotForm').classList.add('hidde
 document.getElementById('a_photo').addEventListener('change',e=>{let r=new FileReader();r.onload=()=>{photoData=r.result;let p=document.getElementById('a_preview');p.src=photoData;p.classList.remove('hidden')};r.readAsDataURL(e.target.files[0])});
 document.getElementById('e_photo').addEventListener('change',e=>{let r=new FileReader();r.onload=()=>{editPhotoData=r.result;document.getElementById('e_preview').src=editPhotoData};r.readAsDataURL(e.target.files[0])});
 function save(){localStorage.setItem('ml_users',JSON.stringify(users.filter(isValidUser)));localStorage.setItem('ml_me',JSON.stringify(me));localStorage.setItem('ml_blocks',JSON.stringify(blocks));localStorage.setItem('ml_likes',JSON.stringify(likes));localStorage.setItem('ml_reports',JSON.stringify(reports));localStorage.setItem('ml_chats',JSON.stringify(chats));}
-function pushUserToFirebase(u){ if(useFirebase&&db&&isValidUser(u)){ db.ref('users/'+u.id).set(u); } }
-function pushLikeToFirebase(){ if(useFirebase&&db){ db.ref('likes').set(likes); } }
+function pushUserToFirebase(u){if(useFirebase&&db&&isValidUser(u)){db.ref('users/'+u.id).set(u);}}
+function pushLikeToFirebase(){if(useFirebase&&db){db.ref('likes').set(likes);}}
+function pushReportsToFirebase(){if(useFirebase&&db){db.ref('reports').set(reports);}}
 function doSignup(){
 let n=document.getElementById('a_name').value.trim(),a=document.getElementById('a_age').value,c=document.getElementById('a_city').value,ph=normPhone(document.getElementById('a_phone').value),ab=document.getElementById('a_about').value.trim(),p=document.getElementById('a_pass').value,sec=document.getElementById('a_secret').value.trim();
-if(!document.getElementById('a_18').checked) return alert("You must tick 'I am 18+'");
-if(!n||!a||!c||!ph||!p||!sec) return alert("Fill Name, Age, City, Phone, Password, Secret Word");
-if(a<18) return alert("Must be 18+");
-if(ph.length<9) return alert("Enter a valid Phone Number");
+if(!document.getElementById('a_18').checked)return alert("You must tick 'I am 18+'");
+if(!n||!a||!c||!ph||!p||!sec)return alert("Fill Name, Age, City, Phone, Password, Secret Word");
+if(a<18)return alert("Must be 18+");
+if(ph.length<9)return alert("Enter a valid Phone Number");
+if(!photoData) return alert("📸 SAFETY: You MUST upload your real face photo! No photo = No account. Fake profiles not allowed.");
+if(photoData.length<500) return alert("Photo too small / not clear. Upload a clear face photo.");
 let found=users.find(u=>normPhone(u.phone)==ph);
-if(found) return alert("This phone number already has account! Go to LOGIN tab.");
-if(/\d{9,}/.test(ab)){alert("⚠️ Phone number removed from About for safety."); ab='Hi ❤️';}
-me={id:Date.now(),name:n,age:a,city:c,phone:ph,about:ab||'Hi ❤️',photo:photoData||DEFAULT_PHOTO,pass:p,secret:sec.toLowerCase(),online:true,lastSeen:Date.now()};users.push(me);save();pushUserToFirebase(me);showMain();startPresence();alert("Welcome "+me.name+" ❤️ Account created!");
+if(found)return alert("This phone number already has account! Go to LOGIN tab.");
+if(/\d{9,}/.test(ab)){alert("⚠️ Phone number removed from About for safety.");ab='Hi ❤️';}
+me={id:Date.now(),name:n,age:a,city:c,phone:ph,about:ab||'Hi ❤️',photo:photoData,pass:p,secret:sec.toLowerCase(),online:true,lastSeen:Date.now(),verified:true};users.push(me);save();pushUserToFirebase(me);showMain();startPresence();alert("Welcome "+me.name+" ❤️ Verified ✅ Account created!");
 }
 function doLogin(){
 let ph=normPhone(document.getElementById('l_phone').value),p=document.getElementById('l_pass').value;
-if(!ph||!p) return alert("Type Phone Number + Password");
+if(!ph||!p)return alert("Type Phone Number + Password");
 let found=users.find(u=>normPhone(u.phone)==ph);
-if(!found) return alert("No account with phone '"+ph+"'. Go to SIGN UP first!");
-if(found.pass!==p) return alert("Wrong password! Press FORGOT PASSWORD? if you forgot.");
-me=found; me.about=cleanPhone(me.about); save(); showMain(); startPresence(); alert("Welcome back "+me.name+" ❤️");
+if(!found)return alert("No account with phone '"+ph+"'. Go to SIGN UP first!");
+if(found.pass!==p)return alert("Wrong password! Press FORGOT PASSWORD? if you forgot.");
+me=found;me.about=cleanPhone(me.about);save();showMain();startPresence();alert("Welcome back "+me.name+" ❤️");
 }
 function doForgot(){
 let ph=normPhone(document.getElementById('f_phone').value),sec=document.getElementById('f_secret').value.trim().toLowerCase(),np=document.getElementById('f_newpass').value;
-if(!ph||!sec||!np) return alert("Fill Phone + Secret Word + New Password");
+if(!ph||!sec||!np)return alert("Fill Phone + Secret Word + New Password");
 let found=users.find(u=>normPhone(u.phone)==ph);
-if(!found) return alert("No account found!");
-if(found.secret!==sec) return alert("Wrong Secret Word!");
-found.pass=np; me=found; save(); pushUserToFirebase(found); hideForgot(); showTab('login'); alert("Password reset! Login now ✅");
+if(!found)return alert("No account found!");
+if(found.secret!==sec)return alert("Wrong Secret Word!");
+found.pass=np;me=found;save();pushUserToFirebase(found);hideForgot();showTab('login');alert("Password reset! Login now ✅");
 }
-function showMain(){ document.getElementById('authBox').classList.add('hidden'); document.getElementById('mainBox').classList.remove('hidden'); render(); }
-function showHome(){ hideAllBoxes(); document.getElementById('homeArea').classList.remove('hidden'); render(); }
-function hideAllBoxes(){ ['homeArea','myProfileBox','editBox','likesBox','matchesBox','chatsBox','chatBox'].forEach(id=>document.getElementById(id).classList.add('hidden')); }
-function logout(){ if(me&&db) db.ref('users/'+me.id+'/online').set(false); me=null; localStorage.removeItem('ml_me'); location.reload(); }
-function doSearch(){ filter.city=document.getElementById('s_city').value; filter.min=document.getElementById('s_min').value; filter.max=document.getElementById('s_max').value; render(); }
-function clearSearch(){ filter={city:'',min:'',max:''}; document.getElementById('s_city').value=''; document.getElementById('s_min').value=''; document.getElementById('s_max').value=''; render(); }
+function showMain(){document.getElementById('authBox').classList.add('hidden');document.getElementById('mainBox').classList.remove('hidden');render();}
+function showHome(){hideAllBoxes();document.getElementById('homeArea').classList.remove('hidden');render();}
+function hideAllBoxes(){['homeArea','myProfileBox','editBox','likesBox','matchesBox','chatsBox','chatBox','adminBox'].forEach(id=>document.getElementById(id).classList.add('hidden'));}
+function logout(){if(me&&db)db.ref('users/'+me.id+'/online').set(false);me=null;localStorage.removeItem('ml_me');location.reload();}
+function doSearch(){filter.city=document.getElementById('s_city').value;filter.min=document.getElementById('s_min').value;filter.max=document.getElementById('s_max').value;render();}
+function clearSearch(){filter={city:'',min:'',max:''};document.getElementById('s_city').value='';document.getElementById('s_min').value='';document.getElementById('s_max').value='';render();}
 function render(){
-  let list=document.getElementById('list'); if(!list) return;
-  let shown=users.filter(u=>isValidUser(u) && String(u.id)!==String(me.id) && !blocks.includes(String(u.id)));
-  if(filter.city) shown=shown.filter(u=>u.city===filter.city);
-  if(filter.min) shown=shown.filter(u=>Number(u.age)>=Number(filter.min));
-  if(filter.max) shown=shown.filter(u=>Number(u.age)<=Number(filter.max));
-  document.getElementById('peopleCount').textContent=users.length+' people on MalawiLove ❤️';
-  if(!shown.length){ list.innerHTML='<div class="card">No people yet. Invite friends! ❤️</div>'; return; }
-  list.innerHTML=shown.map(u=>{
-    let liked=likes.find(l=>l.from==me.id && l.to==u.id);
-    let theyLiked=likes.find(l=>l.from==u.id && l.to==me.id);
-    let isMatch=liked&&theyLiked;
-    return `<div class="card ${isMatch?'matchCard':''}">
-      <img src="${u.photo||DEFAULT_PHOTO}" onclick="openPhoto('${u.photo||DEFAULT_PHOTO}')">
-      <h3>${safeName(u)}, ${u.age} ${isMatch?'💘 MATCH!':''}</h3>
-      <p>${u.city} • ${onlineText(u)}</p>
-      <p class="small">${safeAbout(u)}</p>
-      <div class="row">
-        <button class="${liked?'green':'pink'}" onclick="doLike('${u.id}')">${liked?'❤️ Liked':'❤️ Like'}</button>
-        <button class="black" onclick="openChat('${u.id}')">💬 Chat</button>
-      </div>
-      ${theyLiked && !liked?'<p class="small">❤️ They liked you! Like back for MATCH!</p>':''}
-    </div>`;
-  }).join('');
+let list=document.getElementById('list');if(!list)return;
+let shown=users.filter(u=>isValidUser(u)&&String(u.id)!==String(me.id)&&!blocks.includes(String(u.id))&&!isReportedTooMuch(u.id));
+if(filter.city)shown=shown.filter(u=>u.city===filter.city);
+if(filter.min)shown=shown.filter(u=>Number(u.age)>=Number(filter.min));
+if(filter.max)shown=shown.filter(u=>Number(u.age)<=Number(filter.max));
+document.getElementById('peopleCount').textContent=users.filter(u=>!isReportedTooMuch(u.id)).length+' verified people on MalawiLove ❤️';
+if(!shown.length){list.innerHTML='<div class="card">No people yet. Invite friends! ❤️</div>';return;}
+list.innerHTML=shown.map(u=>{
+let liked=likes.find(l=>l.from==me.id&&l.to==u.id);
+let theyLiked=likes.find(l=>l.from==u.id&&l.to==me.id);
+let isMatch=liked&&theyLiked;
+let real=isRealPhoto(u);
+return `<div class="card ${isMatch?'matchCard':''}">
+<img src="${u.photo||DEFAULT_PHOTO}" onclick="openPhoto('${u.photo||DEFAULT_PHOTO}')">
+<h3>${safeName(u)}, ${u.age} ${real?'<span class="verified">✓ Verified</span>':'<span style="color:red;font-size:11px">⚠️ No Real Photo</span>'} ${isMatch?'💘 MATCH!':''}</h3>
+<p>${u.city} • ${onlineText(u)}</p>
+<p class="small">${safeAbout(u)}</p>
+<div class="row"><button class="${liked?'green':'pink'}" onclick="doLike('${u.id}')">${liked?'❤️ Liked':'❤️ Like'}</button><button class="black" onclick="openChat('${u.id}')">💬 Chat</button></div>
+<button class="grey" onclick="reportUser('${u.id}')">🚨 Report Fake</button>
+${theyLiked&&!liked?'<p class="small">❤️ They liked you! Like back for MATCH!</p>':''}
+</div>`;}).join('');
 }
-// --- LIKE + MATCH ---
 function doLike(otherId){
-  let other=users.find(u=>String(u.id)==String(otherId)); if(!other) return;
-  let already=likes.find(l=>l.from==me.id && l.to==other.id);
-  if(already){ alert("You already liked "+other.name); return; }
-  likes.push({from:me.id,to:other.id,time:Date.now()});
-  save(); pushLikeToFirebase();
-  let theyLikedMe=likes.find(l=>l.from==other.id && l.to==me.id);
-  if(theyLikedMe){ showMatchPopup(other); }
-  else { alert("❤️ You liked "+other.name+"! If they like you back = MATCH!"); }
-  render();
+let other=users.find(u=>String(u.id)==String(otherId));if(!other)return;
+let already=likes.find(l=>l.from==me.id&&l.to==other.id);
+if(already){alert("You already liked "+other.name);return;}
+likes.push({from:me.id,to:other.id,time:Date.now()});save();pushLikeToFirebase();
+let theyLikedMe=likes.find(l=>l.from==other.id&&l.to==me.id);
+if(theyLikedMe){showMatchPopup(other);}else{alert("❤️ You liked "+other.name+"! If they like you back = MATCH!");}
+render();
 }
-function showMyProfile(){ hideAllBoxes(); document.getElementById('myProfileBox').classList.remove('hidden'); document.getElementById('myProfileView').innerHTML=`<img src="${me.photo||DEFAULT_PHOTO}"><h3>${me.name}, ${me.age}</h3><p>${me.city}</p><p>${safeAbout(me)}</p><p class="small">Phone is private 🔒</p>`; }
-function openEdit(){ hideAllBoxes(); document.getElementById('editBox').classList.remove('hidden'); document.getElementById('e_name').value=me.name; document.getElementById('e_age').value=me.age; document.getElementById('e_city').value=me.city; document.getElementById('e_about').value=me.about; document.getElementById('e_preview').src=me.photo||DEFAULT_PHOTO; editPhotoData=''; }
-function closeEdit(){ showMyProfile(); }
-function saveEdit(){ me.name=document.getElementById('e_name').value.trim()||me.name; me.age=document.getElementById('e_age').value||me.age; me.city=document.getElementById('e_city').value; me.about=cleanPhone(document.getElementById('e_about').value)||me.about; if(editPhotoData) me.photo=editPhotoData; save(); pushUserToFirebase(me); alert("Saved ✅"); showMyProfile(); }
-function unblockAll(){ blocks=[]; save(); alert("Unblocked everyone ✅"); render(); }
-function deleteAccount(){ if(!confirm("Delete your account forever?")) return; if(db) db.ref('users/'+me.id).remove(); users=users.filter(u=>String(u.id)!==String(me.id)); me=null; localStorage.clear(); location.reload(); }
-function showLikes(){ hideAllBoxes(); document.getElementById('likesBox').classList.remove('hidden'); let who=likes.filter(l=>l.to==me.id).map(l=>users.find(u=>String(u.id)==String(l.from))).filter(isValidUser); document.getElementById('likesList').innerHTML=who.length?who.map(u=>`<div class="card"><img src="${u.photo||DEFAULT_PHOTO}" style="width:80px;height:80px"><h3>${u.name}, ${u.age}</h3><button class="pink" onclick="doLike('${u.id}')">❤️ Like Back</button><button class="black" onclick="openChat('${u.id}')">💬 Chat</button></div>`).join(''):'<p>No likes yet ❤️</p>'; }
-function showMatches(){ hideAllBoxes(); document.getElementById('matchesBox').classList.remove('hidden'); let matches=users.filter(u=>likes.find(l=>l.from==me.id&&l.to==u.id)&&likes.find(l=>l.from==u.id&&l.to==me.id)); document.getElementById('matchesList').innerHTML=matches.length?matches.map(u=>`<div class="card matchCard"><img src="${u.photo||DEFAULT_PHOTO}" style="width:80px;height:80px"><h3>${u.name}, ${u.age} 💘</h3><button class="pink" onclick="openChat('${u.id}')">💬 Chat Now</button></div>`).join(''):'<p>No matches yet. Like people! ❤️</p>'; }
-function getChatId(a,b){ return [String(a),String(b)].sort().join('_'); }
-function openChat(otherId){ let other=users.find(u=>String(u.id)==String(otherId)); if(!other) return; currentChatOtherId=otherId; currentChatId=getChatId(me.id,otherId); hideAllBoxes(); let cb=document.getElementById('chatBox'); cb.classList.remove('hidden'); document.getElementById('chatTitle').textContent='💬 '+other.name; document.getElementById('chatOnline').innerHTML=onlineText(other); document.getElementById('chatStatus').textContent=''; if(chatListener&&db) db.ref('chats/'+currentChatId).off(); if(useFirebase&&db){ chatListener=db.ref('chats/'+currentChatId).on('value',snap=>{ let msgs=snap.val()?Object.values(snap.val()):[]; msgs.sort((a,b)=>a.time-b.time); let box=document.getElementById('chatMessages'); box.innerHTML=msgs.map(m=>`<div class="msg ${m.from==me.id?'msgMine':'msgTheirs'}">${m.text}<span class="tick ${m.seen?'tickSeen':'tickSent'}">${m.from==me.id?(m.seen?'✓✓ Seen':'✓ Sent'):''}</span></div>`).join(''); box.scrollTop=box.scrollHeight; msgs.forEach((m,i)=>{ if(m.to==me.id&&!m.seen){ let keys=Object.keys(snap.val()); db.ref('chats/'+currentChatId+'/'+keys[i]+'/seen').set(true); } }); }); } }
-function sendMsg(){ let inp=document.getElementById('chatInput'); let txt=inp.value.trim(); if(!txt||!currentChatId) return; let msg={from:me.id,to:currentChatOtherId,text:txt,time:Date.now(),seen:false}; if(useFirebase&&db) db.ref('chats/'+currentChatId).push(msg); inp.value=''; }
-function backToChats(){ if(chatListener&&db) db.ref('chats/'+currentChatId).off(); showChats(); }
-function showChats(){ hideAllBoxes(); document.getElementById('chatsBox').classList.remove('hidden'); renderChatsList(); }
-function renderChatsList(all){ if(!all && useFirebase && db){ db.ref('chats').once('value',s=>renderChatsList(s.val()||{})); return; } let allChats=all||{}; let ids=new Set(); Object.keys(allChats).forEach(cid=>{ let parts=cid.split('_'); if(parts.includes(String(me.id))){ let other=parts.find(p=>p!=String(me.id)); if(other) ids.add(other); } }); document.getElementById('chatsList').innerHTML=[...ids].map(oid=>{ let u=users.find(x=>String(x.id)==String(oid)); if(!u) return ''; return `<div class="card"><h3>${u.name}</h3><button class="pink" onclick="openChat('${u.id}')">OPEN CHAT 💬</button></div>`; }).join('')||'<p>No chats yet ❤️</p>'; }
-function blockInChat(){ if(!currentChatOtherId) return; blocks.push(String(currentChatOtherId)); save(); alert("Blocked 🚫"); backToChats(); }
-function reportInChat(){ if(!currentChatOtherId) return; reports.push(currentChatOtherId); save(); alert("Reported 🚨 Thank you"); }
+function showMyProfile(){hideAllBoxes();document.getElementById('myProfileBox').classList.remove('hidden');document.getElementById('myProfileView').innerHTML=`<img src="${me.photo||DEFAULT_PHOTO}"><h3>${me.name}, ${me.age} <span class="verified">✓ Verified</span></h3><p>${me.city}</p><p>${safeAbout(me)}</p><p class="small">Phone is private 🔒</p>`;}
+function openAdmin(){let code=prompt("Enter Admin Code:");if(code!==ADMIN_CODE)return alert("Wrong code!");hideAllBoxes();document.getElementById('adminBox').classList.remove('hidden');document.getElementById('adminList').innerHTML=users.filter(u=>String(u.id)!==String(me.id)).map(u=>{let repCount=reports.filter(r=>String(r.target)===String(u.id)).length;return `<div class="card" style="text-align:left"><b>${u.name}, ${u.age} - ${u.city}</b><br><span class="small">Reports: ${repCount} ${repCount>=3?'🔴 AUTO-HIDDEN':''} ${isRealPhoto(u)?'✓ Real Photo':'⚠️ No Real Photo'}</span><br><button class="red" onclick="adminDelete('${u.id}')">🗑️ DELETE THIS USER</button></div>`;}).join('')||'<p>No users</p>';}
+function adminDelete(uid){if(!confirm("Delete this user FOREVER?"))return;users=users.filter(u=>String(u.id)!!==String(uid));if(db)db.ref('users/'+uid).remove();save();alert("Deleted ✅");openAdmin();}
+function openEdit(){hideAllBoxes();document.getElementById('editBox').classList.remove('hidden');document.getElementById('e_name').value=me.name;document.getElementById('e_age').value=me.age;document.getElementById('e_city').value=me.city;document.getElementById('e_about').value=me.about;document.getElementById('e_preview').src=me.photo||DEFAULT_PHOTO;editPhotoData='';}
+function closeEdit(){showMyProfile();}
+function saveEdit(){me.name=document.getElementById('e_name').value.trim()||me.name;me.age=document.getElementById('e_age').value||me.age;me.city=document.getElementById('e_city').value;me.about=cleanPhone(document.getElementById('e_about').value)||me.about;if(editPhotoData)me.photo=editPhotoData;save();pushUserToFirebase(me);alert("Saved ✅");showMyProfile();}
+function unblockAll(){blocks=[];save();alert("Unblocked everyone ✅");render();}
+function deleteAccount(){if(!confirm("Delete your account forever?"))return;if(db)db.ref('users/'+me.id).remove();users=users.filter(u=>String(u.id)!==String(me.id));me=null;localStorage.clear();location.reload();}
+function showLikes(){hideAllBoxes();document.getElementById('likesBox').classList.remove('hidden');let who=likes.filter(l=>l.to==me.id).map(l=>users.find(u=>String(u.id)==String(l.from))).filter(isValidUser);document.getElementById('likesList').innerHTML=who.length?who.map(u=>`<div class="card"><img src="${u.photo||DEFAULT_PHOTO}" style="width:80px;height:80px"><h3>${u.name}, ${u.age}</h3><button class="pink" onclick="doLike('${u.id}')">❤️ Like Back</button><button class="black" onclick="openChat('${u.id}')">💬 Chat</button></div>`).join(''):'<p>No likes yet ❤️</p>';}
+function showMatches(){hideAllBoxes();document.getElementById('matchesBox').classList.remove('hidden');let matches=users.filter(u=>likes.find(l=>l.from==me.id&&l.to==u.id)&&likes.find(l=>l.from==u.id&&l.to==me.id));document.getElementById('matchesList').innerHTML=matches.length?matches.map(u=>`<div class="card matchCard"><img src="${u.photo||DEFAULT_PHOTO}" style="width:80px;height:80px"><h3>${u.name}, ${u.age} 💘</h3><button class="pink" onclick="openChat('${u.id}')">💬 Chat Now</button></div>`).join(''):'<p>No matches yet. Like people! ❤️</p>';}
+function getChatId(a,b){return [String(a),String(b)].sort().join('_');}
+function openChat(otherId){let other=users.find(u=>String(u.id)==String(otherId));if(!other)return;currentChatOtherId=otherId;currentChatId=getChatId(me.id,otherId);hideAllBoxes();let cb=document.getElementById('chatBox');cb.classList.remove('hidden');document.getElementById('chatTitle').textContent='💬 '+other.name;document.getElementById('chatOnline').innerHTML=onlineText(other);document.getElementById('chatStatus').textContent='';if(chatListener&&db)db.ref('chats/'+currentChatId).off();if(useFirebase&&db){chatListener=db.ref('chats/'+currentChatId).on('value',snap=>{let msgs=snap.val()?Object.values(snap.val()):[];msgs.sort((a,b)=>a.time-b.time);let box=document.getElementById('chatMessages');box.innerHTML=msgs.map(m=>`<div class="msg ${m.from==me.id?'msgMine':'msgTheirs'}">${m.text}<span class="tick ${m.seen?'tickSeen':'tickSent'}">${m.from==me.id?(m.seen?'✓✓ Seen':'✓ Sent'):''}</span></div>`).join('');box.scrollTop=box.scrollHeight;msgs.forEach((m,i)=>{if(m.to==me.id&&!m.seen){let keys=Object.keys(snap.val());db.ref('chats/'+currentChatId+'/'+keys[i]+'/seen').set(true);}});});}}
+function sendMsg(){let inp=document.getElementById('chatInput');let txt=inp.value.trim();if(!txt||!currentChatId)return;let msg={from:me.id,to:currentChatOtherId,text:txt,time:Date.now(),seen:false};if(useFirebase&&db)db.ref('chats/'+currentChatId).push(msg);inp.value='';}
+function backToChats(){if(chatListener&&db)db.ref('chats/'+currentChatId).off();showChats();}
+function showChats(){hideAllBoxes();document.getElementById('chatsBox').classList.remove('hidden');renderChatsList();}
+function renderChatsList(all){if(!all&&useFirebase&&db){db.ref('chats').once('value',s=>renderChatsList(s.val()||{}));return;}let allChats=all||{};let ids=new Set();Object.keys(allChats).forEach(cid=>{let parts=cid.split('_');if(parts.includes(String(me.id))){let other=parts.find(p=>p!=String(me.id));if(other)ids.add(other);}});document.getElementById('chatsList').innerHTML=[...ids].map(oid=>{let u=users.find(x=>String(x.id)==String(oid));if(!u)return '';return `<div class="card"><h3>${u.name}</h3><button class="pink" onclick="openChat('${u.id}')">OPEN CHAT 💬</button></div>`;}).join('')||'<p>No chats yet ❤️</p>';}
+function blockInChat(){if(!currentChatOtherId)return;blocks.push(String(currentChatOtherId));save();alert("Blocked 🚫");backToChats();}
+function reportUser(uid){let u=users.find(x=>String(x.id)==String(uid));if(!u)return;if(!confirm("Report "+u.name+" as Fake / Scam?"))return;if(reports.find(r=>r.from==me.id&&String(r.target)===String(uid)))return alert("You already reported them");reports.push({from:me.id,target:uid,time:Date.now()});save();pushReportsToFirebase();let c=reports.filter(r=>String(r.target)===String(uid)).length;alert("Reported 🚨 ("+c+"/3) - At 3 reports they are auto-removed!");render();}
+function reportInChat(){if(!currentChatOtherId)return;reportUser(currentChatOtherId);}
 </script>
 </body>
 </html>
