@@ -1,31 +1,31 @@
-            <!DOCTYPE html>
+    <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>MalawiLove SA ❤️ Find Love in South Africa</title>
+<meta name="description" content="MalawiLove SA - Real Malawians finding real love in South Africa. Durban, Johannesburg, Cape Town, Pretoria.">
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;font-family:'Poppins',Arial,sans-serif}
 body{margin:0;background:#fafafa;color:#1a1a1a;padding-bottom:90px}
-.header{background:linear-gradient(135deg,#ff2e63,#ff6b6b);color:#fff;padding:18px 16px 22px;text-align:center;border-radius:0 0 24px 24px;box-shadow:0 4px 20px #ff2e6355}
-.header h1{margin:0;font-size:26px;font-weight:800;letter-spacing:-0.5px}
-.header p{margin:4px 0 0;opacity:.9;font-size:13px}
-.hero{background:#fff;margin:14px;border-radius:20px;padding:20px;text-align:center;box-shadow:0 4px 18px #0001}
-.hero h2{margin:0;font-size:22px}
-.hero p{color:#666;font-size:14px;line-height:1.5}
+.header{background:linear-gradient(135deg,#ff2e63,#ff6b6b);color:#fff;padding:20px 16px 24px;text-align:center;border-radius:0 0 28px 28px;box-shadow:0 4px 20px #ff2e6355}
+.header h1{margin:0;font-size:27px;font-weight:800;letter-spacing:-.5px}
+.header p{margin:5px 0 0;opacity:.92;font-size:13px}
+.hero{background:#fff;margin:14px;border-radius:22px;padding:22px;text-align:center;box-shadow:0 4px 18px #0001}
+.hero h2{margin:0;font-size:23px}.hero p{color:#666;font-size:14px;line-height:1.6}
 .badge{display:inline-block;background:#ffe6ef;color:#ff2e63;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:600;margin:4px}
-.card{background:#fff;margin:14px;border-radius:20px;overflow:hidden;box-shadow:0 4px 18px #0001}
-.cardBody{padding:16px}
-.card img.profile{width:100%;height:280px;object-fit:cover;display:block}
-.card img.avatar{width:90px;height:90px;object-fit:cover;border-radius:50%;display:block;margin:0 auto 10px;border:3px solid #ffe6ef}
-input,select{width:100%;padding:14px 16px;margin:7px 0;border:1.5px solid #eee;border-radius:14px;font-size:15px;background:#fafafa;outline:none}
-input:focus,select:focus{border-color:#ff2e63;background:#fff}
+.card{background:#fff;margin:14px;border-radius:22px;overflow:hidden;box-shadow:0 4px 18px #0001}
+.cardBody{padding:18px}
+.card img.profile{width:100%;height:300px;object-fit:cover;display:block}
+.card img.avatar{width:100px;height:100px;object-fit:cover;border-radius:50%;display:block;margin:0 auto 10px;border:3px solid #ffe6ef}
+input,select,textarea{width:100%;padding:14px 16px;margin:7px 0;border:1.5px solid #eee;border-radius:14px;font-size:15px;background:#fafafa;outline:none}
+input:focus,select:focus,textarea:focus{border-color:#ff2e63;background:#fff}
 button{width:100%;padding:15px;border:0;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;margin:6px 0}
 .pink{background:linear-gradient(135deg,#ff2e63,#ff6b6b);color:#fff;box-shadow:0 4px 14px #ff2e6344}
-.black{background:#1a1a1a;color:#fff}.grey{background:#f0f0f0;color:#333}.white{background:#fff;color:#ff2e63;border:1.5px solid #ff2e63}
+.black{background:#1a1a1a;color:#fff}.grey{background:#f0f0f0;color:#333}.outline{background:#fff;color:#ff2e63;border:1.5px solid #ff2e63}
 .row{display:flex;gap:10px}.row button{flex:1}
 .hidden{display:none}
 .topbar{display:flex;gap:6px;padding:12px;overflow-x:auto;white-space:nowrap}
@@ -35,26 +35,24 @@ button{width:100%;padding:15px;border:0;border-radius:14px;font-size:15px;font-w
 .tabWrap button{flex:1;margin:0;border-radius:10px;background:transparent;color:#666}
 .tabWrap button.active{background:#fff;color:#ff2e63;box-shadow:0 2px 8px #0001}
 .passwrap{position:relative}.passwrap input{padding-right:48px}.eyeBtn{position:absolute!important;right:6px;top:50%;transform:translateY(-50%);width:38px!important;padding:8px!important;background:transparent!important;font-size:18px;box-shadow:none!important}
-.safety{background:#fff8e1;border-radius:14px;padding:12px;font-size:12.5px;line-height:1.5;color:#5d4037;text-align:left}
+.safety{background:#fff8e1;border-radius:14px;padding:13px;font-size:12.5px;line-height:1.6;color:#5d4037;text-align:left}
 .genderTag{background:#ffe6ef;color:#ff2e63;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600;display:inline-block;margin:3px}
 .verified{color:#25D366;font-size:12px;font-weight:700}
 .chatBox{height:320px;overflow-y:auto;text-align:left;background:#fafafa;border-radius:14px;padding:12px}
 .msg{max-width:78%;padding:10px 12px;border-radius:16px;margin:6px 0;font-size:14px;line-height:1.4}.msgMine{background:#ff2e63;color:#fff;margin-left:auto;border-bottom-right-radius:4px}.msgTheirs{background:#fff;border:1px solid #eee;border-bottom-left-radius:4px}
-.profileCard{text-align:center}
-.profileCard h3{margin:6px 0 2px;font-size:20px}
-.profileCard p{color:#666;font-size:14px}
-.footer{ text-align:center;color:#aaa;font-size:11px;padding:14px}
-.demoBtn{ background:transparent!important;color:#aaa!important;font-size:12px!important;box-shadow:none!important;padding:8px!important;font-weight:400}
+.footer{text-align:center;color:#aaa;font-size:11px;padding:14px;line-height:1.6}
+.terms{font-size:12px;color:#888;line-height:1.6;text-align:left}
+.reportBtn{background:#fff!important;color:#ff3b30!important;font-size:12px!important;padding:8px!important;border:1px solid #ffcccc!important;box-shadow:none!important}
 </style>
 </head>
 <body>
-<div class="header"><h1>MalawiLove SA ❤️</h1><p>Find Love in South Africa • <span id="connStatus">● Online</span></p></div>
+<div class="header"><h1>MalawiLove SA ❤️</h1><p>Real Love • Real People • South Africa</p></div>
 
 <div id="authBox">
 <div class="hero">
 <h2>Find Your Person ❤️</h2>
-<p>Real Malawians in South Africa. Safe, private & verified.<br>Durban • Johannesburg • Cape Town • Pretoria</p>
-<div><span class="badge">✓ Verified Profiles</span><span class="badge">🛡️ Phone Never Shown</span><span class="badge">🇲🇼🇿🇦 Malawi • SA</span></div>
+<p>For Malawians in South Africa looking for serious love, friendship & marriage.<br><b>Durban • Johannesburg • Cape Town • Pretoria • Polokwane</b></p>
+<div><span class="badge">✓ Real Profiles</span><span class="badge">🛡️ Phone Never Shown</span><span class="badge">18+ Only</span></div>
 </div>
 
 <div class="card"><div class="cardBody">
@@ -64,19 +62,20 @@ button{width:100%;padding:15px;border:0;border-radius:14px;font-size:15px;font-w
 </div>
 
 <div id="signupForm">
-<input id="a_name" placeholder="Full Name">
-<input id="a_age" type="number" placeholder="Age">
-<select id="a_gender"><option value="">I am...</option><option>Male</option><option>Female</option></select>
-<select id="a_city"><option value="">City</option><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Polokwane</option><option>Blantyre</option><option>Lilongwe</option><option>Other</option></select>
-<input id="a_phone" type="tel" placeholder="Phone Number - Private, never shown">
-<input id="a_about" placeholder="About you - e.g. I love music, church, family">
-<div class="passwrap"><input id="a_pass" type="password" placeholder="Create Password"><button type="button" class="eyeBtn" onclick="toggleEye('a_pass')">👁️</button></div>
-<input id="a_secret" type="text" placeholder="Secret Word for password reset - e.g. Mango">
-<label style="display:flex;gap:8px;align-items:center;font-size:13px;text-align:left;margin:8px 0"><input id="a_18" type="checkbox" style="width:18px;margin:0"> I confirm I am 18 years or older</label>
-<label style="display:block;text-align:left;font-size:13px;font-weight:600;margin-top:10px">📸 Profile Photo <span style="color:#ff2e63">Required</span><input id="a_photo" type="file" accept="image/*"></label>
+<input id="a_name" placeholder="Full Name *">
+<input id="a_age" type="number" placeholder="Age * Must be 18+">
+<select id="a_gender"><option value="">I am... *</option><option>Male</option><option>Female</option></select>
+<select id="a_looking"><option value="">Looking for... *</option><option>Serious Relationship</option><option>Marriage</option><option>Friendship</option><option>Dating</option></select>
+<select id="a_city"><option value="">City *</option><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Polokwane</option><option>Blantyre</option><option>Lilongwe</option><option>Other</option></select>
+<input id="a_phone" type="tel" placeholder="Phone Number * Private - never shown">
+<textarea id="a_about" rows="2" placeholder="About you - e.g. I love music, church, family, honest person"></textarea>
+<div class="passwrap"><input id="a_pass" type="password" placeholder="Create Password *"><button type="button" class="eyeBtn" onclick="toggleEye('a_pass')">👁️</button></div>
+<input id="a_secret" type="text" placeholder="Secret Word for password reset * e.g. Mango">
+<label style="display:flex;gap:8px;align-items:flex-start;font-size:13px;text-align:left;margin:10px 0"><input id="a_18" type="checkbox" style="width:18px;margin:2px 0 0"> I confirm I am 18+ and I agree to be respectful. No scamming, no asking for money.</label>
+<label style="display:block;text-align:left;font-size:13px;font-weight:600;margin-top:10px">📸 Profile Photo <span style="color:#ff2e63">Required - Real photo of you</span><input id="a_photo" type="file" accept="image/*"></label>
 <img id="a_preview" class="hidden avatar">
-<button class="pink" onclick="doSignup()">Create Account ❤️</button>
-<p class="small" style="text-align:center">By joining you agree to be respectful & safe.</p>
+<button class="pink" onclick="doSignup()">Create My Account ❤️</button>
+<div class="terms">By creating an account you agree: Be 18+, be real, be respectful. Anyone asking for money will be blocked. Your phone is never shown to other members.</div>
 </div>
 
 <div id="loginForm" class="hidden">
@@ -88,17 +87,15 @@ button{width:100%;padding:15px;border:0;border-radius:14px;font-size:15px;font-w
 
 <div id="forgotForm" class="hidden">
 <h3 style="margin:0">Reset Password</h3>
-<p class="small">Use your secret word to reset.</p>
+<p class="small">Use your secret word.</p>
 <input id="f_phone" type="tel" placeholder="Phone Number">
 <input id="f_secret" type="text" placeholder="Secret Word">
 <input id="f_newpass" type="password" placeholder="New Password">
 <button class="pink" onclick="doForgot()">Reset Password</button>
 <button class="grey" onclick="hideForgot()">Back to Log In</button>
 </div>
-
-<button class="demoBtn" onclick="enterTest()">Continue as Demo User →</button>
 </div></div>
-<div class="safety" style="margin:14px">🛡️ <b>Stay Safe:</b> Never send money. Meet in public first. Your phone number is NEVER shown to other members. Report anyone who asks for money.</div>
+<div class="safety" style="margin:14px">🛡️ <b>Stay Safe - Read Before You Chat:</b><br>• Never send money to anyone<br>• Meet in a public place first<br>• Your phone is NEVER shown<br>• Report anyone who asks for money - we block them</div>
 </div>
 
 <div id="mainBox" class="hidden">
@@ -112,42 +109,43 @@ button{width:100%;padding:15px;border:0;border-radius:14px;font-size:15px;font-w
 </div>
 <div id="homeArea">
 <div class="card"><div class="cardBody">
-<p class="small" id="peopleCount" style="margin:0">Loading...</p>
+<p class="small" id="peopleCount" style="margin:0">Loading members...</p>
 <h3 style="margin:10px 0 6px">Find Someone</h3>
 <select id="s_city"><option value="">All Cities</option><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Polokwane</option><option>Blantyre</option><option>Lilongwe</option><option>Other</option></select>
 <select id="s_gender"><option value="">All Genders</option><option>Male</option><option>Female</option></select>
+<select id="s_looking"><option value="">Any Intention</option><option>Serious Relationship</option><option>Marriage</option><option>Friendship</option><option>Dating</option></select>
 <div class="row"><input id="s_min" type="number" placeholder="Min Age"><input id="s_max" type="number" placeholder="Max Age"></div>
 <button class="pink" onclick="doSearch()">Search</button>
 <button class="grey" onclick="clearSearch()">Clear Filters</button>
 </div></div>
 <div id="list"></div>
 </div>
-<div id="myProfileBox" class="card hidden"><div class="cardBody profileCard"><h2>My Profile</h2><div id="myProfileView"></div><button class="pink" onclick="openEdit()">✏️ Edit Profile</button><button class="grey" onclick="deleteAccount()">Delete Account</button></div></div>
-<div id="editBox" class="card hidden"><div class="cardBody"><h2>Edit Profile</h2><input id="e_name" placeholder="Name"><input id="e_age" type="number" placeholder="Age"><select id="e_gender"><option>Male</option><option>Female</option></select><select id="e_city"><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Polokwane</option><option>Blantyre</option><option>Lilongwe</option><option>Other</option></select><input id="e_about" placeholder="About you"><label>Change Photo:<input id="e_photo" type="file" accept="image/*"></label><img id="e_preview" class="avatar"><button class="pink" onclick="saveEdit()">Save Changes</button><button class="grey" onclick="closeEdit()">Cancel</button></div></div>
+<div id="myProfileBox" class="card hidden"><div class="cardBody" style="text-align:center"><h2>My Profile</h2><div id="myProfileView"></div><button class="pink" onclick="openEdit()">✏️ Edit Profile</button><button class="grey" onclick="deleteAccount()">Delete Account</button></div></div>
+<div id="editBox" class="card hidden"><div class="cardBody"><h2>Edit Profile</h2><input id="e_name" placeholder="Name"><input id="e_age" type="number" placeholder="Age"><select id="e_gender"><option>Male</option><option>Female</option></select><select id="e_looking"><option>Serious Relationship</option><option>Marriage</option><option>Friendship</option><option>Dating</option></select><select id="e_city"><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Polokwane</option><option>Blantyre</option><option>Lilongwe</option><option>Other</option></select><textarea id="e_about" rows="2" placeholder="About you"></textarea><label>Change Photo:<input id="e_photo" type="file" accept="image/*"></label><img id="e_preview" class="avatar"><button class="pink" onclick="saveEdit()">Save Changes</button><button class="grey" onclick="closeEdit()">Cancel</button></div></div>
 <div id="likesBox" class="card hidden"><div class="cardBody"><h2>❤️ Who Liked You</h2><div id="likesList"></div></div></div>
 <div id="matchesBox" class="card hidden"><div class="cardBody"><h2>💘 Your Matches</h2><div id="matchesList"></div></div></div>
 <div id="chatsBox" class="card hidden"><div class="cardBody"><h2>💬 Messages</h2><div id="chatsList"></div><button class="grey" onclick="showHome()">Back to Discover</button></div></div>
-<div id="chatBox" class="card hidden"><div class="cardBody"><h2 id="chatTitle">Chat</h2><div id="chatMessages" class="chatBox"></div><div class="row"><input id="chatInput" placeholder="Type a message..."><button class="pink" onclick="sendMsg()">Send</button></div><button class="grey" onclick="backToChats()">Back</button></div></div>
+<div id="chatBox" class="card hidden"><div class="cardBody"><h2 id="chatTitle">Chat</h2><div id="chatMessages" class="chatBox"></div><div class="row"><input id="chatInput" placeholder="Type a message... Be respectful ❤️"><button class="pink" onclick="sendMsg()">Send</button></div><div class="row"><button class="reportBtn" onclick="reportUser()">🚩 Report User</button><button class="reportBtn" onclick="blockUser()">🚫 Block User</button></div><button class="grey" onclick="backToChats()">Back</button></div></div>
 </div>
 
-<div id="matchModal" onclick="closeMatch()" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#ff2e63,#ff6b6b);z-index:1000;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:20px"><h1 style="color:#fff;margin:0">It's a Match! 💘</h1><img id="matchPhoto" style="width:150px;height:150px;border-radius:50%;border:4px solid #fff;object-fit:cover;margin:16px 0"><h2 id="matchName" style="color:#fff;margin:0"></h2><p style="color:#fff;opacity:.9">You both liked each other</p><button class="black" onclick="event.stopPropagation();goChatFromMatch()" style="max-width:300px">💬 Send Message</button><button class="white" onclick="closeMatch()" style="max-width:300px;background:#fff">Keep Discovering</button></div>
-<div class="footer">MalawiLove SA ❤️ Made with love in Durban</div>
+<div id="matchModal" onclick="closeMatch()" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#ff2e63,#ff6b6b);z-index:1000;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:20px"><h1 style="color:#fff;margin:0">It's a Match! 💘</h1><img id="matchPhoto" style="width:150px;height:150px;border-radius:50%;border:4px solid #fff;object-fit:cover;margin:16px 0"><h2 id="matchName" style="color:#fff;margin:0"></h2><p style="color:#fff;opacity:.9">You both liked each other</p><button class="black" onclick="event.stopPropagation();goChatFromMatch()" style="max-width:300px">💬 Send Message</button><button class="outline" onclick="closeMatch()" style="max-width:300px;background:#fff">Keep Discovering</button></div>
+<div class="footer">MalawiLove SA ❤️<br>Real People • Real Love • South Africa<br>18+ Only • Be Safe • Never Send Money</div>
 
 <script>
 var db=null;
 try{
   var firebaseConfig={apiKey:"AIzaSyAcNs2UdpGCZYXSquuwMk2ze3odWd36oP0",authDomain:"malawi-love-sa.firebaseapp.com",databaseURL:"https://malawi-love-sa-default-rtdb.firebaseio.com",projectId:"malawi-love-sa",storageBucket:"malawi-love-sa.firebasestorage.app",messagingSenderId:"44621212737",appId:"1:44621212737:web:15daa656f79505d3eaeac0"};
   firebase.initializeApp(firebaseConfig); db=firebase.database();
-  document.getElementById('connStatus').textContent='● Online';
-}catch(e){ document.getElementById('connStatus').textContent='● Offline'; }
-var DEFAULT_PHOTO="https://via.placeholder.com/300";
+}catch(e){}
+var DEFAULT_PHOTO="https://via.placeholder.com/300?text=MalawiLove";
 function normPhone(p){var d=String(p||'').replace(/\D/g,'');if(d.indexOf('27')===0&&d.length===11)d='0'+d.slice(2);return d;}
-function isValidUser(u){return u&&u.name&&u.age&&u.city&&u.phone;}
-var users=[]; try{users=JSON.parse(localStorage.getItem('ml_users')||'[]');}catch(e){users=[];}
-var me=null; try{me=JSON.parse(localStorage.getItem('ml_me')||'null');}catch(e){me=null;}
+function isValidUser(u){return u&&u.name&&u.age&&u.city&&u.phone&&u.photo&&u.photo.indexOf('placeholder')===-1&&u.name!=='Test User'&&u.name!=='Demo User';}
+var users=[]; try{users=JSON.parse(localStorage.getItem('ml_users')||'[]').filter(isValidUser);}catch(e){users=[];}
+var me=null; try{me=JSON.parse(localStorage.getItem('ml_me')||'null'); if(me&&!isValidUser(me)) me=null;}catch(e){me=null;}
 var blocks=[]; try{blocks=JSON.parse(localStorage.getItem('ml_blocks')||'[]');}catch(e){}
 var likes=[]; try{likes=JSON.parse(localStorage.getItem('ml_likes')||'[]');}catch(e){}
-var filter={city:'',gender:'',min:'',max:''};
+var reports=[]; try{reports=JSON.parse(localStorage.getItem('ml_reports')||'[]');}catch(e){}
+var filter={city:'',gender:'',looking:'',min:'',max:''};
 var photoData='';var editPhotoData='';var currentChatId=null;var currentChatOtherId=null;var lastMatchUser=null;
 function toggleEye(id){var inp=document.getElementById(id);inp.type=(inp.type==='password'?'text':'password');}
 function showTab(w){
@@ -158,36 +156,40 @@ function showTab(w){
 }
 function showForgot(){document.getElementById('signupForm').classList.add('hidden');document.getElementById('loginForm').classList.add('hidden');document.getElementById('forgotForm').classList.remove('hidden');}
 function hideForgot(){document.getElementById('forgotForm').classList.add('hidden');document.getElementById('loginForm').classList.remove('hidden');}
-function save(){try{localStorage.setItem('ml_users',JSON.stringify(users));localStorage.setItem('ml_me',JSON.stringify(me));localStorage.setItem('ml_blocks',JSON.stringify(blocks));localStorage.setItem('ml_likes',JSON.stringify(likes));}catch(e){}}
+function save(){try{localStorage.setItem('ml_users',JSON.stringify(users));localStorage.setItem('ml_me',JSON.stringify(me));localStorage.setItem('ml_blocks',JSON.stringify(blocks));localStorage.setItem('ml_likes',JSON.stringify(likes));localStorage.setItem('ml_reports',JSON.stringify(reports));}catch(e){}}
 function pushUser(u){if(db&&isValidUser(u)){try{db.ref('users/'+u.id).set(u);}catch(e){}}}
-function enterTest(){
-  me={id:'test_'+Date.now(),name:'Demo User',age:'25',gender:'Female',city:'Durban',phone:'0712345678',about:'Hi, I am here to find real love ❤️',pass:'1234',secret:'Mango',photo:DEFAULT_PHOTO,online:true,lastSeen:Date.now()};
-  document.getElementById('authBox').classList.add('hidden');
-  document.getElementById('mainBox').classList.remove('hidden');
-  try{users.push(me); save();}catch(e){}
-  showHome();
+function compressImage(dataUrl,cb){
+  var img=new Image(); img.onload=function(){
+    var c=document.createElement('canvas'); var max=600; var w=img.width,h=img.height;
+    if(w>max){h=h*max/w;w=max;}
+    c.width=w;c.height=h; c.getContext('2d').drawImage(img,0,0,w,h);
+    cb(c.toDataURL('image/jpeg',0.7));
+  }; img.src=dataUrl;
 }
 function doSignup(){
   var name=document.getElementById('a_name').value.trim();
-  var age=document.getElementById('a_age').value;
+  var age=Number(document.getElementById('a_age').value);
   var gender=document.getElementById('a_gender').value;
+  var looking=document.getElementById('a_looking').value;
   var city=document.getElementById('a_city').value;
   var phone=normPhone(document.getElementById('a_phone').value);
-  var about=document.getElementById('a_about').value.trim()||"No bio yet ❤️";
+  var about=document.getElementById('a_about').value.trim()||"Hi, I am here to find real love ❤️";
   var pass=document.getElementById('a_pass').value;
   var secret=document.getElementById('a_secret').value.trim();
   if(!name) return alert('Please enter Your Name');
-  if(!age) return alert('Please enter Age');
+  if(!age||age<18) return alert('You must be 18+ to join MalawiLove SA');
+  if(age>100) return alert('Please enter a real age');
   if(!gender) return alert('Please select Gender');
+  if(!looking) return alert('Please select what you are looking for');
   if(!city) return alert('Please select City');
-  if(!phone) return alert('Please enter Phone');
-  if(!pass) return alert('Please create Password');
+  if(!phone||phone.length<10) return alert('Please enter a valid Phone Number');
+  if(!pass||pass.length<4) return alert('Password must be at least 4 characters');
   if(!secret) return alert('Please enter Secret Word');
-  if(!document.getElementById('a_18').checked) return alert('Tick I am 18+');
-  if(!photoData) return alert('Photo Required 📸');
-  if(users.find(function(u){return normPhone(u.phone)===phone})) return alert('This phone already has account. Tap Log In.');
-  var u={id:Date.now().toString(),name:name,age:age,gender:gender,city:city,phone:phone,about:about,pass:pass,secret:secret,photo:photoData,online:true,lastSeen:Date.now()};
-  users.push(u);me=u;save();pushUser(u);showMain();alert('Welcome '+name+' ❤️');
+  if(!document.getElementById('a_18').checked) return alert('Please confirm you are 18+');
+  if(!photoData) return alert('Profile Photo Required 📸 Please add a real photo of you');
+  if(users.find(function(u){return normPhone(u.phone)===phone})) return alert('This phone already has an account. Please Log In.');
+  var u={id:Date.now().toString(),name:name,age:String(age),gender:gender,looking:looking,city:city,phone:phone,about:about,pass:pass,secret:secret,photo:photoData,online:true,lastSeen:Date.now(),createdAt:Date.now()};
+  users.push(u);me=u;save();pushUser(u);showMain();alert('Welcome to MalawiLove SA, '+name+' ❤️ Your account is live!');
 }
 function doLogin(){
   var phone=normPhone(document.getElementById('l_phone').value);
@@ -198,9 +200,9 @@ function doLogin(){
   if(db){
     db.ref('users').once('value',function(snap){
       var all=snap.val()?Object.values(snap.val()):[];
-      var fu=null; for(var j=0;j<all.length;j++){if(normPhone(all[j].phone)===phone&&all[j].pass===pass){fu=all[j];break;}}
+      var fu=null; for(var j=0;j<all.length;j++){if(normPhone(all[j].phone)===phone&&all[j].pass===pass&&isValidUser(all[j])){fu=all[j];break;}}
       if(fu){users.push(fu);me=fu;save();showMain();alert('Welcome back '+me.name+' ❤️');}
-      else alert('Wrong phone or password.');
+      else alert('Wrong phone or password. If you are new, please Create Account.');
     });
   } else alert('Wrong phone or password.');
 }
@@ -210,25 +212,11 @@ function doForgot(){
   var np=document.getElementById('f_newpass').value;
   var u=null; for(var i=0;i<users.length;i++){if(normPhone(users[i].phone)===phone){u=users[i];break;}}
   if(!u||u.secret!==secret) return alert('Wrong phone or secret word');
-  u.pass=np;if(me&&me.id===u.id)me=u;save();pushUser(u);alert('Password reset! Log in now');hideForgot();
+  u.pass=np;if(me&&me.id===u.id)me=u;save();pushUser(u);alert('Password reset! Please Log In now');hideForgot();
 }
 function logout(){me=null;try{localStorage.removeItem('ml_me');}catch(e){} location.reload();}
 function showMain(){document.getElementById('authBox').classList.add('hidden');document.getElementById('mainBox').classList.remove('hidden');showHome();}
 function showHome(){hideAll();document.getElementById('homeArea').classList.remove('hidden');render();}
 function hideAll(){['homeArea','myProfileBox','editBox','likesBox','matchesBox','chatsBox','chatBox'].forEach(function(id){document.getElementById(id).classList.add('hidden')});}
-function doSearch(){filter={city:document.getElementById('s_city').value,gender:document.getElementById('s_gender').value,min:document.getElementById('s_min').value,max:document.getElementById('s_max').value};render();}
-function clearSearch(){filter={city:'',gender:'',min:'',max:''};document.getElementById('s_city').value='';document.getElementById('s_gender').value='';document.getElementById('s_min').value='';document.getElementById('s_max').value='';render();}
-function render(){
-  var list=document.getElementById('list');document.getElementById('peopleCount').textContent=users.length+' people on MalawiLove ❤️';
-  var shown=users.filter(function(u){return u.id!==me.id&&blocks.indexOf(u.id)===-1&&isValidUser(u);});
-  if(filter.city) shown=shown.filter(function(u){return u.city===filter.city});
-  if(filter.gender) shown=shown.filter(function(u){return u.gender===filter.gender});
-  if(filter.min) shown=shown.filter(function(u){return Number(u.age)>=Number(filter.min)});
-  if(filter.max) shown=shown.filter(function(u){return Number(u.age)<=Number(filter.max)});
-  if(!shown.length){list.innerHTML='<div class="card"><div class="cardBody" style="text-align:center">No people found. Try Clear Filters ❤️</div></div>';return;}
-  var html='';
-  for(var i=0;i<shown.length;i++){var u=shown[i]; html+='<div class="card"><img class="profile" src="'+(u.photo||DEFAULT_PHOTO)+'"><div class="cardBody"><h3 style="margin:0">'+u.name+', '+u.age+' <span class="verified">✓ Verified</span></h3><p class="small" style="margin:4px 0">📍 '+u.city+' • '+(u.gender||'')+'</p><p style="font-size:14px;color:#555">'+(u.about||'')+'</p><div class="row"><button class="pink" onclick="likeUser(\''+u.id+'\')">❤️ Like</button><button class="black" onclick="openChat(\''+u.id+'\')">💬 Message</button></div></div></div>';}
-  list.innerHTML=html;
-}
-function showMyProfile(){hideAll();document.getElementById('myProfileBox').classList.remove('hidden');document.getElementById('myProfileView').innerHTML='<img class="avatar" src="'+me.photo+'"><h3>'+me.name+', '+me.age+'</h3><span class="genderTag">'+(me.gender||'')+'</span> <span class="genderTag">📍 '+me.city+'</span><p>'+me.about+'</p>';}
-function openEdit()
+function doSearch(){filter={city:document.getElementById('s_city').value,gender:document.getElementById('s_gender').value,looking:document.getElementById('s_looking').value,min:document.getElementById('s_min').value,max:document.getElementById('s_max').value};render();}
+function clearSearch(){filter={city:'',gender:'',looking:'',min:'',max:''};document.getElementById('s_city').value='';document.getElementById('s_gender').value='';document.getElementBy
