@@ -1,48 +1,193 @@
-              <!DOCTYPE html>
-<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MalawiLove SA - Find Love in South Africa</title>
+   <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MalawiLove SA - Find Your Person</title>
 <style>
-*{box-sizing:border-box;font-family:system-ui,Arial}body{margin:0;background:#FFF5F7;color:#111}
-.top{background:#fff;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;box-shadow:0 1px 8px #0001;z-index:10}
-.logo{font-weight:900;font-size:22px;color:#E91E63;white-space:nowrap}.logo span{color:#111}
-.badge{background:#E8F5E9;color:#1B7A2E;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:700;white-space:nowrap}
-.hero{text-align:center;padding:22px 16px 8px}.hero h1{font-size:28px;margin:6px 0}.hero p{color:#666;margin:0;line-height:1.5}
-.wrap{max-width:420px;margin:0 auto;padding:14px}
-.card{background:#fff;border-radius:16px;padding:18px;box-shadow:0 4px 20px #0001}
-.tabs{display:flex;gap:8px;margin-bottom:14px}.tabs button{flex:1;padding:12px;border:0;border-radius:10px;font-weight:800;cursor:pointer}
-.tab-on{background:#E91E63;color:#fff}.tab-off{background:#F3F4F6;color:#333}
-input,select,textarea{width:100%;padding:13px;border:1px solid #E5E7EB;border-radius:10px;margin:6px 0;font-size:15px}
-.btn{width:100%;padding:14px;border:0;border-radius:10px;font-weight:800;font-size:16px;cursor:pointer;margin-top:8px}
-.pink{background:#E91E63;color:#fff}.grey{background:#F3F4F6;color:#333}
-.eye-wrap{display:flex;gap:6px;align-items:center}.eye-wrap input{flex:1}.eye{width:48px;padding:13px 0;border:1px solid #E5E7EB;border-radius:10px;background:#F3F4F6;cursor:pointer;margin:6px 0}
-.small{font-size:12px;color:#6B7280;text-align:center;margin-top:10px;line-height:1.5}
+*{box-sizing:border-box;font-family:system-ui,Arial,sans-serif}
+body{margin:0;background:#FFF5F7;color:#111}
+.top{background:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;box-shadow:0 2px 10px rgba(0,0,0,.06);z-index:10}
+.logo{font-weight:900;font-size:22px;color:#E91E63;letter-spacing:-.5px}
+.logo span{color:#111}
+.badge{background:#E8F5E9;color:#1B7A2E;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:800}
+.hero{text-align:center;padding:22px 16px 8px}
+.hero h1{font-size:28px;margin:8px 0}
+.hero p{color:#666;margin:0;line-height:1.6}
+.wrap{max-width:430px;margin:0 auto;padding:14px}
+.card{background:#fff;border-radius:18px;padding:18px;box-shadow:0 6px 24px rgba(0,0,0,.06)}
+.tabs{display:flex;gap:8px;margin-bottom:14px}
+.tabs button{flex:1;padding:12px;border:0;border-radius:12px;font-weight:800;cursor:pointer}
+.tab-on{background:#E91E63;color:#fff}
+.tab-off{background:#F3F4F6;color:#111}
+input,select,textarea{width:100%;padding:13px;border:1px solid #E5E7EB;border-radius:12px;margin:6px 0;font-size:15px;background:#fff}
+.btn{width:100%;padding:14px;border:0;border-radius:12px;font-weight:800;font-size:16px;margin-top:10px;cursor:pointer}
+.pink{background:#E91E63;color:#fff}
+.grey{background:#F3F4F6;color:#111}
+.white{background:#fff;color:#E91E63;border:1.5px solid #E91E63}
+.eye-wrap{display:flex;gap:6px}
+.eye-wrap input{flex:1}
+.eye{width:50px;border:1px solid #E5E7EB;border-radius:12px;background:#F3F4F6;cursor:pointer}
+.small{font-size:12px;color:#6B7280;text-align:center;margin-top:12px;line-height:1.6}
 .link{color:#E91E63;font-weight:700;cursor:pointer}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
-.person{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 12px #0001}
-.person img{width:100%;height:180px;object-fit:cover;background:#FCE7F3}.person div{padding:10px}
-.hidden{display:none}.row{display:flex;gap:8px}.row button{flex:1}
-.topbtn{padding:8px 14px;border-radius:20px;border:0;font-weight:700;cursor:pointer;background:#F3F4F6}
-</style></head>
+.person{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 14px rgba(0,0,0,.06)}
+.person img{width:100%;height:175px;object-fit:cover;background:#FCE7F3}
+.person div{padding:12px}
+.hidden{display:none}
+</style>
+</head>
 <body>
-<div class="top"><div class="logo">Malawi<span>Love</span> SA</div><div><span class="badge" id="conn">● Online</span> <button class="topbtn" onclick="showAdmin()">Admin</button></div></div>
-<div class="hero" id="hero"><h1>Find Your Person. 💕</h1><p>Real Malawians in South Africa<br>Durban • Joburg • Cape Town<br><b id="count">Loading members...</b></p></div>
 
-<div class="wrap">
-<div class="card" id="authCard">
-<div class="tabs"><button id="tabSignup" class="tab-on" onclick="showSignup()">Create Account</button><button id="tabLogin" class="tab-off" onclick="showLogin()">Log In</button></div>
-
-<div id="signupForm">
-<input id="a_name" placeholder="Full Name *">
-<div class="row"><input id="a_age" type="number" placeholder="Age *"><select id="a_gender"><option value="">Gender *</option><option>Man</option><option>Woman</option></select></div>
-<div class="row"><select id="a_looking"><option value="">Looking for *</option><option>Woman</option><option>Man</option></select><select id="a_city"><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Blantyre</option><option>Lilongwe</option><option>Other</option></select></div>
-<input id="a_phone" placeholder="Phone / WhatsApp * e.g 0712345678">
-<textarea id="a_about" placeholder="About me... e.g I love gospel, cooking, honest person"></textarea>
-<input id="a_photo" type="file" accept="image/*">
-<div class="eye-wrap"><input id="a_pass" type="password" placeholder="Password * Min 4 chars"><button class="eye" onclick="toggleEye('a_pass',this)">👁️</button></div>
-<input id="a_secret" placeholder="Secret: Your mother's name? (for password reset)">
-<button class="btn pink" onclick="doSignup()">Create My Account ❤️</button>
-<p class="small">By joining you agree you are 18+ and will be respectful.<br>Already have account? <span class="link" onclick="showLogin()">Log In here</span></p>
+<div class="top">
+  <div class="logo">Malawi<span>Love</span> SA</div>
+  <div class="badge">● Online</div>
 </div>
 
-<div id="loginForm" class="hidden">
-<input id
+<div class="hero" id="hero">
+  <h1>Find Your Person. 💕</h1>
+  <p>Real Malawians in South Africa<br>Durban • Johannesburg • Cape Town<br><b id="count">Loading members...</b></p>
+</div>
+
+<div class="wrap">
+  <div class="card" id="authCard">
+    <div class="tabs">
+      <button id="tS" class="tab-on" onclick="sS()">Create Account</button>
+      <button id="tL" class="tab-off" onclick="sL()">Log In</button>
+    </div>
+
+    <div id="sF">
+      <input id="n" placeholder="Full Name *">
+      <input id="a" type="number" placeholder="Age *">
+      <select id="g"><option value="">Gender *</option><option>Man</option><option>Woman</option></select>
+      <select id="lk"><option value="">Looking for *</option><option>Woman</option><option>Man</option></select>
+      <select id="c"><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Blantyre</option><option>Lilongwe</option><option>Other</option></select>
+      <input id="p" placeholder="Phone / WhatsApp *">
+      <textarea id="ab" placeholder="About me..."></textarea>
+      <input id="ph" type="file" accept="image/*">
+      <div class="eye-wrap"><input id="pw" type="password" placeholder="Password * Min 4"><button class="eye" onclick="e('pw',this)">👁️</button></div>
+      <input id="sc" placeholder="Secret: Mother's name?">
+      <button class="btn pink" onclick="su()">Create My Account ❤️</button>
+      <p class="small">Already have account? <span class="link" onclick="sL()">Log In here</span></p>
+    </div>
+
+    <div id="lF" class="hidden">
+      <input id="lp" placeholder="Phone / WhatsApp">
+      <div class="eye-wrap"><input id="lw" type="password" placeholder="Password"><button class="eye" onclick="e('lw',this)">👁️</button></div>
+      <button class="btn pink" onclick="li()">Log In ❤️</button>
+      <button class="btn white" onclick="guest()">Enter as Guest to See Inside 👀</button>
+      <p class="small"><span class="link" onclick="fg()">Forgot Password?</span> • <span class="link" onclick="sS()">Create Account</span></p>
+      <div id="fB" class="hidden">
+        <input id="fp" placeholder="Your Phone">
+        <input id="fs" placeholder="Mother's name?">
+        <div class="eye-wrap"><input id="fn" type="password" placeholder="New Password"><button class="eye" onclick="e('fn',this)">👁️</button></div>
+        <button class="btn grey" onclick="fr()">Reset Password</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="app" class="hidden">
+    <div class="card">
+      <b>Welcome, <span id="mn"></span>! ❤️</b><br>
+      <span class="small" id="mi"></span><br>
+      <button class="btn grey" onclick="localStorage.removeItem('ml_user');location.reload()">Log Out</button>
+    </div>
+    <h3>Discover People Near You</h3>
+    <div class="grid" id="pe"></div>
+  </div>
+</div>
+
+<script>
+const U="https://fzkavixubxtrlptplymq.supabase.co";
+const K="sb_publishable_SnXO5On70bbqUONRFAX4EA_0JBAw_Sc";
+let me=null, all=[];
+
+function cp(p){return (p||"").replace(/\s+/g,"").trim();}
+function e(id,b){let x=document.getElementById(id);x.type=x.type==="password"?"text":"password";b.textContent=x.type==="password"?"👁️":"🙈";}
+function sS(){document.getElementById('sF').classList.remove('hidden');document.getElementById('lF').classList.add('hidden');document.getElementById('tS').className='tab-on';document.getElementById('tL').className='tab-off';}
+function sL(){document.getElementById('sF').classList.add('hidden');document.getElementById('lF').classList.remove('hidden');document.getElementById('tS').className='tab-off';document.getElementById('tL').className='tab-on';}
+function fg(){document.getElementById('fB').classList.toggle('hidden');}
+
+async function q(path,method,body){
+  let r=await fetch(U+"/rest/v1/"+path,{method:method||"GET",headers:{apikey:K,Authorization:"Bearer "+K,"Content-Type":"application/json",Prefer:"return=representation"},body:body?JSON.stringify(body):null});
+  return r.json();
+}
+
+async function load(){
+  try{
+    let d=await q("profiles?select=*&order=created_at.desc");
+    if(Array.isArray(d)){all=d;document.getElementById('count').textContent=d.length+" members joined • Real people, Real love";render();}
+    else{document.getElementById('count').textContent="Members loading - check connection";}
+  }catch(err){document.getElementById('count').textContent="Could not load members - check internet";}
+}
+
+function render(){
+  let h="";
+  all.forEach(u=>{
+    if(me && u.id===me.id) return;
+    h+='<div class="person"><img src="'+(u.photo||'https://via.placeholder.com/300x300?text='+encodeURIComponent(u.name))+'"><div><b>'+u.name+', '+u.age+'</b><br><small>'+u.city+' • '+u.gender+'</small><p style="font-size:13px;color:#555;margin:6px 0">'+(u.about||'').slice(0,80)+'</p><button class="btn pink" style="padding:10px" onclick="alert(\'WhatsApp: '+u.phone+'\')">Say Hi 💬</button></div></div>';
+  });
+  document.getElementById('pe').innerHTML=h||"No members yet - be the first!";
+}
+
+async function su(){
+  try{
+    let name=document.getElementById('n').value.trim(),age=document.getElementById('a').value,gender=document.getElementById('g').value,looking=document.getElementById('lk').value,city=document.getElementById('c').value,phone=cp(document.getElementById('p').value),about=document.getElementById('ab').value,pass=document.getElementById('pw').value.trim(),secret=document.getElementById('sc').value.trim();
+    if(!name||!age||!gender||!phone||pass.length<4){alert("Fill Name, Age, Gender, Phone, Password 4+");return;}
+    let ex=await q("profiles?phone=eq."+encodeURIComponent(phone)+"&select=id");
+    if(ex&&ex[0]){alert("Phone already has account. Tap Log In.");sL();return;}
+    let photo="";let f=document.getElementById('ph').files[0];
+    if(f){photo=await new Promise(r=>{let x=new FileReader();x.onload=e=>r(e.target.result);x.readAsDataURL(f);});}
+    let d=await q("profiles","POST",{id:"u"+Date.now(),name:name,age:age,gender:gender,looking:looking,city:city,phone:phone,about:about,pass:pass,secret:secret,photo:photo,verified:false,last_seen:Date.now()});
+    if(d&&d[0]){me=d[0];localStorage.setItem("ml_user",JSON.stringify(me));enter();alert("Welcome "+name+"!");}
+    else{alert("Error creating account: "+JSON.stringify(d));}
+  }catch(err){alert("Connection error. Check internet and try again.");}
+}
+
+async function li(){
+  try{
+    let phone=cp(document.getElementById('lp').value),pass=document.getElementById('lw').value.trim();
+    if(!phone||!pass){alert("Enter Phone and Password");return;}
+    let d=await q("profiles?phone=eq."+encodeURIComponent(phone)+"&select=*");
+    if(!d||!d[0]){alert("No account with this phone. Create Account.");return;}
+    if((d[0].pass||"").trim()!==pass){alert("Wrong password. Tap Forgot Password.");return;}
+    me=d[0];localStorage.setItem("ml_user",JSON.stringify(me));enter();
+  }catch(err){alert("Login failed - check internet, or tap Guest to see inside.");}
+}
+
+async function fr(){
+  try{
+    let phone=cp(document.getElementById('fp').value),sec=document.getElementById('fs').value.trim(),np=document.getElementById('fn').value.trim();
+    let d=await q("profiles?phone=eq."+encodeURIComponent(phone)+"&select=*");
+    if(!d||!d[0]){alert("Phone not found");return;}
+    if((d[0].secret||"").toLowerCase().trim()!==sec.toLowerCase().trim()){alert("Wrong secret answer");return;}
+    await q("profiles?phone=eq."+encodeURIComponent(phone),"PATCH",{pass:np});
+    alert("Reset done! Log In now");sL();
+  }catch(err){alert("Reset failed - check internet.");}
+}
+
+function guest(){
+  me={id:"guest",name:"Guest",city:"Durban",age:"25",phone:"Guest"};
+  document.getElementById('authCard').classList.add('hidden');
+  document.getElementById('hero').classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
+  document.getElementById('mn').textContent="Guest";
+  document.getElementById('mi').textContent="Durban • Guest Mode - Exploring";
+  load();
+}
+
+function enter(){
+  document.getElementById('authCard').classList.add('hidden');
+  document.getElementById('hero').classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
+  document.getElementById('mn').textContent=me.name;
+  document.getElementById('mi').textContent=me.city+" • "+me.age+" • "+me.phone;
+  load();
+}
+
+let sv=localStorage.getItem("ml_user");
+if(sv){try{me=JSON.parse(sv);enter();}catch(e){load();}}
+else{load();}
+</script>
+</body>
+</html>
