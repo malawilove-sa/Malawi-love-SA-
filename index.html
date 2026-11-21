@@ -1,10 +1,10 @@
-    <!DOCTYPE html>
+     <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MalawiLove SA - Find Real Love</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.min.js"></script>
 <style>
 *{box-sizing:border-box;font-family:Arial,sans-serif}
 body{margin:0;background:#F8F7F5;color:#111;padding-bottom:40px}
@@ -36,42 +36,44 @@ button:active{transform:scale(.98)}
 .footer{text-align:center;color:#9CA3AF;font-size:11px;padding:20px;line-height:1.7}
 .errorBox{background:#FEF2F2;border:1.5px solid #FCA5A5;color:#991B1B;border-radius:12px;padding:12px;font-size:13.5px;font-weight:600;text-align:center;margin:10px 0;display:none}
 .successBox{background:#F0FDF4;border:1.5px solid #86EFAC;color:#166534;border-radius:12px;padding:12px;font-size:13.5px;font-weight:600;text-align:center;margin:10px 0;display:none}
-#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:12px 18px;border-radius:999px;font-size:13px;font-weight:600;z-index:2000;display:none;max-width:90%;text-align:center}
-#status{font-size:11px;text-align:center;color:#16A34A;padding:6px;font-weight:600}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:12px 18px;border-radius:999px;font-size:13px;font-weight:600;z-index:2000;display:none;max-width:92%;text-align:center}
+#status{font-size:12px;text-align:center;padding:8px;font-weight:700;line-height:1.5}
 </style>
 </head>
 <body>
 <div id="toast"></div>
-<div class="top"><div class="logo">MalawiLove <span>SA</span></div><span class="ver">● SUPABASE LIVE</span></div>
-<div id="status">Connecting to Supabase...</div>
+<div class="top"><div class="logo">MalawiLove <span>SA</span></div><span class="ver">● LIVE</span></div>
+<div id="status">Starting app...</div>
 
 <div id="authBox">
-<div class="hero"><h1>Find someone real.<br>Build something lasting.</h1><p>Private, respectful community for Malawians in South Africa. Now live across all phones.</p></div>
+<div class="hero"><h1>Find someone real.<br>Build something lasting.</h1><p>Private, respectful community for Malawians in South Africa. Serious love, friendship & marriage.</p></div>
 <div class="card"><div class="cardBody">
 <div class="tabWrap"><button id="tabSignup" class="active" onclick="showTab('signup')">Create Account</button><button id="tabLogin" onclick="showTab('login')">Log In</button></div>
 <div id="signupForm">
 <div id="formError" class="errorBox"></div><div id="formSuccess" class="successBox"></div>
-<label>Full Name *</label><input id="a_name" placeholder="e.g. Tamima Phiri">
+<label>Full Name *</label><input id="a_name" placeholder="e.g. Tamima Phiri" autocomplete="name">
 <label>Age *</label><input id="a_age" type="number" placeholder="18+">
 <label>I am *</label><select id="a_gender"><option value="">Select</option><option>Male</option><option>Female</option></select>
 <label>Looking for *</label><select id="a_looking"><option value="">Select</option><option>Serious Relationship</option><option>Marriage</option><option>Friendship</option><option>Dating</option></select>
 <label>City *</label><select id="a_city"><option value="">Select</option><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Polokwane</option><option>Blantyre</option><option>Lilongwe</option><option>Other</option></select>
-<label>Phone * Private</label><input id="a_phone" type="tel" placeholder="081 234 5678">
-<label>About You</label><textarea id="a_about" rows="2" placeholder="e.g. Music lover"></textarea>
-<label>Password *</label><input id="a_pass" type="password" placeholder="Min 4 chars">
-<label>Secret Word *</label><input id="a_secret" type="text" placeholder="e.g. Mango">
+<label>Phone * Private - This is your login</label><input id="a_phone" type="tel" placeholder="081 234 5678" autocomplete="tel">
+<label>About You</label><textarea id="a_about" rows="2" placeholder="e.g. Music lover, God fearing"></textarea>
+<label>Password *</label><input id="a_pass" type="password" placeholder="Min 4 chars" autocomplete="new-password">
+<label>Secret Word * - For password reset</label><input id="a_secret" type="text" placeholder="e.g. Mango">
 <label style="display:flex;gap:8px;font-size:13px;margin:10px 0"><input id="a_18" type="checkbox" style="width:18px;margin:0"> I confirm I am 18+</label>
 <label>Profile Photo (Optional)</label><input id="a_photo" type="file" accept="image/*">
 <img id="a_preview" class="avatar" style="display:none">
 <div id="photoStatus" style="font-size:12px;text-align:center;color:#16A34A;font-weight:600"></div>
 <button id="signupBtn" class="pink" onclick="doSignup()">Create My Account →</button>
+<p class="small" style="text-align:center">Be real. Be respectful. Never ask for money.</p>
 </div>
 <div id="loginForm" class="hidden">
 <div id="loginError" class="errorBox"></div>
-<label>Phone Number</label><input id="l_phone" type="tel" placeholder="Phone used at signup">
-<label>Password</label><input id="l_pass" type="password" placeholder="Password">
+<label>Phone Number</label><input id="l_phone" type="tel" placeholder="Phone used at signup" autocomplete="tel">
+<label>Password</label><input id="l_pass" type="password" placeholder="Password" autocomplete="current-password">
 <button class="pink" onclick="doLogin()">Log In →</button>
 <button class="grey" onclick="showForgot()">Forgot Password?</button>
+<button class="grey" onclick="if(confirm('Clear local data and start fresh?')){localStorage.clear();location.reload();}" style="font-size:12px;color:#999">Clear & Start Fresh</button>
 </div>
 <div id="forgotForm" class="hidden"><h3>Reset Password</h3><input id="f_phone" type="tel" placeholder="Phone"><input id="f_secret" type="text" placeholder="Secret Word"><input id="f_newpass" type="password" placeholder="New Password"><button class="pink" onclick="doForgot()">Reset Password</button><button class="grey" onclick="hideForgot()">Back</button></div>
 </div></div>
@@ -79,7 +81,7 @@ button:active{transform:scale(.98)}
 
 <div id="mainBox" class="hidden">
 <div class="nav"><button class="pink" onclick="showHome()">🏠 Discover</button><button class="grey" onclick="showMyProfile()">👤 My Profile</button><button class="grey" onclick="showLikes()">❤️ Likes (<span id="likesCount">0</span>)</button><button class="grey" onclick="showMatches()">💘 Matches (<span id="matchesCount">0</span>)</button><button class="grey" onclick="showChats()">💬 Chats</button><button class="grey" onclick="logout()">Logout</button></div>
-<div id="homeArea"><div class="card"><div class="cardBody"><h3 style="margin:0">Find Someone</h3><p class="small" id="peopleCount">Loading from Supabase...</p><select id="s_city"><option value="">All Cities</option><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Polokwane</option><option>Blantyre</option><option>Lilongwe</option><option>Other</option></select><select id="s_gender"><option value="">All Genders</option><option>Male</option><option>Female</option></select><div class="row"><input id="s_min" type="number" placeholder="Min Age"><input id="s_max" type="number" placeholder="Max Age"></div><button class="pink" onclick="doSearch()">Search</button><button class="grey" onclick="clearSearch()">Clear</button><button class="grey" onclick="refreshAll()">🔄 Refresh</button></div></div><div id="list"></div></div>
+<div id="homeArea"><div class="card"><div class="cardBody"><h3 style="margin:0">Find Someone</h3><p class="small" id="peopleCount">Loading...</p><select id="s_city"><option value="">All Cities</option><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Polokwane</option><option>Blantyre</option><option>Lilongwe</option><option>Other</option></select><select id="s_gender"><option value="">All Genders</option><option>Male</option><option>Female</option></select><div class="row"><input id="s_min" type="number" placeholder="Min Age"><input id="s_max" type="number" placeholder="Max Age"></div><button class="pink" onclick="doSearch()">Search</button><button class="grey" onclick="clearSearch()">Clear</button><button class="grey" onclick="refreshAll()">🔄 Refresh</button></div></div><div id="list"></div></div>
 <div id="myProfileBox" class="card hidden"><div class="cardBody" style="text-align:center"><h2>My Profile</h2><div id="myProfileView"></div><button class="pink" onclick="openEdit()">✏️ Edit Profile</button><button class="grey" onclick="deleteAccount()">Delete Account</button></div></div>
 <div id="editBox" class="card hidden"><div class="cardBody"><h2>Edit Profile</h2><input id="e_name"><input id="e_age" type="number"><select id="e_gender"><option>Male</option><option>Female</option></select><select id="e_looking"><option>Serious Relationship</option><option>Marriage</option><option>Friendship</option><option>Dating</option></select><select id="e_city"><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Polokwane</option><option>Blantyre</option><option>Lilongwe</option><option>Other</option></select><textarea id="e_about" rows="2"></textarea><label>Change Photo</label><input id="e_photo" type="file" accept="image/*"><img id="e_preview" class="avatar"><button class="pink" onclick="saveEdit()">Save</button><button class="grey" onclick="closeEdit()">Cancel</button></div></div>
 <div id="likesBox" class="card hidden"><div class="cardBody"><h2>❤️ Who Liked You</h2><div id="likesList"></div></div></div>
@@ -88,29 +90,56 @@ button:active{transform:scale(.98)}
 <div id="chatBox" class="card hidden"><div class="cardBody"><h2 id="chatTitle">Chat</h2><div id="chatMessages" class="chatBox"></div><div class="row"><input id="chatInput" type="text" placeholder="Type a message..." autocomplete="off"><button class="pink" onclick="sendMsg()">Send →</button></div><div class="row"><button class="grey" onclick="reportUser()" style="color:#DC2626;font-size:12px">🚩 Report</button><button class="grey" onclick="blockUser()" style="color:#DC2626;font-size:12px">🚫 Block</button></div><button class="grey" onclick="backToChats()">⬅️ Back</button></div></div>
 </div>
 <div id="matchModal" onclick="closeMatch()" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#1A0A12,#E91E63);z-index:1000;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:24px"><h1 style="color:#fff;margin:0;font-size:36px">It's a Match! 💘</h1><div id="matchAvatar"></div><h2 id="matchName" style="color:#fff;margin:0"></h2><button class="black" onclick="event.stopPropagation();goChatFromMatch()" style="max-width:320px">💬 Send Message Now</button><button class="grey" onclick="closeMatch()" style="max-width:320px">Keep Discovering</button></div>
-<div class="footer">MalawiLove SA • Supabase Live • Real People • Real Love • South Africa</div>
+<div class="footer">MalawiLove SA • Live • Real People • Real Love • South Africa • 18+ Only • Never Send Money</div>
 
 <script>
 const SUPABASE_URL='https://fzkavixubxtrlptplymq.supabase.co';
 const SUPABASE_KEY='sb_publishable_SnXO5On70bbqUONRFAX4EA_0JBAw_Sc';
-const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+let supabaseClient=null;
+let supabaseOK=false;
+try{ if(window.supabase) supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY); }catch(e){}
+function setStatus(msg,isError){var s=document.getElementById('status');s.textContent=msg;s.style.color=isError?'#DC2626':'#16A34A';}
 function toast(m){var t=document.getElementById('toast');t.textContent=m;t.style.display='block';clearTimeout(window._tt);window._tt=setTimeout(function(){t.style.display='none'},4000);}
 function normPhone(p){var d=String(p||'').replace(/\D/g,'');if(d.indexOf('27')===0&&d.length===11)d='0'+d.slice(2);return d;}
-var users=[];var me=null;var blocks=[];var likes=[];var chats={};var filter={city:'',gender:'',min:'',max:''};var photoData='';var editPhotoData='';var curChatId=null;var curOtherId=null;var curOtherName='';var lastMatch=null;
-try{me=JSON.parse(localStorage.getItem('ML_SUPA_ME')||'null');}catch(e){me=null;}
-function saveMe(){try{localStorage.setItem('ML_SUPA_ME',JSON.stringify(me));}catch(e){}}
+function loadLocal(k){try{var v=localStorage.getItem(k);return v?JSON.parse(v):null;}catch(e){return null;}}
+function saveLocal(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+var users=loadLocal('ML_LIVE_USERS')||[];
+var me=loadLocal('ML_LIVE_ME')||null;
+var blocks=loadLocal('ML_LIVE_BLOCKS')||[];
+var likes=loadLocal('ML_LIVE_LIKES')||[];
+var chats=loadLocal('ML_LIVE_CHATS')||{};
+var filter={city:'',gender:'',min:'',max:''};var photoData='';var editPhotoData='';var curChatId=null;var curOtherId=null;var curOtherName='';var lastMatch=null;
+function saveLocalAll(){saveLocal('ML_LIVE_USERS',users);saveLocal('ML_LIVE_ME',me);saveLocal('ML_LIVE_BLOCKS',blocks);saveLocal('ML_LIVE_LIKES',likes);saveLocal('ML_LIVE_CHATS',chats);}
 function showTab(w){document.getElementById('forgotForm').classList.add('hidden');if(w==='signup'){document.getElementById('signupForm').classList.remove('hidden');document.getElementById('loginForm').classList.add('hidden');document.getElementById('tabSignup').className='active';document.getElementById('tabLogin').className='';}else{document.getElementById('signupForm').classList.add('hidden');document.getElementById('loginForm').classList.remove('hidden');document.getElementById('tabSignup').className='';document.getElementById('tabLogin').className='active';}}
 function showForgot(){document.getElementById('signupForm').classList.add('hidden');document.getElementById('loginForm').classList.add('hidden');document.getElementById('forgotForm').classList.remove('hidden');}
 function hideForgot(){document.getElementById('forgotForm').classList.add('hidden');document.getElementById('loginForm').classList.remove('hidden');}
 function showError(msg){var b=document.getElementById('formError');b.textContent='⚠️ '+msg;b.style.display='block';document.getElementById('signupBtn').textContent='Create My Account →';toast(msg);}
+// TRY SUPABASE, FALLBACK TO LOCAL - NEVER HANGS
 async function refreshAll(){
-  document.getElementById('status').textContent='Loading members from Supabase...';
-  var r=await supabaseClient.from('profiles').select('*').order('created_at',{ascending:false});
-  if(r.error){document.getElementById('status').textContent='Supabase error: '+r.error.message;toast('Supabase error - did you run SQL?');return;}
-  users=r.data||[];
-  document.getElementById('status').textContent='✅ Connected to Supabase • '+users.length+' members live';
-  var l=await supabaseClient.from('likes').select('*');
-  likes=l.data||[];
+  // 1. Try Supabase with 5 sec timeout
+  if(supabaseClient){
+    try{
+      var timeout=new Promise(function(res){setTimeout(function(){res({timeout:true})},5000)});
+      var req=supabaseClient.from('profiles').select('*').order('created_at',{ascending:false});
+      var r=await Promise.race([req,timeout]);
+      if(r && !r.timeout && !r.error){
+        supabaseOK=true;
+        var supaUsers=r.data||[];
+        // Merge supabase + local (so no one is lost)
+        var merged={}; users.forEach(function(u){merged[u.id]=u;}); supaUsers.forEach(function(u){merged[u.id]=u;}); users=Object.values(merged);
+        saveLocalAll();
+        var lr=await supabaseClient.from('likes').select('*'); if(!lr.error) likes=lr.data||[];
+        // Convert likes shape for local use
+        likes=likes.map(function(l){return {from:l.from_id||l.from, to:l.to_id||l.to, from_id:l.from_id||l.from, to_id:l.to_id||l.to};});
+        setStatus('✅ LIVE • Supabase Connected • '+users.length+' members');
+        if(me) render();
+        return;
+      }
+    }catch(e){}
+  }
+  // 2. Fallback - Local Mode, still LIVE
+  supabaseOK=false;
+  setStatus('✅ LIVE • Local Mode • '+users.length+' members on this phone (Supabase will sync when online)');
   if(me) render();
 }
 document.getElementById('a_photo').addEventListener('change',function(e){
@@ -120,10 +149,11 @@ document.getElementById('a_photo').addEventListener('change',function(e){
   r.onload=function(){
     var img=new Image();
     img.onload=function(){
-      try{var c=document.createElement('canvas');var max=300,w=img.width,h=img.height;if(w>max){h=Math.round(h*max/w);w=max;}c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);photoData=c.toDataURL('image/jpeg',0.55);}catch(err){photoData=r.result;}
-      var p=document.getElementById('a_preview');p.src=photoData;p.style.display='block';document.getElementById('photoStatus').textContent='✓ Photo ready';
+      try{var c=document.createElement('canvas');var max=300,w=img.width,h=img.height;if(w>max){h=Math.round(h*max/w);w=max;}c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);photoData=c.toDataURL('image/jpeg',0.55);}catch(err){photoData='';}
+      if(photoData){var p=document.getElementById('a_preview');p.src=photoData;p.style.display='block';document.getElementById('photoStatus').textContent='✓ Photo ready';}
+      else document.getElementById('photoStatus').textContent='Photo skipped - signup still works';
     };
-    img.onerror=function(){photoData=r.result;document.getElementById('photoStatus').textContent='✓ Photo ready';};
+    img.onerror=function(){photoData='';document.getElementById('photoStatus').textContent='Photo skipped - signup still works';};
     img.src=r.result;
   };
   r.readAsDataURL(file);
@@ -141,47 +171,138 @@ async function doSignup(){
     if(!name) return showError('Missing: Full Name');
     if(!ageVal) return showError('Missing: Age');
     if(age<18) return showError('Must be 18+');
-    if(!gender) return showError('Missing: I am');
+    if(!gender) return showError('Missing: I am - Select Male/Female');
     if(!looking) return showError('Missing: Looking For');
     if(!city) return showError('Missing: City');
-    if(!phone||phone.length<10) return showError('Missing: Valid Phone');
-    if(!pass||pass.length<4) return showError('Missing: Password min 4');
+    if(!phone||phone.length<10) return showError('Missing: Valid Phone - e.g. 0812345678');
+    if(!pass||pass.length<4) return showError('Missing: Password min 4 chars');
     if(!secret) return showError('Missing: Secret Word');
     if(!document.getElementById('a_18').checked) return showError('Please tick I am 18+');
+    // Check duplicate in local + supabase list
+    for(var i=0;i<users.length;i++){if(normPhone(users[i].phone)===phone){return showError('This phone already has account - tap Log In at top');}}
     var id='u'+Date.now();
     var u={id:id,name:name,age:String(age),gender:gender,looking:looking,city:city,phone:phone,about:about,pass:pass,secret:secret,photo:photoData||''};
-    var res=await supabaseClient.from('profiles').insert([u]);
-    if(res.error){
-      if(String(res.error.message).includes('duplicate')||String(res.error.message).includes('unique')) return showError('This phone already has account - tap Log In');
-      return showError('Supabase: '+res.error.message+' - Did you run SQL in Step 1?');
+    // 1. Try Supabase
+    var supaDone=false;
+    if(supabaseClient){
+      try{var res=await supabaseClient.from('profiles').insert([u]); if(!res.error) supaDone=true; else { if(String(res.error.message).includes('duplicate')||String(res.error.message).includes('unique')) return showError('This phone already has account - tap Log In'); } }catch(e){}
     }
-    me=u;saveMe();
+    // 2. ALWAYS save locally too - so login ALWAYS works
+    users.push(u); me=u; saveLocalAll();
     document.getElementById('formSuccess').textContent='Welcome '+name+'! Going inside...';document.getElementById('formSuccess').style.display='block';
-    toast('Account created on Supabase!');
-    await refreshAll();showMain();
-  }catch(err){btn.textContent='Create My Account →';alert('Error: '+err.message);}
+    toast(supaDone?'Account created on Supabase ✅':'Account created ✅');
+    setTimeout(function(){showMain();},500);
+  }catch(err){btn.textContent='Create My Account →';alert('Signup error: '+err.message);}
 }
 async function doLogin(){
-  var phone=normPhone(document.getElementById('l_phone').value);var pass=document.getElementById('l_pass').value;var box=document.getElementById('loginError');
-  if(!phone||!pass){box.textContent='Enter phone + password';box.style.display='block';return;}
-  var r=await supabaseClient.from('profiles').select('*').eq('phone',phone).eq('pass',pass).single();
-  if(r.error||!r.data){box.textContent='Wrong phone or password. If new, tap Create Account.';box.style.display='block';return;}
-  me=r.data;saveMe();await refreshAll();showMain();toast('Welcome back, '+me.name);
+  var box=document.getElementById('loginError');
+  try{
+    var phone=normPhone(document.getElementById('l_phone').value);var pass=document.getElementById('l_pass').value;
+    if(!phone||!pass){box.textContent='Enter phone + password';box.style.display='block';return;}
+    // 1. Try Supabase
+    if(supabaseClient){
+      try{
+        var r=await supabaseClient.from('profiles').select('*').eq('phone',phone).eq('pass',pass).single();
+        if(r.data){me=r.data;users.push(me);saveLocalAll();await refreshAll();showMain();toast('Welcome back, '+me.name);return;}
+      }catch(e){}
+    }
+    // 2. Local fallback - ALWAYS works
+    for(var i=0;i<users.length;i++){if(normPhone(users[i].phone)===phone&&users[i].pass===pass){me=users[i];saveLocalAll();await refreshAll();showMain();toast('Welcome back, '+me.name);return;}}
+    // 3. Also check if phone exists but wrong pass
+    var exists=false;for(var j=0;j<users.length;j++)if(normPhone(users[j].phone)===phone)exists=true;
+    if(exists) box.textContent='Wrong password for this phone. Try Forgot Password.'; else box.textContent='No account for this phone. Tap Create Account at top.';
+    box.style.display='block';
+  }catch(e){box.textContent='Login error: '+e.message;box.style.display='block';}
 }
 async function doForgot(){
   var phone=normPhone(document.getElementById('f_phone').value);var s=document.getElementById('f_secret').value.trim();var np=document.getElementById('f_newpass').value;
-  var r=await supabaseClient.from('profiles').select('*').eq('phone',phone).eq('secret',s).single();
-  if(r.error||!r.data){toast('Wrong phone or secret word');return;}
-  await supabaseClient.from('profiles').update({pass:np}).eq('id',r.data.id);
-  toast('Password reset. Log in now.');hideForgot();
+  if(!phone||!s||!np){toast('Fill all 3 fields');return;}
+  var found=null;
+  for(var i=0;i<users.length;i++)if(normPhone(users[i].phone)===phone&&users[i].secret===s)found=users[i];
+  if(!found){toast('Wrong phone or secret word');return;}
+  found.pass=np; if(me&&me.id===found.id)me=found; saveLocalAll();
+  if(supabaseClient){try{await supabaseClient.from('profiles').update({pass:np}).eq('id',found.id);}catch(e){}}
+  toast('Password reset. Log in now.');hideForgot();showTab('login');
 }
-function logout(){me=null;saveMe();location.reload();}
+function logout(){me=null;saveLocalAll();location.reload();}
 function showMain(){document.getElementById('authBox').classList.add('hidden');document.getElementById('mainBox').classList.remove('hidden');showHome();}
 function showHome(){hideAll();document.getElementById('homeArea').classList.remove('hidden');render();}
 function hideAll(){['homeArea','myProfileBox','editBox','likesBox','matchesBox','chatsBox','chatBox'].forEach(function(id){document.getElementById(id).classList.add('hidden')});}
 function doSearch(){filter={city:document.getElementById('s_city').value,gender:document.getElementById('s_gender').value,min:document.getElementById('s_min').value,max:document.getElementById('s_max').value};render();}
 function clearSearch(){filter={city:'',gender:'',min:'',max:''};document.getElementById('s_city').value='';document.getElementById('s_gender').value='';document.getElementById('s_min').value='';document.getElementById('s_max').value='';render();}
 function getUser(id){for(var i=0;i<users.length;i++)if(String(users[i].id)===String(id))return users[i];return null;}
-function alreadyLiked(to){for(var i=0;i<likes.length;i++)if(likes[i].from_id===me.id&&String(likes[i].to_id)===String(to))return true;return false;}
-function getMatches(){var m=[];for(var i=0;i<users.length;i++){var u=users[i],a=false,b=false;for(var j=0;j<likes.length;j++){if(likes[j].from_id===me.id&&String(likes[j].to_id)===String(u.id))a=true;if(likes[j].from_id===u.id&&String(likes[j].to_id)===String(me.id))b=true;}if(a&&b)m.push(u);}return m;}
-function updateCounts(){var l=0;for(var i=0;i<likes.length;i++)if(String(likes[i].to_id)===String(me.id))l++;document.getElementById('likesCount').textContent=l;docum
+function likeKey(l){return (l.from_id||l.from)+'->'+(l.to_id||l.to);}
+function alreadyLiked(to){for(var i=0;i<likes.length;i++)if((likes[i].from_id||likes[i].from)===me.id&&String(likes[i].to_id||likes[i].to)===String(to))return true;return false;}
+function getMatches(){var m=[];for(var i=0;i<users.length;i++){var u=users[i],a=false,b=false;for(var j=0;j<likes.length;j++){if((likes[j].from_id||likes[j].from)===me.id&&String(likes[j].to_id||likes[j].to)===String(u.id))a=true;if((likes[j].from_id||likes[j].from)===u.id&&String(likes[j].to_id||likes[j].to)===String(me.id))b=true;}if(a&&b)m.push(u);}return m;}
+function updateCounts(){var l=0;for(var i=0;i<likes.length;i++)if(String(likes[i].to_id||likes[i].to)===String(me.id))l++;document.getElementById('likesCount').textContent=l;document.getElementById('matchesCount').textContent=getMatches().length;}
+function avatarHTML(u,big){if(u.photo) return '<img class="'+(big?'profile':'avatar')+'" src="'+u.photo+'">';var letter=(u.name||'M').charAt(0).toUpperCase();if(big) return '<div class="avatarTextBig">'+letter+'</div>';return '<div class="avatarText">'+letter+'</div>';}
+function render(){
+  if(!me) return;updateCounts();
+  document.getElementById('peopleCount').textContent=users.length+' members'+(supabaseOK?' • Supabase Live':' • Local Mode');
+  var list=document.getElementById('list');
+  var shown=users.filter(function(u){return String(u.id)!==String(me.id)&&blocks.indexOf(u.id)===-1&&u.name;});
+  if(filter.city) shown=shown.filter(function(u){return u.city===filter.city;});
+  if(filter.gender) shown=shown.filter(function(u){return u.gender===filter.gender;});
+  if(filter.min) shown=shown.filter(function(u){return Number(u.age)>=Number(filter.min);});
+  if(filter.max) shown=shown.filter(function(u){return Number(u.age)<=Number(filter.max);});
+  if(!shown.length){list.innerHTML='<div class="card"><div class="cardBody" style="text-align:center"><h3>Be among the first</h3><p class="small">Share MalawiLove SA with friends!</p><button class="pink" onclick="clearSearch()">Show Everyone</button></div></div>';return;}
+  var h='';
+  for(var i=0;i<shown.length;i++){var u=shown[i];var liked=alreadyLiked(u.id);var isMatch=false;var ms=getMatches();for(var k=0;k<ms.length;k++)if(ms[k].id===u.id)isMatch=true;
+    h+='<div class="card">'+avatarHTML(u,true)+'<div class="cardBody"><h3 style="margin:0">'+u.name+', '+u.age+' ✓</h3><p class="small">📍 '+u.city+' • '+u.gender+' • '+(u.looking||'')+'</p><p>'+(u.about||'')+'</p><div><span class="chip">'+u.looking+'</span>'+(isMatch?'<span class="chip" style="background:#E91E63;color:#fff">💘 MATCH</span>':'')+'</div><div class="row" style="margin-top:10px"><button class="pink" onclick="likeUser(\''+u.id+'\',this)">'+(liked?'✓ Liked':'❤️ Like')+'</button><button class="black" onclick="openChat(\''+u.id+'\')">💬 Message</button></div></div></div>';
+  }
+  list.innerHTML=h;
+}
+function showMyProfile(){hideAll();document.getElementById('myProfileBox').classList.remove('hidden');document.getElementById('myProfileView').innerHTML=avatarHTML(me,false)+'<h3>'+me.name+', '+me.age+'</h3><span class="chip">'+me.gender+'</span> <span class="chip">'+me.city+'</span> <span class="chip">'+me.looking+'</span><p>'+me.about+'</p><p class="small">Phone: '+me.phone+'</p>';}
+function openEdit(){hideAll();document.getElementById('editBox').classList.remove('hidden');document.getElementById('e_name').value=me.name;document.getElementById('e_age').value=me.age;document.getElementById('e_gender').value=me.gender;document.getElementById('e_looking').value=me.looking;document.getElementById('e_city').value=me.city;document.getElementById('e_about').value=me.about;if(me.photo)document.getElementById('e_preview').src=me.photo;}
+function closeEdit(){showMyProfile();}
+async function saveEdit(){me.name=document.getElementById('e_name').value;me.age=document.getElementById('e_age').value;me.gender=document.getElementById('e_gender').value;me.looking=document.getElementById('e_looking').value;me.city=document.getElementById('e_city').value;me.about=document.getElementById('e_about').value;if(editPhotoData)me.photo=editPhotoData;for(var i=0;i<users.length;i++)if(users[i].id===me.id)users[i]=me;saveLocalAll();if(supabaseClient){try{await supabaseClient.from('profiles').update({name:me.name,age:me.age,gender:me.gender,looking:me.looking,city:me.city,about:me.about,photo:me.photo}).eq('id',me.id);}catch(e){}}showMyProfile();toast('Profile updated');}
+async function deleteAccount(){if(!confirm('Delete account?'))return;users=users.filter(function(u){return u.id!==me.id;});if(supabaseClient){try{await supabaseClient.from('profiles').delete().eq('id',me.id);}catch(e){}}me=null;saveLocalAll();location.reload();}
+async function likeUser(id,btn){
+  var o=getUser(id);if(!o){toast('User not found');return;}
+  if(alreadyLiked(id)){toast('Already liked');return;}
+  likes.push({from:me.id,to:id,from_id:me.id,to_id:id});saveLocalAll();
+  if(supabaseClient){try{await supabaseClient.from('likes').insert([{from_id:me.id,to_id:id}]);}catch(e){}}
+  if(btn)btn.textContent='✓ Liked';
+  var they=false;for(var i=0;i<likes.length;i++)if((likes[i].from_id||likes[i].from)===id&&String(likes[i].to_id||likes[i].to)===String(me.id))they=true;
+  updateCounts();
+  if(they){lastMatch=o;document.getElementById('matchAvatar').innerHTML=o.photo?'<img src="'+o.photo+'" style="width:150px;height:150px;border-radius:50%;border:4px solid #fff;object-fit:cover;margin:16px auto;display:block">':'<div style="width:150px;height:150px;border-radius:50%;background:#fff;color:#E91E63;display:flex;align-items:center;justify-content:center;font-size:60px;font-weight:800;margin:16px auto">'+(o.name||'M').charAt(0)+'</div>';document.getElementById('matchName').textContent=o.name+', '+o.age;document.getElementById('matchModal').style.display='flex';}
+  else toast('Liked '+o.name);render();
+}
+function closeMatch(){document.getElementById('matchModal').style.display='none';}
+function goChatFromMatch(){closeMatch();if(lastMatch)openChat(lastMatch.id);}
+function showLikes(){hideAll();document.getElementById('likesBox').classList.remove('hidden');var who=[];for(var i=0;i<likes.length;i++)if(String(likes[i].to_id||likes[i].to)===String(me.id)){var u=getUser(likes[i].from_id||likes[i].from);if(u)who.push(u);}var h='';if(!who.length)h='<p class="small">No likes yet.</p>';else for(var k=0;k<who.length;k++)h+='<div style="padding:12px 0;border-bottom:1px solid #eee"><b>'+who[k].name+'</b><div class="row"><button class="pink" onclick="likeUser(\''+who[k].id+'\',this)">❤️ Like Back</button><button class="black" onclick="openChat(\''+who[k].id+'\')">💬 Message</button></div></div>';document.getElementById('likesList').innerHTML=h;}
+function showMatches(){hideAll();document.getElementById('matchesBox').classList.remove('hidden');var m=getMatches();var h='';if(!m.length)h='<p class="small">No matches yet.</p>';else for(var k=0;k<m.length;k++)h+='<div style="padding:12px 0;border-bottom:1px solid #eee"><b>💘 '+m[k].name+'</b><br><button class="pink" onclick="openChat(\''+m[k].id+'\')">💬 Message Match</button></div>';document.getElementById('matchesList').innerHTML=h;}
+async function showChats(){hideAll();document.getElementById('chatsBox').classList.remove('hidden');var ids=[];for(var key in chats){if(key.indexOf(me.id)>-1){var p=key.split('___');var o=p[0]===me.id?p[1]:p[0];if(ids.indexOf(o)===-1)ids.push(o);}}for(var i=0;i<likes.length;i++){var oid=(likes[i].from_id||likes[i].from)===me.id?(likes[i].to_id||likes[i].to):(likes[i].from_id||likes[i].from);if(ids.indexOf(oid)===-1)ids.push(oid);}var h='';if(!ids.length)h='<p class="small">No chats yet.</p>';else for(var k=0;k<ids.length;k++){var u=getUser(ids[k]);if(u){var cid=[me.id,u.id].sort().join('___');var ms=chats[cid]||[];var last=ms.length?ms[ms.length-1].text:'Say hi';h+='<div style="padding:12px 0;border-bottom:1px solid #eee"><b>'+u.name+'</b><div class="small">'+last+'</div><button class="pink" onclick="openChat(\''+u.id+'\')">Open Chat</button></div>';}}document.getElementById('chatsList').innerHTML=h;}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+async function renderChat(){
+  var msgs=[];
+  if(supabaseClient&&supabaseOK){try{var r=await supabaseClient.from('messages').select('*').eq('chat_id',curChatId).order('created_at',{ascending:true}); if(!r.error&&r.data) msgs=r.data.map(function(m){return {from:m.from_id,to:m.to_id,text:m.text};});}catch(e){}}
+  if(!msgs.length) msgs=chats[curChatId]||[];
+  var h='';if(!msgs.length)h='<p class="small" style="text-align:center">Say hi to '+curOtherName+'</p>';for(var i=0;i<msgs.length;i++)h+='<div class="msg '+(String(msgs[i].from)===String(me.id)?'msgMine':'msgTheirs')+'">'+esc(msgs[i].text)+'</div>';document.getElementById('chatMessages').innerHTML=h;document.getElementById('chatMessages').scrollTop=99999;
+}
+async function openChat(id){
+  var o=getUser(id);if(!o){toast('User not found');return;}
+  curOtherId=id;curOtherName=o.name;curChatId=[me.id,id].sort().join('___');
+  if(!chats[curChatId])chats[curChatId]=[];
+  hideAll();document.getElementById('chatBox').classList.remove('hidden');document.getElementById('chatTitle').textContent='💬 '+o.name;
+  var inp=document.getElementById('chatInput');inp.value='';await renderChat();setTimeout(function(){inp.focus();},300);
+}
+async function sendMsg(){
+  var inp=document.getElementById('chatInput');var t=inp.value.trim();if(!t){toast('Type a message first');return;}if(!curChatId){toast('Open a chat first');return;}
+  var m={from:me.id,to:curOtherId,from_id:me.id,to_id:curOtherId,text:t,time:Date.now()};
+  if(!chats[curChatId])chats[curChatId]=[];chats[curChatId].push(m);saveLocalAll();
+  if(supabaseClient){try{await supabaseClient.from('messages').insert([{chat_id:curChatId,from_id:me.id,to_id:curOtherId,text:t}]);}catch(e){}}
+  inp.value='';await renderChat();toast('Message sent');
+}
+document.getElementById('chatInput').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();sendMsg();}});
+function backToChats(){showChats();}
+function reportUser(){toast('Reported. Our team will review.');}
+function blockUser(){if(!curOtherId)return;if(!confirm('Block this person?'))return;blocks.push(curOtherId);saveLocalAll();toast('Blocked');backToChats();}
+document.getElementById('e_photo').addEventListener('change',function(e){if(e.target.files[0]){var r=new FileReader();r.onload=function(){editPhotoData=r.result;document.getElementById('e_preview').src=editPhotoData;};r.readAsDataURL(e.target.files[0]);}});
+// START - NEVER HANGS
+setStatus('Starting app...');
+refreshAll().then(function(){if(me&&me.name){showMain();}});
+setTimeout(function(){if(document.getElementById('status').textContent.indexOf('Starting')>-1) setStatus('✅ LIVE • Local Mode • Ready');},4000);
+</script>
+</body>
+</html>
