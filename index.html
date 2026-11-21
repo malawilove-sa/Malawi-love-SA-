@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+ <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -127,7 +127,7 @@ function closeMatch(){document.getElementById('matchModal').style.display='none'
 function goChatFromMatch(){closeMatch();if(lastMatchUser)openChat(lastMatchUser.id);}
 function toggleEye(id,btn){let inp=document.getElementById(id);if(inp.type==='password'){inp.type='text';btn.textContent='🙈';}else{inp.type='password';btn.textContent='👁️';}}
 function cleanPhone(t){if(!t)return t;if(/\d{9,}/.test(t))return 'Hi ❤️';return t;}
-function normPhone(p){return String(p||'').replace(/\D/g,'');}
+function normPhone(p){let d=String(p||'').replace(/\D/g,'');if(d.startsWith('27')&&d.length===11)d='0'+d.slice(2);return d;}
 function safeAbout(u){if(!u||!u.about||u.about==="undefined"||u.about==="")return "No bio yet ❤️";return u.about;}
 function safeName(u){if(!u||!u.name||u.name==="undefined")return "Someone";return u.name;}
 function openPhoto(src){document.getElementById('bigPhoto').src=src||DEFAULT_PHOTO;document.getElementById('photoModal').style.display='flex';}
@@ -162,7 +162,7 @@ if(ph.length<9)return alert("Enter a valid Phone Number");
 if(!photoData) return alert("📸 SAFETY: You MUST upload your real face photo! No photo = No account.");
 if(photoData.length<500) return alert("Photo too small / not clear. Upload a clear face photo.");
 let found=users.find(u=>normPhone(u.phone)==ph);
-if(found)return alert("This phone number already has account! Go to LOGIN tab.");
+if(found)return alert("This phone number "+ph+" is already used by: "+found.name+", "+found.age+", "+found.city+". That person must LOGIN, not SIGN UP. If this is YOUR number and you never made account, ask Admin to delete "+found.name+" first.");
 if(/\d{9,}/.test(ab)){alert("⚠️ Phone number removed from About for safety.");ab='Hi ❤️';}
 me={id:Date.now(),name:n,age:a,city:c,phone:ph,about:ab||'Hi ❤️',photo:photoData,pass:p,secret:sec.toLowerCase(),online:true,lastSeen:Date.now(),verified:true};users.push(me);save();pushUserToFirebase(me);showMain();startPresence();alert("Welcome "+me.name+" ❤️ Verified ✅ Account created!");
 }
@@ -221,7 +221,7 @@ if(theyLikedMe){showMatchPopup(other);}else{alert("❤️ You liked "+other.name
 render();
 }
 function showMyProfile(){hideAllBoxes();document.getElementById('myProfileBox').classList.remove('hidden');document.getElementById('myProfileView').innerHTML=`<img src="${me.photo||DEFAULT_PHOTO}"><h3>${me.name}, ${me.age} <span class="verified">✓ Verified</span></h3><p>${me.city}</p><p>${safeAbout(me)}</p><p class="small">Phone is private 🔒</p>`;}
-function openAdmin(){let code=prompt("Enter Admin Code:");if(code!==ADMIN_CODE)return alert("Wrong code!");hideAllBoxes();document.getElementById('adminBox').classList.remove('hidden');document.getElementById('adminList').innerHTML=users.filter(u=>String(u.id)!==String(me.id)).map(u=>{let repCount=reports.filter(r=>String(r.target)===String(u.id)).length;return `<div class="card" style="text-align:left"><b>${u.name}, ${u.age} - ${u.city}</b><br><span class="small">Reports: ${repCount} ${repCount>=3?'🔴 AUTO-HIDDEN':''} ${isRealPhoto(u)?'✓ Real Photo':'⚠️ No Real Photo'}</span><br><button class="red" onclick="adminDelete('${u.id}')">🗑️ DELETE THIS USER</button></div>`;}).join('')||'<p>No users</p>';}
+function openAdmin(){let code=prompt("Enter Admin Code:");if(code!==ADMIN_CODE)return alert("Wrong code!");hideAllBoxes();document.getElementById('adminBox').classList.remove('hidden');document.getElementById('adminList').innerHTML=users.filter(u=>String(u.id)!==String(me.id)).map(u=>{let repCount=reports.filter(r=>String(r.target)===String(u.id)).length;let phMask='****'+String(normPhone(u.phone)).slice(-4);return `<div class="card" style="text-align:left"><b>${u.name}, ${u.age} - ${u.city}</b><br><span class="small">Phone ends: ${phMask} | Reports: ${repCount} ${repCount>=3?'🔴 AUTO-HIDDEN':''} ${isRealPhoto(u)?'✓ Real Photo':'⚠️ No Real Photo'}</span><br><button class="red" onclick="adminDelete('${u.id}')">🗑️ DELETE THIS USER</button></div>`;}).join('')||'<p>No users</p>';}
 function adminDelete(uid){if(!confirm("Delete this user FOREVER?"))return;users=users.filter(u=>String(u.id)!==String(uid));if(db)db.ref('users/'+uid).remove();save();alert("Deleted ✅");openAdmin();}
 function openEdit(){hideAllBoxes();document.getElementById('editBox').classList.remove('hidden');document.getElementById('e_name').value=me.name;document.getElementById('e_age').value=me.age;document.getElementById('e_city').value=me.city;document.getElementById('e_about').value=me.about;document.getElementById('e_preview').src=me.photo||DEFAULT_PHOTO;editPhotoData='';}
 function closeEdit(){showMyProfile();}
