@@ -1,4 +1,4 @@
-      <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -33,11 +33,11 @@ button{width:100%;padding:16px;border:0;border-radius:12px;font-size:17px;font-w
 <div id="authBox" class="card">
 <h2>Welcome ❤️</h2>
 <div class="safetyBox">🛡️ Safe Dating: Phone is NEVER shown.</div>
-<button class="green" id="btnTestEnter">🚀 ENTER APP TO TEST - Tap Here To Go Inside ➡️</button>
-<p class="small">If login fails, tap green button to go inside and test.</p>
+<button class="green" onclick="enterTest()">🚀 ENTER APP TO TEST - Tap Here To Go Inside ➡️</button>
+<p class="small">Tap green button to go inside.</p>
 <div class="row">
-<button id="tabSignup" class="tabBtn tabActive">SIGN UP</button>
-<button id="tabLogin" class="tabBtn tabInactive">LOGIN</button>
+<button id="tabSignup" class="tabBtn tabActive" onclick="showTab('signup')">SIGN UP</button>
+<button id="tabLogin" class="tabBtn tabInactive" onclick="showTab('login')">LOGIN</button>
 </div>
 
 <div id="signupForm">
@@ -47,21 +47,21 @@ button{width:100%;padding:16px;border:0;border-radius:12px;font-size:17px;font-w
 <select id="a_city"><option value="">Select City</option><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Polokwane</option><option>Blantyre</option><option>Lilongwe</option><option>Other</option></select>
 <input id="a_phone" type="tel" placeholder="Phone Number">
 <input id="a_about" placeholder="About you">
-<div class="passwrap"><input id="a_pass" type="password" placeholder="Create Password"><button type="button" class="eyeBtn" id="eye1">👁️</button></div>
+<div class="passwrap"><input id="a_pass" type="password" placeholder="Create Password"><button type="button" class="eyeBtn" onclick="toggleEye('a_pass')">👁️</button></div>
 <input id="a_secret" type="text" placeholder="Secret Word - e.g. Mango">
 <label style="display:block;text-align:left;font-size:14px"><input id="a_18" type="checkbox" style="width:auto"> I am 18+</label>
 <label style="display:block;text-align:left"><b>📸 Photo REQUIRED:</b><input id="a_photo" type="file" accept="image/*"></label>
 <img id="a_preview" class="hidden" style="margin:auto">
-<button class="pink" id="btnSignup">CREATE ACCOUNT ❤️</button>
-<button class="black" id="btnGoLogin">Already have account? LOGIN HERE ➡️</button>
+<button class="pink" onclick="doSignup()">CREATE ACCOUNT ❤️</button>
+<button class="black" onclick="showTab('login')">Already have account? LOGIN HERE ➡️</button>
 </div>
 
 <div id="loginForm" class="hidden">
 <input id="l_phone" type="tel" placeholder="Your Phone Number">
-<div class="passwrap"><input id="l_pass" type="password" placeholder="Your Password"><button type="button" class="eyeBtn" id="eye2">👁️</button></div>
-<button class="black" id="btnLogin">LOGIN ➡️</button>
-<button class="orange" id="btnForgot">🔑 FORGOT PASSWORD?</button>
-<button class="grey" id="btnGoSignup">Don't have account? Go to SIGN UP</button>
+<div class="passwrap"><input id="l_pass" type="password" placeholder="Your Password"><button type="button" class="eyeBtn" onclick="toggleEye('l_pass')">👁️</button></div>
+<button class="black" onclick="doLogin()">LOGIN ➡️</button>
+<button class="orange" onclick="showForgot()">🔑 FORGOT PASSWORD?</button>
+<button class="grey" onclick="showTab('signup')">Don't have account? Go to SIGN UP</button>
 </div>
 
 <div id="forgotForm" class="hidden">
@@ -69,19 +69,19 @@ button{width:100%;padding:16px;border:0;border-radius:12px;font-size:17px;font-w
 <input id="f_phone" type="tel" placeholder="Your Phone Number">
 <input id="f_secret" type="text" placeholder="Your Secret Word">
 <input id="f_newpass" type="password" placeholder="New Password">
-<button class="green" id="btnReset">RESET PASSWORD ✅</button>
-<button class="grey" id="btnBackLogin">⬅️ Back to LOGIN</button>
+<button class="green" onclick="doForgot()">RESET PASSWORD ✅</button>
+<button class="grey" onclick="hideForgot()">⬅️ Back to LOGIN</button>
 </div>
 </div>
 
 <div id="mainBox" class="hidden">
 <div class="topbar">
-<button class="grey" id="navHome">🏠 Home</button>
-<button class="grey" id="navProfile">👤 Profile</button>
-<button class="grey" id="navLikes">❤️ Likes</button>
-<button class="purple" id="navMatches">💘 Matches</button>
-<button class="pink" id="navChats">💬 Chats</button>
-<button class="red" id="navLogout">Logout</button>
+<button class="grey" onclick="showHome()">🏠 Home</button>
+<button class="grey" onclick="showMyProfile()">👤 Profile</button>
+<button class="grey" onclick="showLikes()">❤️ Likes</button>
+<button class="purple" onclick="showMatches()">💘 Matches</button>
+<button class="pink" onclick="showChats()">💬 Chats</button>
+<button class="red" onclick="logout()">Logout</button>
 </div>
 <div id="homeArea">
 <div class="card"><p class="small" id="peopleCount">Loading...</p>
@@ -89,82 +89,74 @@ button{width:100%;padding:16px;border:0;border-radius:12px;font-size:17px;font-w
 <select id="s_city"><option value="">All Cities</option><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Polokwane</option><option>Blantyre</option><option>Lilongwe</option><option>Other</option></select>
 <select id="s_gender"><option value="">All Genders</option><option>Male</option><option>Female</option></select>
 <div class="row"><input id="s_min" type="number" placeholder="Min Age"><input id="s_max" type="number" placeholder="Max Age"></div>
-<button class="pink" id="btnSearch">SEARCH</button>
-<button class="grey" id="btnClear">CLEAR SEARCH</button>
+<button class="pink" onclick="doSearch()">SEARCH</button>
+<button class="grey" onclick="clearSearch()">CLEAR SEARCH</button>
 </div>
 <div id="list"></div>
 </div>
-<div id="myProfileBox" class="card hidden"><h2>👤 My Profile</h2><div id="myProfileView"></div><button class="pink" id="btnEdit">✏️ EDIT MY PROFILE</button><button class="red" id="btnDelete">🗑️ DELETE MY ACCOUNT</button></div>
-<div id="editBox" class="card hidden"><h2>✏️ Edit</h2><input id="e_name" placeholder="Name"><input id="e_age" type="number" placeholder="Age"><select id="e_gender"><option>Male</option><option>Female</option></select><select id="e_city"><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Polokwane</option><option>Blantyre</option><option>Lilongwe</option><option>Other</option></select><input id="e_about" placeholder="About you"><label>Change Photo:<input id="e_photo" type="file" accept="image/*"></label><img id="e_preview" style="width:120px;height:120px;border-radius:50%;object-fit:cover"><button class="green" id="btnSaveEdit">✅ SAVE</button><button class="grey" id="btnCancelEdit">Cancel</button></div>
+<div id="myProfileBox" class="card hidden"><h2>👤 My Profile</h2><div id="myProfileView"></div><button class="pink" onclick="openEdit()">✏️ EDIT MY PROFILE</button><button class="red" onclick="deleteAccount()">🗑️ DELETE MY ACCOUNT</button></div>
+<div id="editBox" class="card hidden"><h2>✏️ Edit</h2><input id="e_name" placeholder="Name"><input id="e_age" type="number" placeholder="Age"><select id="e_gender"><option>Male</option><option>Female</option></select><select id="e_city"><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Polokwane</option><option>Blantyre</option><option>Lilongwe</option><option>Other</option></select><input id="e_about" placeholder="About you"><label>Change Photo:<input id="e_photo" type="file" accept="image/*"></label><img id="e_preview" style="width:120px;height:120px;border-radius:50%;object-fit:cover"><button class="green" onclick="saveEdit()">✅ SAVE</button><button class="grey" onclick="closeEdit()">Cancel</button></div>
 <div id="likesBox" class="card hidden"><h2>❤️ Who Liked You</h2><div id="likesList"></div></div>
 <div id="matchesBox" class="card hidden"><h2>💘 Matches</h2><div id="matchesList"></div></div>
-<div id="chatsBox" class="card hidden"><h2>💬 My Chats</h2><div id="chatsList"></div><button class="grey" id="btnBackHome1">⬅️ Back</button></div>
-<div id="chatBox" class="card hidden"><h2 id="chatTitle">💬 Chat</h2><div id="chatMessages" class="chatBox"></div><div class="row"><input id="chatInput" placeholder="Type message..."><button class="pink" id="btnSend">Send</button></div><button class="grey" id="btnBackChats">⬅️ Back</button></div>
+<div id="chatsBox" class="card hidden"><h2>💬 My Chats</h2><div id="chatsList"></div><button class="grey" onclick="showHome()">⬅️ Back</button></div>
+<div id="chatBox" class="card hidden"><h2 id="chatTitle">💬 Chat</h2><div id="chatMessages" class="chatBox"></div><div class="row"><input id="chatInput" placeholder="Type message..."><button class="pink" onclick="sendMsg()">Send</button></div><button class="grey" onclick="backToChats()">⬅️ Back</button></div>
 </div>
 
-<div id="matchModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(255,46,99,0.95);z-index:1000;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:20px;box-sizing:border-box"><h1 style="color:#fff">IT'S A MATCH! 💘</h1><img id="matchPhoto" style="width:150px;height:150px;border-radius:50%;border:4px solid #fff"><h2 id="matchName" style="color:#fff"></h2><button class="black" id="btnMatchChat" style="max-width:300px">💬 SEND MESSAGE NOW</button><button class="grey" id="btnMatchClose" style="max-width:300px">Keep Swiping ➡️</button></div>
-<div id="photoModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:999;align-items:center;justify-content:center;flex-direction:column"><img id="bigPhoto" style="max-width:95%;max-height:85%;border-radius:15px"><p style="color:#fff">Tap anywhere to close ✖️</p></div>
+<div id="matchModal" onclick="closeMatch()" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(255,46,99,0.95);z-index:1000;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:20px;box-sizing:border-box"><h1 style="color:#fff">IT'S A MATCH! 💘</h1><img id="matchPhoto" style="width:150px;height:150px;border-radius:50%;border:4px solid #fff"><h2 id="matchName" style="color:#fff"></h2><button class="black" onclick="event.stopPropagation();goChatFromMatch()" style="max-width:300px">💬 SEND MESSAGE NOW</button><button class="grey" onclick="closeMatch()" style="max-width:300px">Keep Swiping ➡️</button></div>
+<div id="photoModal" onclick="this.style.display='none'" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:999;align-items:center;justify-content:center;flex-direction:column"><img id="bigPhoto" style="max-width:95%;max-height:85%;border-radius:15px"><p style="color:#fff">Tap anywhere to close ✖️</p></div>
 
 <script>
-let db=null;
+var db=null;
 try{
-  const firebaseConfig={apiKey:"AIzaSyAcNs2UdpGCZYXSquuwMk2ze3odWd36oP0",authDomain:"malawi-love-sa.firebaseapp.com",databaseURL:"https://malawi-love-sa-default-rtdb.firebaseio.com",projectId:"malawi-love-sa",storageBucket:"malawi-love-sa.firebasestorage.app",messagingSenderId:"44621212737",appId:"1:44621212737:web:15daa656f79505d3eaeac0"};
+  var firebaseConfig={apiKey:"AIzaSyAcNs2UdpGCZYXSquuwMk2ze3odWd36oP0",authDomain:"malawi-love-sa.firebaseapp.com",databaseURL:"https://malawi-love-sa-default-rtdb.firebaseio.com",projectId:"malawi-love-sa",storageBucket:"malawi-love-sa.firebasestorage.app",messagingSenderId:"44621212737",appId:"1:44621212737:web:15daa656f79505d3eaeac0"};
   firebase.initializeApp(firebaseConfig); db=firebase.database();
   document.getElementById('connStatus').textContent='● ONLINE';
 }catch(e){ document.getElementById('connStatus').textContent='● OFFLINE - Still works'; }
-const DEFAULT_PHOTO="https://via.placeholder.com/150";
-function normPhone(p){let d=String(p||'').replace(/\D/g,'');if(d.startsWith('27')&&d.length===11)d='0'+d.slice(2);return d;}
+var DEFAULT_PHOTO="https://via.placeholder.com/150";
+function normPhone(p){var d=String(p||'').replace(/\D/g,'');if(d.indexOf('27')===0&&d.length===11)d='0'+d.slice(2);return d;}
 function isValidUser(u){return u&&u.name&&u.age&&u.city&&u.phone;}
-let users=JSON.parse(localStorage.getItem('ml_users')||'[]');
-let me=JSON.parse(localStorage.getItem('ml_me')||'null');
-let blocks=JSON.parse(localStorage.getItem('ml_blocks')||'[]');
-let likes=JSON.parse(localStorage.getItem('ml_likes')||'[]');
-let filter={city:'',gender:'',min:'',max:''};
-let photoData='';let editPhotoData='';let currentChatId=null;let currentChatOtherId=null;let lastMatchUser=null;
-function toggleEye(id){let inp=document.getElementById(id);inp.type=(inp.type==='password'?'text':'password');}
+var users=[]; try{users=JSON.parse(localStorage.getItem('ml_users')||'[]');}catch(e){users=[];}
+var me=null; try{me=JSON.parse(localStorage.getItem('ml_me')||'null');}catch(e){me=null;}
+var blocks=[]; try{blocks=JSON.parse(localStorage.getItem('ml_blocks')||'[]');}catch(e){}
+var likes=[]; try{likes=JSON.parse(localStorage.getItem('ml_likes')||'[]');}catch(e){}
+var filter={city:'',gender:'',min:'',max:''};
+var photoData='';var editPhotoData='';var currentChatId=null;var currentChatOtherId=null;var lastMatchUser=null;
+
+function toggleEye(id){var inp=document.getElementById(id);inp.type=(inp.type==='password'?'text':'password');}
 function openPhoto(src){document.getElementById('bigPhoto').src=src||DEFAULT_PHOTO;document.getElementById('photoModal').style.display='flex';}
-document.getElementById('photoModal').onclick=function(){this.style.display='none';};
 function showTab(w){
   document.getElementById('forgotForm').classList.add('hidden');
   if(w==='signup'){document.getElementById('signupForm').classList.remove('hidden');document.getElementById('loginForm').classList.add('hidden');document.getElementById('tabSignup').className='tabBtn tabActive';document.getElementById('tabLogin').className='tabBtn tabInactive';}
   else{document.getElementById('signupForm').classList.add('hidden');document.getElementById('loginForm').classList.remove('hidden');document.getElementById('tabSignup').className='tabBtn tabInactive';document.getElementById('tabLogin').className='tabBtn tabActive';}
   window.scrollTo(0,0);
 }
+function showForgot(){document.getElementById('signupForm').classList.add('hidden');document.getElementById('loginForm').classList.add('hidden');document.getElementById('forgotForm').classList.remove('hidden');}
+function hideForgot(){document.getElementById('forgotForm').classList.add('hidden');document.getElementById('loginForm').classList.remove('hidden');}
 function save(){localStorage.setItem('ml_users',JSON.stringify(users));localStorage.setItem('ml_me',JSON.stringify(me));localStorage.setItem('ml_blocks',JSON.stringify(blocks));localStorage.setItem('ml_likes',JSON.stringify(likes));}
 function pushUser(u){if(db&&isValidUser(u)){try{db.ref('users/'+u.id).set(u);}catch(e){}}}
-function showMain(){document.getElementById('authBox').classList.add('hidden');document.getElementById('mainBox').classList.remove('hidden');showHome();}
 
-document.getElementById('tabSignup').addEventListener('click',()=>showTab('signup'));
-document.getElementById('tabLogin').addEventListener('click',()=>showTab('login'));
-document.getElementById('btnGoLogin').addEventListener('click',()=>showTab('login'));
-document.getElementById('btnGoSignup').addEventListener('click',()=>showTab('signup'));
-document.getElementById('btnForgot').addEventListener('click',()=>{document.getElementById('signupForm').classList.add('hidden');document.getElementById('loginForm').classList.add('hidden');document.getElementById('forgotForm').classList.remove('hidden');});
-document.getElementById('btnBackLogin').addEventListener('click',()=>{document.getElementById('forgotForm').classList.add('hidden');document.getElementById('loginForm').classList.remove('hidden');});
-document.getElementById('eye1').addEventListener('click',()=>toggleEye('a_pass'));
-document.getElementById('eye2').addEventListener('click',()=>toggleEye('l_pass'));
-document.getElementById('a_photo').addEventListener('change',e=>{let r=new FileReader();r.onload=()=>{photoData=r.result;let p=document.getElementById('a_preview');p.src=photoData;p.classList.remove('hidden')};r.readAsDataURL(e.target.files[0])});
-document.getElementById('e_photo').addEventListener('change',e=>{let r=new FileReader();r.onload=()=>{editPhotoData=r.result;document.getElementById('e_preview').src=editPhotoData};r.readAsDataURL(e.target.files[0])});
+// *** THE FIX - THIS FUNCTION ALWAYS WORKS ***
+function enterTest(){
+  alert('Button works! Going inside...');
+  me={id:'test_'+Date.now(),name:'Test User',age:'25',gender:'Female',city:'Durban',phone:'0712345678',about:'Hi I am testing ❤️',pass:'1234',secret:'Mango',photo:DEFAULT_PHOTO,online:true,lastSeen:Date.now()};
+  var found=false; for(var i=0;i<users.length;i++){if(users[i].phone===me.phone) found=true;}
+  if(!found) users.push(me);
+  save();
+  document.getElementById('authBox').classList.add('hidden');
+  document.getElementById('mainBox').classList.remove('hidden');
+  showHome();
+  alert('You are INSIDE now dada! ❤️');
+}
 
-// --- NEW: ENTER TO TEST - ALWAYS WORKS ---
-document.getElementById('btnTestEnter').addEventListener('click',()=>{
-  if(!me){
-    me={id:'test_'+Date.now(),name:'Test User',age:'25',gender:'Female',city:'Durban',phone:'0712345678',about:'Hi I am testing ❤️',pass:'1234',secret:'Mango',photo:DEFAULT_PHOTO,online:true,lastSeen:Date.now()};
-    if(!users.find(u=>u.id===me.id)) users.push(me);
-    save();
-  }
-  showMain();
-  alert('You are INSIDE now dada! ❤️ Tap Profile to see Gender.');
-});
-
-document.getElementById('btnSignup').addEventListener('click',()=>{
-  let name=document.getElementById('a_name').value.trim();
-  let age=document.getElementById('a_age').value;
-  let gender=document.getElementById('a_gender').value;
-  let city=document.getElementById('a_city').value;
-  let phone=normPhone(document.getElementById('a_phone').value);
-  let about=document.getElementById('a_about').value.trim()||"No bio yet ❤️";
-  let pass=document.getElementById('a_pass').value;
-  let secret=document.getElementById('a_secret').value.trim();
+function doSignup(){
+  var name=document.getElementById('a_name').value.trim();
+  var age=document.getElementById('a_age').value;
+  var gender=document.getElementById('a_gender').value;
+  var city=document.getElementById('a_city').value;
+  var phone=normPhone(document.getElementById('a_phone').value);
+  var about=document.getElementById('a_about').value.trim()||"No bio yet ❤️";
+  var pass=document.getElementById('a_pass').value;
+  var secret=document.getElementById('a_secret').value.trim();
   if(!name) return alert('Please enter Your Name');
   if(!age) return alert('Please enter Age');
   if(!gender) return alert('Please select Gender');
@@ -174,65 +166,75 @@ document.getElementById('btnSignup').addEventListener('click',()=>{
   if(!secret) return alert('Please enter Secret Word');
   if(!document.getElementById('a_18').checked) return alert('Tick I am 18+');
   if(!photoData) return alert('Photo REQUIRED 📸');
-  if(users.find(u=>normPhone(u.phone)===phone)) return alert('This phone already has account. Tap LOGIN.');
-  let u={id:Date.now().toString(),name,age,gender,city,phone,about,pass,secret,photo:photoData,online:true,lastSeen:Date.now()};
+  if(users.find(function(u){return normPhone(u.phone)===phone})) return alert('This phone already has account. Tap LOGIN.');
+  var u={id:Date.now().toString(),name:name,age:age,gender:gender,city:city,phone:phone,about:about,pass:pass,secret:secret,photo:photoData,online:true,lastSeen:Date.now()};
   users.push(u);me=u;save();pushUser(u);showMain();alert('Welcome '+name+' ❤️ You are INSIDE!');
-});
-
-// --- NEW: LOGIN CHECKS FIREBASE DIRECTLY ---
-document.getElementById('btnLogin').addEventListener('click',()=>{
-  let phone=normPhone(document.getElementById('l_phone').value);
-  let pass=document.getElementById('l_pass').value;
+}
+function doLogin(){
+  var phone=normPhone(document.getElementById('l_phone').value);
+  var pass=document.getElementById('l_pass').value;
   if(!phone||!pass) return alert('Enter Phone + Password');
-  let u=users.find(x=>normPhone(x.phone)===phone&&x.pass===pass);
+  var u=null; for(var i=0;i<users.length;i++){if(normPhone(users[i].phone)===phone&&users[i].pass===pass){u=users[i];break;}}
   if(u){me=u;save();showMain();alert('Welcome back '+me.name+' ❤️');return;}
-  // If not found locally, check Firebase
   if(db){
     alert('Checking Firebase... wait 2 sec');
-    db.ref('users').once('value',snap=>{
-      let all=snap.val()?Object.values(snap.val()):[];
-      let fu=all.find(x=>normPhone(x.phone)===phone&&x.pass===pass);
+    db.ref('users').once('value',function(snap){
+      var all=snap.val()?Object.values(snap.val()):[];
+      var fu=null; for(var j=0;j<all.length;j++){if(normPhone(all[j].phone)===phone&&all[j].pass===pass){fu=all[j];break;}}
       if(fu){users.push(fu);me=fu;save();showMain();alert('Welcome back '+me.name+' ❤️ Found in Firebase!');}
-      else alert('Wrong phone or password. If new, go to SIGN UP. Or tap GREEN ENTER TO TEST button.');
+      else alert('Wrong phone or password. If new, go to SIGN UP. Or tap GREEN button.');
     });
-  } else {
-    alert('Wrong phone or password. If new, go to SIGN UP. Or tap GREEN ENTER TO TEST button.');
-  }
-});
-
-document.getElementById('btnReset').addEventListener('click',()=>{
-  let phone=normPhone(document.getElementById('f_phone').value);
-  let secret=document.getElementById('f_secret').value.trim();
-  let np=document.getElementById('f_newpass').value;
-  let u=users.find(x=>normPhone(x.phone)===phone);
+  } else alert('Wrong phone or password. Or tap GREEN button.');
+}
+function doForgot(){
+  var phone=normPhone(document.getElementById('f_phone').value);
+  var secret=document.getElementById('f_secret').value.trim();
+  var np=document.getElementById('f_newpass').value;
+  var u=null; for(var i=0;i<users.length;i++){if(normPhone(users[i].phone)===phone){u=users[i];break;}}
   if(!u||u.secret!==secret) return alert('Wrong phone or secret word');
-  u.pass=np;if(me&&me.id===u.id)me=u;save();pushUser(u);alert('Password reset! Login now');document.getElementById('forgotForm').classList.add('hidden');document.getElementById('loginForm').classList.remove('hidden');
-});
-document.getElementById('navHome').addEventListener('click',showHome);
-document.getElementById('navProfile').addEventListener('click',showMyProfile);
-document.getElementById('navLikes').addEventListener('click',showLikes);
-document.getElementById('navMatches').addEventListener('click',showMatches);
-document.getElementById('navChats').addEventListener('click',showChats);
-document.getElementById('navLogout').addEventListener('click',()=>{me=null;localStorage.removeItem('ml_me');location.reload();});
-document.getElementById('btnBackHome1').addEventListener('click',showHome);
-document.getElementById('btnBackChats').addEventListener('click',()=>{if(db&&currentChatId)db.ref('chats/'+currentChatId).off();showChats();});
-document.getElementById('btnSearch').addEventListener('click',()=>{filter={city:document.getElementById('s_city').value,gender:document.getElementById('s_gender').value,min:document.getElementById('s_min').value,max:document.getElementById('s_max').value};render();});
-document.getElementById('btnClear').addEventListener('click',()=>{filter={city:'',gender:'',min:'',max:''};document.getElementById('s_city').value='';document.getElementById('s_gender').value='';document.getElementById('s_min').value='';document.getElementById('s_max').value='';render();});
-document.getElementById('btnEdit').addEventListener('click',openEdit);
-document.getElementById('btnDelete').addEventListener('click',()=>{if(!confirm('Delete account?'))return;users=users.filter(u=>u.id!==me.id);if(db)db.ref('users/'+me.id).remove();me=null;save();location.reload();});
-document.getElementById('btnSaveEdit').addEventListener('click',()=>{me.name=document.getElementById('e_name').value;me.age=document.getElementById('e_age').value;me.gender=document.getElementById('e_gender').value;me.city=document.getElementById('e_city').value;me.about=document.getElementById('e_about').value;if(editPhotoData)me.photo=editPhotoData;let i=users.findIndex(u=>u.id===me.id);if(i>=0)users[i]=me;save();pushUser(me);showMyProfile();alert('Saved ✅');});
-document.getElementById('btnCancelEdit').addEventListener('click',showMyProfile);
-document.getElementById('btnSend').addEventListener('click',sendMsg);
-document.getElementById('btnMatchChat').addEventListener('click',()=>{document.getElementById('matchModal').style.display='none';if(lastMatchUser)openChat(lastMatchUser.id);});
-document.getElementById('btnMatchClose').addEventListener('click',()=>{document.getElementById('matchModal').style.display='none';});
-document.getElementById('matchModal').addEventListener('click',()=>{document.getElementById('matchModal').style.display='none';});
+  u.pass=np;if(me&&me.id===u.id)me=u;save();pushUser(u);alert('Password reset! Login now');hideForgot();
+}
+function logout(){me=null;localStorage.removeItem('ml_me');location.reload();}
+function showMain(){document.getElementById('authBox').classList.add('hidden');document.getElementById('mainBox').classList.remove('hidden');showHome();}
 function showHome(){hideAll();document.getElementById('homeArea').classList.remove('hidden');render();}
-function hideAll(){['homeArea','myProfileBox','editBox','likesBox','matchesBox','chatsBox','chatBox'].forEach(id=>document.getElementById(id).classList.add('hidden'));}
+function hideAll(){['homeArea','myProfileBox','editBox','likesBox','matchesBox','chatsBox','chatBox'].forEach(function(id){document.getElementById(id).classList.add('hidden')});}
+function doSearch(){filter={city:document.getElementById('s_city').value,gender:document.getElementById('s_gender').value,min:document.getElementById('s_min').value,max:document.getElementById('s_max').value};render();}
+function clearSearch(){filter={city:'',gender:'',min:'',max:''};document.getElementById('s_city').value='';document.getElementById('s_gender').value='';document.getElementById('s_min').value='';document.getElementById('s_max').value='';render();}
 function render(){
-  let list=document.getElementById('list');document.getElementById('peopleCount').textContent=users.length+' people on MalawiLove ❤️';
-  let shown=users.filter(u=>u.id!==me.id&&!blocks.includes(u.id)&&isValidUser(u));
-  if(filter.city) shown=shown.filter(u=>u.city===filter.city);
-  if(filter.gender) shown=shown.filter(u=>u.gender===filter.gender);
-  if(filter.min) shown=shown.filter(u=>Number(u.age)>=Number(filter.min));
-  if(filter.max) shown=shown.filter(u=>Number(u.age)<=Number(filter.max));
-  if(!shown.length){list.in
+  var list=document.getElementById('list');document.getElementById('peopleCount').textContent=users.length+' people on MalawiLove ❤️';
+  var shown=users.filter(function(u){return u.id!==me.id&&blocks.indexOf(u.id)===-1&&isValidUser(u);});
+  if(filter.city) shown=shown.filter(function(u){return u.city===filter.city});
+  if(filter.gender) shown=shown.filter(function(u){return u.gender===filter.gender});
+  if(filter.min) shown=shown.filter(function(u){return Number(u.age)>=Number(filter.min)});
+  if(filter.max) shown=shown.filter(function(u){return Number(u.age)<=Number(filter.max)});
+  if(!shown.length){list.innerHTML='<div class="card">No people found. Try CLEAR SEARCH ❤️</div>';return;}
+  var html='';
+  for(var i=0;i<shown.length;i++){var u=shown[i]; html+='<div class="card"><img src="'+(u.photo||DEFAULT_PHOTO)+'" onclick="openPhoto(\''+(u.photo||DEFAULT_PHOTO)+'\')"><h3>'+u.name+', '+u.age+'</h3><span class="genderTag">'+(u.gender||'')+'</span> <span class="genderTag">'+u.city+'</span><p class="small">'+(u.about||'')+'</p><div class="row"><button class="pink" onclick="likeUser(\''+u.id+'\')">❤️ LIKE</button><button class="black" onclick="openChat(\''+u.id+'\')">💬 CHAT</button></div></div>';}
+  list.innerHTML=html;
+}
+function showMyProfile(){hideAll();document.getElementById('myProfileBox').classList.remove('hidden');document.getElementById('myProfileView').innerHTML='<img src="'+me.photo+'" style="width:150px;height:150px;border-radius:50%;object-fit:cover"><h3>'+me.name+', '+me.age+'</h3><span class="genderTag">Gender: '+(me.gender||'')+'</span><br><span class="genderTag">'+me.city+'</span><p>'+me.about+'</p>';}
+function openEdit(){hideAll();document.getElementById('editBox').classList.remove('hidden');document.getElementById('e_name').value=me.name;document.getElementById('e_age').value=me.age;document.getElementById('e_gender').value=me.gender||'Male';document.getElementById('e_city').value=me.city;document.getElementById('e_about').value=me.about;document.getElementById('e_preview').src=me.photo;}
+function closeEdit(){showMyProfile();}
+function saveEdit(){me.name=document.getElementById('e_name').value;me.age=document.getElementById('e_age').value;me.gender=document.getElementById('e_gender').value;me.city=document.getElementById('e_city').value;me.about=document.getElementById('e_about').value;if(editPhotoData)me.photo=editPhotoData;var idx=-1;for(var i=0;i<users.length;i++){if(users[i].id===me.id)idx=i;} if(idx>=0)users[idx]=me;save();pushUser(me);showMyProfile();alert('Saved ✅');}
+function deleteAccount(){if(!confirm('Delete account?'))return;users=users.filter(function(u){return u.id!==me.id});if(db)db.ref('users/'+me.id).remove();me=null;save();location.reload();}
+function likeUser(id){var other=null;for(var i=0;i<users.length;i++){if(users[i].id===id)other=users[i];} if(!other)return;for(var j=0;j<likes.length;j++){if(likes[j].from===me.id&&likes[j].to===id) return alert('Already liked ❤️');} likes.push({from:me.id,to:id});save();if(db)db.ref('likes').push({from:me.id,to:id});var back=false;for(var k=0;k<likes.length;k++){if(likes[k].from===id&&likes[k].to===me.id)back=true;} if(back){lastMatchUser=other;document.getElementById('matchPhoto').src=other.photo;document.getElementById('matchName').textContent=other.name+', '+other.age+' • '+other.gender;document.getElementById('matchModal').style.display='flex';}else alert('Liked '+other.name+' ❤️');}
+function closeMatch(){document.getElementById('matchModal').style.display='none';}
+function goChatFromMatch(){closeMatch();if(lastMatchUser)openChat(lastMatchUser.id);}
+function showLikes(){hideAll();document.getElementById('likesBox').classList.remove('hidden');var who=[];for(var i=0;i<likes.length;i++){if(likes[i].to===me.id){for(var j=0;j<users.length;j++){if(users[j].id===likes[i].from)who.push(users[j]);}}} var h='';if(!who.length)h='<p>No likes yet ❤️</p>';else{for(var k=0;k<who.length;k++){h+='<div class="card"><b>'+who[k].name+', '+who[k].age+' • '+(who[k].gender||'')+'</b><br><button class="pink" onclick="likeUser(\''+who[k].id+'\')">❤️ LIKE BACK</button></div>';}} document.getElementById('likesList').innerHTML=h;}
+function showMatches(){hideAll();document.getElementById('matchesBox').classList.remove('hidden');var m=[];for(var i=0;i<users.length;i++){var u=users[i];var a=false,b=false;for(var j=0;j<likes.length;j++){if(likes[j].from===me.id&&likes[j].to===u.id)a=true;if(likes[j].from===u.id&&likes[j].to===me.id)b=true;} if(a&&b)m.push(u);} var h='';if(!m.length)h='<p>No matches yet ❤️</p>';else{for(var k=0;k<m.length;k++){h+='<div class="card"><b>'+m[k].name+', '+m[k].age+' • '+(m[k].gender||'')+' • '+m[k].city+'</b><br><button class="pink" onclick="openChat(\''+m[k].id+'\')">💬 CHAT</button></div>';}} document.getElementById('matchesList').innerHTML=h;}
+function showChats(){hideAll();document.getElementById('chatsBox').classList.remove('hidden');var ids=[];for(var i=0;i<likes.length;i++){var otherId=likes[i].from===me.id?likes[i].to:likes[i].from;if(ids.indexOf(otherId)===-1)ids.push(otherId);} var h='';if(!ids.length)h='<p>No chats yet ❤️</p>';else{for(var k=0;k<ids.length;k++){var u=null;for(var j=0;j<users.length;j++){if(users[j].id===ids[k])u=users[j];} if(u)h+='<div class="card"><b>'+u.name+', '+u.age+'</b><br><button class="pink" onclick="openChat(\''+u.id+'\')">OPEN CHAT 💬</button></div>';}} document.getElementById('chatsList').innerHTML=h;}
+function openChat(id){var other=null;for(var i=0;i<users.length;i++){if(users[i].id===id)other=users[i];} if(!other)return;currentChatOtherId=id;currentChatId=[me.id,id].sort().join('_');hideAll();document.getElementById('chatBox').classList.remove('hidden');document.getElementById('chatTitle').textContent='💬 '+other.name+' • '+other.gender;if(db)db.ref('chats/'+currentChatId).on('value',function(snap){var msgs=snap.val()?Object.values(snap.val()):[];var h='';for(var i=0;i<msgs.length;i++){h+='<div class="msg '+(msgs[i].from===me.id?'msgMine':'msgTheirs')+'">'+msgs[i].text+'</div>';} document.getElementById('chatMessages').innerHTML=h;document.getElementById('chatMessages').scrollTop=99999;});}
+function sendMsg(){var t=document.getElementById('chatInput').value.trim();if(!t||!currentChatId)return;if(db)db.ref('chats/'+currentChatId).push({from:me.id,to:currentChatOtherId,text:t,time:Date.now()});document.getElementById('chatInput').value='';}
+function backToChats(){if(db&&currentChatId)db.ref('chats/'+currentChatId).off();showChats();}
+
+document.getElementById('a_photo').addEventListener('change',function(e){var r=new FileReader();r.onload=function(){photoData=r.result;var p=document.getElementById('a_preview');p.src=photoData;p.classList.remove('hidden')};r.readAsDataURL(e.target.files[0])});
+document.getElementById('e_photo').addEventListener('change',function(e){var r=new FileReader();r.onload=function(){editPhotoData=r.result;document.getElementById('e_preview').src=editPhotoData};r.readAsDataURL(e.target.files[0])});
+
+if(me)showMain();
+if(db){
+  db.ref('users').on('value',function(snap){var raw=snap.val()||{};var fbUsers=Object.values(raw).filter(isValidUser);if(fbUsers.length){var map={};var all=users.concat(fbUsers);for(var i=0;i<all.length;i++){map[normPhone(all[i].phone)]=all[i];} users=Object.values(map);save();if(me)render();}});
+  db.ref('likes').on('value',function(snap){var v=snap.val()?Object.values(snap.val()):[];if(v.length){likes=v;save();if(me)render();}});
+}
+</script>
+</body>
+</html>         
