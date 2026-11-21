@@ -1,12 +1,12 @@
-           <!DOCTYPE html>
+              <!DOCTYPE html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>MalawiLove SA - Find Love in South Africa</title>
 <style>
 *{box-sizing:border-box;font-family:system-ui,Arial}body{margin:0;background:#FFF5F7;color:#111}
 .top{background:#fff;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;box-shadow:0 1px 8px #0001;z-index:10}
-.logo{font-weight:900;font-size:22px;color:#E91E63}.logo span{color:#111}
-.badge{background:#E8F5E9;color:#1B7A2E;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700}
-.hero{text-align:center;padding:22px 16px 8px}.hero h1{font-size:28px;margin:6px 0}.hero p{color:#666;margin:0}
+.logo{font-weight:900;font-size:22px;color:#E91E63;white-space:nowrap}.logo span{color:#111}
+.badge{background:#E8F5E9;color:#1B7A2E;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:700;white-space:nowrap}
+.hero{text-align:center;padding:22px 16px 8px}.hero h1{font-size:28px;margin:6px 0}.hero p{color:#666;margin:0;line-height:1.5}
 .wrap{max-width:420px;margin:0 auto;padding:14px}
 .card{background:#fff;border-radius:16px;padding:18px;box-shadow:0 4px 20px #0001}
 .tabs{display:flex;gap:8px;margin-bottom:14px}.tabs button{flex:1;padding:12px;border:0;border-radius:10px;font-weight:800;cursor:pointer}
@@ -21,18 +21,16 @@ input,select,textarea{width:100%;padding:13px;border:1px solid #E5E7EB;border-ra
 .person{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 12px #0001}
 .person img{width:100%;height:180px;object-fit:cover;background:#FCE7F3}.person div{padding:10px}
 .hidden{display:none}.row{display:flex;gap:8px}.row button{flex:1}
-.topbtn{padding:8px 14px;border-radius:20px;border:0;font-weight:700;cursor:pointer}
+.topbtn{padding:8px 14px;border-radius:20px;border:0;font-weight:700;cursor:pointer;background:#F3F4F6}
 </style></head>
 <body>
-<div class="top"><div class="logo">Malawi<span>Love</span> SA 🇲🇼❤️🇿🇦</div><div><span class="badge" id="conn">● SUPABASE ✓</span> <button class="topbtn" onclick="showAdmin()">Admin</button></div></div>
-<div class="hero" id="hero"><h1>Find Your Person. 💕</h1><p>Real Malawians in South Africa • Durban • Joburg • Cape Town<br><b id="count">Loading members...</b></p></div>
+<div class="top"><div class="logo">Malawi<span>Love</span> SA</div><div><span class="badge" id="conn">● Online</span> <button class="topbtn" onclick="showAdmin()">Admin</button></div></div>
+<div class="hero" id="hero"><h1>Find Your Person. 💕</h1><p>Real Malawians in South Africa<br>Durban • Joburg • Cape Town<br><b id="count">Loading members...</b></p></div>
 
 <div class="wrap">
-<!-- AUTH CARD -->
 <div class="card" id="authCard">
 <div class="tabs"><button id="tabSignup" class="tab-on" onclick="showSignup()">Create Account</button><button id="tabLogin" class="tab-off" onclick="showLogin()">Log In</button></div>
 
-<!-- SIGNUP -->
 <div id="signupForm">
 <input id="a_name" placeholder="Full Name *">
 <div class="row"><input id="a_age" type="number" placeholder="Age *"><select id="a_gender"><option value="">Gender *</option><option>Man</option><option>Woman</option></select></div>
@@ -41,80 +39,10 @@ input,select,textarea{width:100%;padding:13px;border:1px solid #E5E7EB;border-ra
 <textarea id="a_about" placeholder="About me... e.g I love gospel, cooking, honest person"></textarea>
 <input id="a_photo" type="file" accept="image/*">
 <div class="eye-wrap"><input id="a_pass" type="password" placeholder="Password * Min 4 chars"><button class="eye" onclick="toggleEye('a_pass',this)">👁️</button></div>
-<input id="a_secret" placeholder="Secret Question: Your mother's name? (for password reset)">
+<input id="a_secret" placeholder="Secret: Your mother's name? (for password reset)">
 <button class="btn pink" onclick="doSignup()">Create My Account ❤️</button>
 <p class="small">By joining you agree you are 18+ and will be respectful.<br>Already have account? <span class="link" onclick="showLogin()">Log In here</span></p>
 </div>
 
-<!-- LOGIN -->
 <div id="loginForm" class="hidden">
-<input id="l_phone" placeholder="Phone / WhatsApp">
-<div class="eye-wrap"><input id="l_pass" type="password" placeholder="Password"><button class="eye" onclick="toggleEye('l_pass',this)">👁️</button></div>
-<button class="btn pink" onclick="doLogin()">Log In ❤️</button>
-<p class="small"><span class="link" onclick="showForgot()">Forgot Password?</span> • New here? <span class="link" onclick="showSignup()">Create Account</span></p>
-<div id="forgotBox" class="hidden">
-<input id="f_phone" placeholder="Your Phone">
-<input id="f_secret" placeholder="Mother's name?">
-<div class="eye-wrap"><input id="f_newpass" type="password" placeholder="New Password"><button class="eye" onclick="toggleEye('f_newpass',this)">👁️</button></div>
-<button class="btn grey" onclick="doForgot()">Reset Password</button>
-</div>
-</div>
-</div>
-
-<!-- INSIDE APP -->
-<div id="app" class="hidden">
-<div class="card"><b>Welcome, <span id="meName"></span>! ❤️</b><br><span class="small" id="meInfo"></span><br><button class="btn grey" onclick="logout()">Log Out</button></div>
-<h3 style="margin:18px 4px 0">Discover People Near You</h3>
-<div class="grid" id="people"></div>
-</div>
-
-<!-- ADMIN -->
-<div id="adminBox" class="hidden card" style="margin-top:12px">
-<h3>Admin Panel</h3><input id="adminPass" type="password" placeholder="Admin Code"><button class="btn pink" onclick="doAdmin()">Open Admin</button>
-<div id="adminList"></div>
-</div>
-</div>
-
-<script>
-const SUPA_URL="https://fzkavixubxtrlptplymq.supabase.co";
-const SUPA_KEY="sb_publishable_SnXO5On70bbqUONRFAX4EA_0JBAw_Sc";
-let me=null, allUsers=[];
-function toggleEye(id,btn){var e=document.getElementById(id);if(e.type==="password"){e.type="text";btn.textContent="🙈";}else{e.type="password";btn.textContent="👁️";}}
-function showSignup(){document.getElementById('signupForm').classList.remove('hidden');document.getElementById('loginForm').classList.add('hidden');document.getElementById('tabSignup').className='tab-on';document.getElementById('tabLogin').className='tab-off';}
-function showLogin(){document.getElementById('signupForm').classList.add('hidden');document.getElementById('loginForm').classList.remove('hidden');document.getElementById('tabSignup').className='tab-off';document.getElementById('tabLogin').className='tab-on';}
-function showForgot(){document.getElementById('forgotBox').classList.toggle('hidden');}
-function showAdmin(){document.getElementById('adminBox').classList.toggle('hidden');}
-async function supa(path,method,body){let r=await fetch(SUPA_URL+"/rest/v1/"+path,{method:method||"GET",headers:{apikey:SUPA_KEY,Authorization:"Bearer "+SUPA_KEY,"Content-Type":"application/json",Prefer:"return=representation"},body:body?JSON.stringify(body):null});return r.json();}
-async function loadUsers(){try{let d=await supa("profiles?select=*&order=created_at.desc");if(Array.isArray(d)){allUsers=d;document.getElementById('count').textContent=d.length+" members joined • Real people, Real love";render();}}catch(e){document.getElementById('conn').textContent="● OFFLINE";}}
-function render(){let h="";allUsers.forEach(u=>{if(me&&u.id===me.id)return;h+=`<div class="person"><img src="${u.photo||'https://via.placeholder.com/300x300?text='+encodeURIComponent(u.name)}"><div><b>${u.name}, ${u.age}</b><br><small>${u.city} • ${u.gender} • ${u.verified?'✅ Verified':'New'}</small><p style="font-size:13px;color:#555;margin:6px 0">${(u.about||'').slice(0,80)}</p><button class="btn pink" style="padding:10px" onclick="sayHi('${u.id}','${u.phone}')">Say Hi 💬</button></div></div>`;});document.getElementById('people').innerHTML=h||"<p>No other members yet - invite friends!</p>";}
-function sayHi(id,phone){alert("Send WhatsApp to "+phone+" to say Hi! Chat feature coming for 10k users - for now WhatsApp connects you instantly.");}
-async function doSignup(){
-let name=document.getElementById('a_name').value.trim(),age=document.getElementById('a_age').value,gender=document.getElementById('a_gender').value,looking=document.getElementById('a_looking').value,city=document.getElementById('a_city').value,phone=document.getElementById('a_phone').value.trim(),about=document.getElementById('a_about').value,pass=document.getElementById('a_pass').value,secret=document.getElementById('a_secret').value;
-if(!name||!age||!gender||!phone||pass.length<4){alert("Fill Name, Age, Gender, Phone and Password min 4 chars");return;}
-let photo="";let f=document.getElementById('a_photo').files[0];if(f){photo=await new Promise(res=>{let r=new FileReader();r.onload=e=>res(e.target.result);r.readAsDataURL(f);});}
-let id="u"+Date.now();
-let data=await supa("profiles", "POST",{id:id,name:name,age:age,gender:gender,looking:looking,city:city,phone:phone,about:about,pass:pass,secret:secret,photo:photo,verified:false,last_seen:Date.now()});
-if(data && data[0]){me=data[0];localStorage.setItem("ml_user",JSON.stringify(me));enter();alert("Welcome "+name+"! Saved to Supabase - You are member #"+(allUsers.length+1));}else{alert("Error saving - check Supabase tables. Error: "+JSON.stringify(data));}
-}
-async function doLogin(){
-let phone=document.getElementById('l_phone').value.trim(),pass=document.getElementById('l_pass').value;
-let d=await supa("profiles?phone=eq."+encodeURIComponent(phone)+"&pass=eq."+encodeURIComponent(pass));
-if(d && d[0]){me=d[0];localStorage.setItem("ml_user",JSON.stringify(me));enter();}else{alert("Wrong phone or password. Try Create Account if you are new, or Forgot Password.");}
-}
-async function doForgot(){
-let phone=document.getElementById('f_phone').value.trim(),sec=document.getElementById('f_secret').value, np=document.getElementById('f_newpass').value;
-let d=await supa("profiles?phone=eq."+encodeURIComponent(phone)+"&select=*");
-if(!d[0]){alert("Phone not found");return;}
-if((d[0].secret||"").toLowerCase().trim()!==sec.toLowerCase().trim()){alert("Wrong secret answer");return;}
-await supa("profiles?phone=eq."+encodeURIComponent(phone),"PATCH",{pass:np});alert("Password reset! Now Log In with new password");showLogin();
-}
-function enter(){document.getElementById('authCard').classList.add('hidden');document.getElementById('hero').classList.add('hidden');document.getElementById('app').classList.remove('hidden');document.getElementById('meName').textContent=me.name;document.getElementById('meInfo').textContent=me.city+" • "+me.age+" • "+me.phone;loadUsers();}
-function logout(){localStorage.removeItem("ml_user");location.reload();}
-function doAdmin(){
-if(document.getElementById('adminPass').value!=="1234"){alert("Wrong admin code");return;}
-let h="<h4>All Members ("+allUsers.length+")</h4>";allUsers.forEach(u=>{h+=`<div style="border-bottom:1px solid #eee;padding:8px 0"><b>${u.name}</b> - ${u.phone} - ${u.city} <button onclick="delUser('${u.id}')">Delete</button></div>`;});document.getElementById('adminList').innerHTML=h;
-}
-async function delUser(id){if(!confirm("Delete this user?"))return;await fetch(SUPA_URL+"/rest/v1/profiles?id=eq."+id,{method:"DELETE",headers:{apikey:SUPA_KEY,Authorization:"Bearer "+SUPA_KEY}});loadUsers();alert("Deleted");}
-let saved=localStorage.getItem("ml_user");if(saved){me=JSON.parse(saved);enter();}else{loadUsers();}
-</script>
-</body></html>
+<input id
