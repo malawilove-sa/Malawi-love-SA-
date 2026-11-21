@@ -1,16 +1,17 @@
-<!DOCTYPE html>
+        <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>MalawiLove SA ❤️</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial;background:#ffe6ef;padding:0 0 120px}
+body{margin:0;font-family:Arial;background:#ffe6ef;padding:0 0 120px;overflow-x:hidden}
 .header{background:#ff2e63;color:#fff;text-align:center;padding:15px;font-size:22px;font-weight:bold}
-.card{background:#fff;margin:12px;border-radius:15px;padding:15px;text-align:center;box-shadow:0 2px 8px #0002}
+.card{background:#fff;margin:12px;border-radius:15px;padding:15px;text-align:center;box-shadow:0 2px 8px #0002;overflow:hidden}
+.card img{width:150px!important;height:150px!important;object-fit:cover;border-radius:50%!important;display:block;margin:10px auto;max-width:150px}
 input,select{width:95%;padding:13px;margin:6px 0;border:1px solid #ddd;border-radius:10px;font-size:16px}
 button{width:100%;padding:16px;border:0;border-radius:12px;font-size:17px;font-weight:bold;margin:6px 0;cursor:pointer}
 .pink{background:#ff2e63;color:#fff}.black{background:#222;color:#fff}.orange{background:#ff9500;color:#fff}.grey{background:#eee}.red{background:#ff3b30;color:#fff}.green{background:#25D366;color:#fff}.purple{background:#9b59b6;color:#fff}
@@ -51,7 +52,7 @@ button{width:100%;padding:16px;border:0;border-radius:12px;font-size:17px;font-w
 <input id="a_secret" type="text" placeholder="Secret Word - e.g. Mango">
 <label style="display:block;text-align:left;font-size:14px"><input id="a_18" type="checkbox" style="width:auto"> I am 18+</label>
 <label style="display:block;text-align:left"><b>📸 Photo REQUIRED:</b><input id="a_photo" type="file" accept="image/*"></label>
-<img id="a_preview" class="hidden" style="margin:auto">
+<img id="a_preview" class="hidden">
 <button class="pink" onclick="doSignup()">CREATE ACCOUNT ❤️</button>
 <button class="black" onclick="showTab('login')">Already have account? LOGIN HERE ➡️</button>
 </div>
@@ -121,7 +122,6 @@ var blocks=[]; try{blocks=JSON.parse(localStorage.getItem('ml_blocks')||'[]');}c
 var likes=[]; try{likes=JSON.parse(localStorage.getItem('ml_likes')||'[]');}catch(e){}
 var filter={city:'',gender:'',min:'',max:''};
 var photoData='';var editPhotoData='';var currentChatId=null;var currentChatOtherId=null;var lastMatchUser=null;
-
 function toggleEye(id){var inp=document.getElementById(id);inp.type=(inp.type==='password'?'text':'password');}
 function openPhoto(src){document.getElementById('bigPhoto').src=src||DEFAULT_PHOTO;document.getElementById('photoModal').style.display='flex';}
 function showTab(w){
@@ -134,10 +134,7 @@ function showForgot(){document.getElementById('signupForm').classList.add('hidde
 function hideForgot(){document.getElementById('forgotForm').classList.add('hidden');document.getElementById('loginForm').classList.remove('hidden');}
 function save(){localStorage.setItem('ml_users',JSON.stringify(users));localStorage.setItem('ml_me',JSON.stringify(me));localStorage.setItem('ml_blocks',JSON.stringify(blocks));localStorage.setItem('ml_likes',JSON.stringify(likes));}
 function pushUser(u){if(db&&isValidUser(u)){try{db.ref('users/'+u.id).set(u);}catch(e){}}}
-
-// *** THE FIX - THIS FUNCTION ALWAYS WORKS ***
 function enterTest(){
-  alert('Button works! Going inside...');
   me={id:'test_'+Date.now(),name:'Test User',age:'25',gender:'Female',city:'Durban',phone:'0712345678',about:'Hi I am testing ❤️',pass:'1234',secret:'Mango',photo:DEFAULT_PHOTO,online:true,lastSeen:Date.now()};
   var found=false; for(var i=0;i<users.length;i++){if(users[i].phone===me.phone) found=true;}
   if(!found) users.push(me);
@@ -147,7 +144,6 @@ function enterTest(){
   showHome();
   alert('You are INSIDE now dada! ❤️');
 }
-
 function doSignup(){
   var name=document.getElementById('a_name').value.trim();
   var age=document.getElementById('a_age').value;
@@ -177,11 +173,10 @@ function doLogin(){
   var u=null; for(var i=0;i<users.length;i++){if(normPhone(users[i].phone)===phone&&users[i].pass===pass){u=users[i];break;}}
   if(u){me=u;save();showMain();alert('Welcome back '+me.name+' ❤️');return;}
   if(db){
-    alert('Checking Firebase... wait 2 sec');
     db.ref('users').once('value',function(snap){
       var all=snap.val()?Object.values(snap.val()):[];
       var fu=null; for(var j=0;j<all.length;j++){if(normPhone(all[j].phone)===phone&&all[j].pass===pass){fu=all[j];break;}}
-      if(fu){users.push(fu);me=fu;save();showMain();alert('Welcome back '+me.name+' ❤️ Found in Firebase!');}
+      if(fu){users.push(fu);me=fu;save();showMain();alert('Welcome back '+me.name+' ❤️');}
       else alert('Wrong phone or password. If new, go to SIGN UP. Or tap GREEN button.');
     });
   } else alert('Wrong phone or password. Or tap GREEN button.');
@@ -209,7 +204,7 @@ function render(){
   if(filter.max) shown=shown.filter(function(u){return Number(u.age)<=Number(filter.max)});
   if(!shown.length){list.innerHTML='<div class="card">No people found. Try CLEAR SEARCH ❤️</div>';return;}
   var html='';
-  for(var i=0;i<shown.length;i++){var u=shown[i]; html+='<div class="card"><img src="'+(u.photo||DEFAULT_PHOTO)+'" onclick="openPhoto(\''+(u.photo||DEFAULT_PHOTO)+'\')"><h3>'+u.name+', '+u.age+'</h3><span class="genderTag">'+(u.gender||'')+'</span> <span class="genderTag">'+u.city+'</span><p class="small">'+(u.about||'')+'</p><div class="row"><button class="pink" onclick="likeUser(\''+u.id+'\')">❤️ LIKE</button><button class="black" onclick="openChat(\''+u.id+'\')">💬 CHAT</button></div></div>';}
+  for(var i=0;i<shown.length;i++){var u=shown[i]; html+='<div class="card"><img src="'+(u.photo||DEFAULT_PHOTO)+'"><h3>'+u.name+', '+u.age+'</h3><span class="genderTag">'+(u.gender||'')+'</span> <span class="genderTag">'+u.city+'</span><p class="small">'+(u.about||'')+'</p><div class="row"><button class="pink" onclick="likeUser(\''+u.id+'\')">❤️ LIKE</button><button class="black" onclick="openChat(\''+u.id+'\')">💬 CHAT</button></div></div>';}
   list.innerHTML=html;
 }
 function showMyProfile(){hideAll();document.getElementById('myProfileBox').classList.remove('hidden');document.getElementById('myProfileView').innerHTML='<img src="'+me.photo+'" style="width:150px;height:150px;border-radius:50%;object-fit:cover"><h3>'+me.name+', '+me.age+'</h3><span class="genderTag">Gender: '+(me.gender||'')+'</span><br><span class="genderTag">'+me.city+'</span><p>'+me.about+'</p>';}
@@ -217,24 +212,4 @@ function openEdit(){hideAll();document.getElementById('editBox').classList.remov
 function closeEdit(){showMyProfile();}
 function saveEdit(){me.name=document.getElementById('e_name').value;me.age=document.getElementById('e_age').value;me.gender=document.getElementById('e_gender').value;me.city=document.getElementById('e_city').value;me.about=document.getElementById('e_about').value;if(editPhotoData)me.photo=editPhotoData;var idx=-1;for(var i=0;i<users.length;i++){if(users[i].id===me.id)idx=i;} if(idx>=0)users[idx]=me;save();pushUser(me);showMyProfile();alert('Saved ✅');}
 function deleteAccount(){if(!confirm('Delete account?'))return;users=users.filter(function(u){return u.id!==me.id});if(db)db.ref('users/'+me.id).remove();me=null;save();location.reload();}
-function likeUser(id){var other=null;for(var i=0;i<users.length;i++){if(users[i].id===id)other=users[i];} if(!other)return;for(var j=0;j<likes.length;j++){if(likes[j].from===me.id&&likes[j].to===id) return alert('Already liked ❤️');} likes.push({from:me.id,to:id});save();if(db)db.ref('likes').push({from:me.id,to:id});var back=false;for(var k=0;k<likes.length;k++){if(likes[k].from===id&&likes[k].to===me.id)back=true;} if(back){lastMatchUser=other;document.getElementById('matchPhoto').src=other.photo;document.getElementById('matchName').textContent=other.name+', '+other.age+' • '+other.gender;document.getElementById('matchModal').style.display='flex';}else alert('Liked '+other.name+' ❤️');}
-function closeMatch(){document.getElementById('matchModal').style.display='none';}
-function goChatFromMatch(){closeMatch();if(lastMatchUser)openChat(lastMatchUser.id);}
-function showLikes(){hideAll();document.getElementById('likesBox').classList.remove('hidden');var who=[];for(var i=0;i<likes.length;i++){if(likes[i].to===me.id){for(var j=0;j<users.length;j++){if(users[j].id===likes[i].from)who.push(users[j]);}}} var h='';if(!who.length)h='<p>No likes yet ❤️</p>';else{for(var k=0;k<who.length;k++){h+='<div class="card"><b>'+who[k].name+', '+who[k].age+' • '+(who[k].gender||'')+'</b><br><button class="pink" onclick="likeUser(\''+who[k].id+'\')">❤️ LIKE BACK</button></div>';}} document.getElementById('likesList').innerHTML=h;}
-function showMatches(){hideAll();document.getElementById('matchesBox').classList.remove('hidden');var m=[];for(var i=0;i<users.length;i++){var u=users[i];var a=false,b=false;for(var j=0;j<likes.length;j++){if(likes[j].from===me.id&&likes[j].to===u.id)a=true;if(likes[j].from===u.id&&likes[j].to===me.id)b=true;} if(a&&b)m.push(u);} var h='';if(!m.length)h='<p>No matches yet ❤️</p>';else{for(var k=0;k<m.length;k++){h+='<div class="card"><b>'+m[k].name+', '+m[k].age+' • '+(m[k].gender||'')+' • '+m[k].city+'</b><br><button class="pink" onclick="openChat(\''+m[k].id+'\')">💬 CHAT</button></div>';}} document.getElementById('matchesList').innerHTML=h;}
-function showChats(){hideAll();document.getElementById('chatsBox').classList.remove('hidden');var ids=[];for(var i=0;i<likes.length;i++){var otherId=likes[i].from===me.id?likes[i].to:likes[i].from;if(ids.indexOf(otherId)===-1)ids.push(otherId);} var h='';if(!ids.length)h='<p>No chats yet ❤️</p>';else{for(var k=0;k<ids.length;k++){var u=null;for(var j=0;j<users.length;j++){if(users[j].id===ids[k])u=users[j];} if(u)h+='<div class="card"><b>'+u.name+', '+u.age+'</b><br><button class="pink" onclick="openChat(\''+u.id+'\')">OPEN CHAT 💬</button></div>';}} document.getElementById('chatsList').innerHTML=h;}
-function openChat(id){var other=null;for(var i=0;i<users.length;i++){if(users[i].id===id)other=users[i];} if(!other)return;currentChatOtherId=id;currentChatId=[me.id,id].sort().join('_');hideAll();document.getElementById('chatBox').classList.remove('hidden');document.getElementById('chatTitle').textContent='💬 '+other.name+' • '+other.gender;if(db)db.ref('chats/'+currentChatId).on('value',function(snap){var msgs=snap.val()?Object.values(snap.val()):[];var h='';for(var i=0;i<msgs.length;i++){h+='<div class="msg '+(msgs[i].from===me.id?'msgMine':'msgTheirs')+'">'+msgs[i].text+'</div>';} document.getElementById('chatMessages').innerHTML=h;document.getElementById('chatMessages').scrollTop=99999;});}
-function sendMsg(){var t=document.getElementById('chatInput').value.trim();if(!t||!currentChatId)return;if(db)db.ref('chats/'+currentChatId).push({from:me.id,to:currentChatOtherId,text:t,time:Date.now()});document.getElementById('chatInput').value='';}
-function backToChats(){if(db&&currentChatId)db.ref('chats/'+currentChatId).off();showChats();}
-
-document.getElementById('a_photo').addEventListener('change',function(e){var r=new FileReader();r.onload=function(){photoData=r.result;var p=document.getElementById('a_preview');p.src=photoData;p.classList.remove('hidden')};r.readAsDataURL(e.target.files[0])});
-document.getElementById('e_photo').addEventListener('change',function(e){var r=new FileReader();r.onload=function(){editPhotoData=r.result;document.getElementById('e_preview').src=editPhotoData};r.readAsDataURL(e.target.files[0])});
-
-if(me)showMain();
-if(db){
-  db.ref('users').on('value',function(snap){var raw=snap.val()||{};var fbUsers=Object.values(raw).filter(isValidUser);if(fbUsers.length){var map={};var all=users.concat(fbUsers);for(var i=0;i<all.length;i++){map[normPhone(all[i].phone)]=all[i];} users=Object.values(map);save();if(me)render();}});
-  db.ref('likes').on('value',function(snap){var v=snap.val()?Object.values(snap.val()):[];if(v.length){likes=v;save();if(me)render();}});
-}
-</script>
-</body>
-</html>         
+function likeUser(id){var other=null;for(var i=0;i<users.length;i++){if(users[i].id===id)other=users[i];} if(!other)return;for(var j=0;j<likes.length;j++){if(likes[j].from===me.id&&likes[j].to===id) return alert('Already liked ❤️');} likes.push({from:me.id,to:id});save();if(db)db.ref('likes').push({from:me.id,to:id});var back=false;for(var k=0;k<likes.length;k++){if(likes[k].from===id&&likes[k].to===me.id)back=true;} if(back){lastMatchUser=other;document.getElementById('matchPhoto').src=other.photo;document.getElementById('matchName').textContent=other.name+', '+other.age+' • '+other.gender;document.getElementById('matchModal').sty
