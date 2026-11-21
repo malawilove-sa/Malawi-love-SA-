@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+         <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -72,13 +72,13 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#E91E63;backgr
 </div>
 <div class="toast" id="toast"></div>
 <script>
-const U="https://fzkavixubxtrlptplymq.supabase.co";
-const K="sb_publishable_SnXO5On70bbqUONRFAX4EA_0JBAw_Sc";
+const U="https://cotocofslfhcmeyklzrb.supabase.co";
+const K="sb_publishable_1Pm9aAvMes7qoie_A4FVTw_yCwX9a_R";
 const TABLE="love_profiles";
 let me=null, all=[];
 function cp(p){return (p||"").replace(/\s+/g,"").trim();}
 function clean(v,f){v=(v||"").toString().trim();if(!v||v==="null"||v==="undefined")return f;return v;}
-function toast(m){let t=document.getElementById('toast');t.textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',3500);}
+function toast(m){let t=document.getElementById('toast');t.textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',4000);}
 function e(id,b){let x=document.getElementById(id);x.type=x.type==="password"?"text":"password";b.textContent=x.type==="password"?"👁️":"🙈";}
 function sS(){document.getElementById('sF').classList.remove('hidden');document.getElementById('lF').classList.add('hidden');document.getElementById('tS').className='tab-on';document.getElementById('tL').className='';}
 function sL(){document.getElementById('sF').classList.add('hidden');document.getElementById('lF').classList.remove('hidden');document.getElementById('tS').className='';document.getElementById('tL').className='tab-on';}
@@ -140,7 +140,7 @@ toast("Reset done! Log In now");sL();
 }
 function guest(){me={id:"guest",name:"Guest",city:"Durban",age:"25",phone:"Guest"};document.getElementById('authCard').classList.add('hidden');document.getElementById('hero').classList.add('hidden');document.getElementById('app').classList.remove('hidden');document.getElementById('mn').textContent="Guest";document.getElementById('mi').textContent="Durban • Guest Mode - Exploring";load();}
 function enter(){document.getElementById('authCard').classList.add('hidden');document.getElementById('hero').classList.add('hidden');document.getElementById('app').classList.remove('hidden');document.getElementById('mn').textContent=me.name;document.getElementById('mi').textContent=me.city+" • "+me.age+" • "+me.phone;load();}
-let sv=localStorage.getItem("ml_user");if(sv){try{me=JSON.parse(sv);enter();}catch(e){load();}}else{load();}
+let sv=localStorage.getItem("ml_user");if(sv){try{me=JSON.parse(sv);if(me.id!=="guest")enter();else load();}catch(e){load();}}else{load();}
 </script>
 </body>
 </html>
