@@ -1,166 +1,126 @@
-      <!DOCTYPE html>
-<html>
+ <!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>MalawiLove SA ❤️ Find Love in South Africa</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+<title>MalawiLove SA — Find Real Love in South Africa</title>
+<meta name="description" content="MalawiLove SA. Real Malawians in South Africa finding serious love, friendship & marriage.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;font-family:'Poppins',Arial,sans-serif}
-body{margin:0;background:#fafafa;color:#1a1a1a;padding-bottom:90px}
-.header{background:linear-gradient(135deg,#ff2e63,#ff6b6b);color:#fff;padding:20px 16px 24px;text-align:center;border-radius:0 0 28px 28px}
-.header h1{margin:0;font-size:27px;font-weight:800}.header p{margin:5px 0 0;opacity:.92;font-size:13px}
-.hero{background:#fff;margin:14px;border-radius:22px;padding:22px;text-align:center;box-shadow:0 4px 18px #0001}
-.hero h2{margin:0;font-size:23px}.hero p{color:#666;font-size:14px;line-height:1.6}
-.badge{display:inline-block;background:#ffe6ef;color:#ff2e63;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:600;margin:4px}
-.card{background:#fff;margin:14px;border-radius:22px;overflow:hidden;box-shadow:0 4px 18px #0001}
-.cardBody{padding:18px}
-.card img.profile{width:100%;height:300px;object-fit:cover;display:block;background:#f0f0f0}
-.card img.avatar{width:100px;height:100px;object-fit:cover;border-radius:50%;display:block;margin:0 auto 10px;border:3px solid #ffe6ef}
-input,select,textarea{width:100%;padding:14px 16px;margin:7px 0;border:1.5px solid #eee;border-radius:14px;font-size:15px;background:#fafafa;outline:none}
-input:focus,select:focus,textarea:focus{border-color:#ff2e63;background:#fff}
-button{width:100%;padding:15px;border:0;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;margin:6px 0}
-button:active{transform:scale(.97)}
-.pink{background:linear-gradient(135deg,#ff2e63,#ff6b6b);color:#fff}
-.black{background:#1a1a1a;color:#fff}.grey{background:#f0f0f0;color:#333}.outline{background:#fff;color:#ff2e63;border:1.5px solid #ff2e63}
+:root{--pink:#E91E63;--pink2:#FF4D6D;--dark:#121212;--grey:#6B7280;--bg:#F8F7F5;--line:#EDE9E6;--green:#16A34A;--gold:#B7791F}
+*{box-sizing:border-box;font-family:'Inter',system-ui,sans-serif}
+body{margin:0;background:var(--bg);color:var(--dark);padding-bottom:40px;-webkit-font-smoothing:antialiased}
+a{color:var(--pink)}
+.topbarPro{background:#fff;border-bottom:1px solid var(--line);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:20}
+.logo{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;letter-spacing:-.5px}.logo span{color:var(--pink)}
+.logo small{display:block;font-family:'Inter';font-size:10px;letter-spacing:2px;color:var(--grey);font-weight:600}
+.pill{font-size:11px;font-weight:700;background:#FEF2F4;color:var(--pink);padding:6px 10px;border-radius:999px}
+.hero{background:linear-gradient(135deg,#1A0A12 0%,#4A0E24 55%,#E91E63 100%);color:#fff;margin:14px;border-radius:24px;padding:28px 22px;position:relative;overflow:hidden}
+.hero:before{content:"";position:absolute;right:-40px;top:-40px;width:180px;height:180px;background:#ffffff18;border-radius:50%}
+.hero h1{font-family:'Playfair Display',serif;font-size:32px;line-height:1.05;margin:0;position:relative}
+.hero p{opacity:.9;font-size:14px;line-height:1.6;margin:12px 0 0;position:relative}
+.trust{display:flex;gap:8px;margin:16px 14px 0;flex-wrap:wrap}.trust span{background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 11px;font-size:12px;font-weight:600}
+.card{background:#fff;margin:14px;border-radius:20px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.06);border:1px solid #F0EDEA}
+.cardBody{padding:20px}
+.card img.profile{width:100%;height:320px;object-fit:cover;display:block;background:#eee}
+.card img.avatar{width:96px;height:96px;object-fit:cover;border-radius:50%;display:block;margin:0 auto 10px;border:3px solid #FCE7EF}
+input,select,textarea{width:100%;padding:13px 14px;margin:6px 0;border:1.5px solid var(--line);border-radius:12px;font-size:14.5px;background:#FCFBFA;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--pink);background:#fff}
+label{font-size:12px;font-weight:600;color:#374151}
+button{width:100%;padding:14px;border:0;border-radius:12px;font-size:14.5px;font-weight:700;cursor:pointer;margin:6px 0}
+button:active{transform:scale(.98)}
+.pink{background:var(--pink);color:#fff;box-shadow:0 6px 16px #E91E6340}
+.black{background:#111;color:#fff}.grey{background:#F3F0ED;color:#111}.outline{background:#fff;color:var(--pink);border:1.5px solid #FBCFE8}
 .row{display:flex;gap:10px}.row button{flex:1}
 .hidden{display:none}
-.topbar{display:flex;gap:6px;padding:12px;overflow-x:auto;white-space:nowrap;background:#fff}
-.topbar button{flex:none;padding:10px 14px;font-size:12px;border-radius:20px}
-.small{font-size:13px;color:#888}
-.tabWrap{display:flex;background:#f0f0f0;border-radius:14px;padding:4px;margin:14px 0}
-.tabWrap button{flex:1;margin:0;border-radius:10px;background:transparent;color:#666}
-.tabWrap button.active{background:#fff;color:#ff2e63}
-.passwrap{position:relative}.passwrap input{padding-right:48px}.eyeBtn{position:absolute!important;right:6px;top:50%;transform:translateY(-50%);width:38px!important;padding:8px!important;background:transparent!important;font-size:18px}
-.safety{background:#fff8e1;border-radius:14px;padding:13px;font-size:12.5px;line-height:1.6;color:#5d4037}
-.genderTag{background:#ffe6ef;color:#ff2e63;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600;display:inline-block;margin:3px}
-.verified{color:#25D366;font-size:12px;font-weight:700}
-.chatBox{height:340px;overflow-y:auto;background:#fafafa;border-radius:14px;padding:12px}
-.msg{max-width:78%;padding:10px 12px;border-radius:16px;margin:6px 0;font-size:14px;line-height:1.4;word-break:break-word}.msgMine{background:#ff2e63;color:#fff;margin-left:auto;border-bottom-right-radius:4px}.msgTheirs{background:#fff;border:1px solid #eee;border-bottom-left-radius:4px}
-.footer{text-align:center;color:#aaa;font-size:11px;padding:14px;line-height:1.6}
-.errorBox{background:#ffebee;border:1.5px solid #ff3b30;color:#c62828;border-radius:12px;padding:12px;font-size:13.5px;font-weight:600;text-align:center;margin:10px 0;display:none}
-.successBox{background:#e8f5e9;border:1.5px solid #25D366;color:#1b5e20;border-radius:12px;padding:12px;font-size:13.5px;font-weight:600;text-align:center;margin:10px 0;display:none}
-#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:12px 18px;border-radius:30px;font-size:13px;font-weight:600;z-index:2000;display:none;max-width:90%;text-align:center}
-.likeBtn{font-size:16px!important}.likeBtn.liked{background:#25D366!important}
+.nav{display:flex;gap:6px;padding:12px;background:#fff;border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap;position:sticky;top:62px;z-index:15}
+.nav button{flex:none;padding:9px 13px;font-size:12px;border-radius:999px;margin:0}
+.small{font-size:12.5px;color:var(--grey);line-height:1.5}
+.tabWrap{display:flex;background:#F3F0ED;border-radius:12px;padding:4px;margin:12px 0}
+.tabWrap button{flex:1;margin:0;border-radius:9px;background:transparent;color:#6B7280}
+.tabWrap button.active{background:#fff;color:var(--pink);box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.passwrap{position:relative}.passwrap input{padding-right:44px}.eyeBtn{position:absolute!important;right:6px;top:50%;transform:translateY(-50%);width:36px!important;padding:8px!important;background:transparent!important;font-size:16px;box-shadow:none!important}
+.chip{display:inline-block;background:#FEF2F4;color:var(--pink);padding:5px 10px;border-radius:999px;font-size:11.5px;font-weight:600;margin:3px 3px 0 0}
+.verified{color:var(--green);font-size:11px;font-weight:700}
+.safety{background:#FFFBEB;border:1px solid #FDE68A;border-radius:14px;padding:14px;font-size:12.5px;line-height:1.6;color:#78350F}
+.chatBox{height:340px;overflow-y:auto;background:#FCFBFA;border:1px solid var(--line);border-radius:14px;padding:12px}
+.msg{max-width:78%;padding:10px 12px;border-radius:16px;margin:6px 0;font-size:14px;line-height:1.45;word-break:break-word}.msgMine{background:var(--pink);color:#fff;margin-left:auto;border-bottom-right-radius:4px}.msgTheirs{background:#fff;border:1px solid var(--line);border-bottom-left-radius:4px}
+.footer{text-align:center;color:#9CA3AF;font-size:11px;padding:20px;line-height:1.7}
+.errorBox{background:#FEF2F2;border:1.5px solid #FCA5A5;color:#991B1B;border-radius:12px;padding:12px;font-size:13.5px;font-weight:600;text-align:center;margin:10px 0;display:none}
+.successBox{background:#F0FDF4;border:1.5px solid #86EFAC;color:#166534;border-radius:12px;padding:12px;font-size:13.5px;font-weight:600;text-align:center;margin:10px 0;display:none}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:12px 18px;border-radius:999px;font-size:13px;font-weight:600;z-index:2000;display:none;max-width:90%;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.sectionTitle{font-size:18px;font-weight:800;margin:4px 0 2px}
+.badgePro{display:inline-flex;align-items:center;gap:5px;background:#111;color:#fff;padding:6px 10px;border-radius:999px;font-size:11px;font-weight:700}
+.kpi{display:flex;gap:10px;margin:14px}.kpi div{flex:1;background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;text-align:center}.kpi b{font-size:20px;display:block}.kpi span{font-size:11px;color:var(--grey);font-weight:600}
 </style>
 </head>
 <body>
 <div id="toast"></div>
-<div class="header"><h1>MalawiLove SA ❤️</h1><p>Real Love • Real People • South Africa</p></div>
+<div class="topbarPro"><div class="logo">MalawiLove <span>SA</span><small>REAL LOVE • SOUTH AFRICA</small></div><span class="pill">● 18+ Verified Community</span></div>
 
 <div id="authBox">
-<div class="hero"><h2>Find Your Person ❤️</h2><p>For Malawians in South Africa looking for serious love, friendship & marriage.<br><b>Durban • Johannesburg • Cape Town • Pretoria</b></p><div><span class="badge">✓ Real Profiles</span><span class="badge">🛡️ Phone Never Shown</span><span class="badge">18+ Only</span></div></div>
+<div class="hero"><span class="badgePro">🇲🇼 MALAWIANS IN SA • EST. 2026</span><h1>Find someone real.<br>Build something lasting.</h1><p>A private, respectful community for Malawians in South Africa seeking serious relationships, friendship and marriage.</p></div>
+<div class="trust"><span>✓ Verified Profiles</span><span>🔒 Phone Never Shown</span><span>🛡️ No Scammers</span><span>💬 Safe Messaging</span></div>
+<div class="kpi"><div><b id="kpiMembers">—</b><span>MEMBERS</span></div><div><b>5 Cities</b><span>DURBAN • JHB • CPT</span></div><div><b>100%</b><span>REAL PEOPLE</span></div></div>
+
 <div class="card"><div class="cardBody">
 <div class="tabWrap"><button id="tabSignup" class="active" onclick="showTab('signup')">Create Account</button><button id="tabLogin" onclick="showTab('login')">Log In</button></div>
 <div id="signupForm">
 <div id="formError" class="errorBox"></div><div id="formSuccess" class="successBox"></div>
-<input id="a_name" placeholder="Full Name *"><input id="a_age" type="number" placeholder="Age * Must be 18+">
-<select id="a_gender"><option value="">I am... *</option><option>Male</option><option>Female</option></select>
-<select id="a_looking"><option value="">Looking for... *</option><option>Serious Relationship</option><option>Marriage</option><option>Friendship</option><option>Dating</option></select>
-<select id="a_city"><option value="">City *</option><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Polokwane</option><option>Blantyre</option><option>Lilongwe</option><option>Other</option></select>
-<input id="a_phone" type="tel" placeholder="Phone Number * Private">
-<textarea id="a_about" rows="2" placeholder="About you"></textarea>
-<div class="passwrap"><input id="a_pass" type="password" placeholder="Create Password *"><button type="button" class="eyeBtn" onclick="toggleEye('a_pass')">👁️</button></div>
-<input id="a_secret" type="text" placeholder="Secret Word * e.g. Mango">
-<label style="display:flex;gap:8px;font-size:13px;margin:10px 0"><input id="a_18" type="checkbox" style="width:18px;margin:0"> I confirm I am 18+</label>
-<label style="display:block;font-size:13px;font-weight:600">📸 Profile Photo *<input id="a_photo" type="file" accept="image/*"></label>
-<img id="a_preview" class="hidden avatar"><div id="photoStatus" style="font-size:12px;text-align:center;color:#25D366;font-weight:600"></div>
-<button id="signupBtn" class="pink" onclick="doSignup()">Create My Account ❤️</button>
+<label>Full Name *</label><input id="a_name" placeholder="e.g. Tamima Phiri">
+<label>Age *</label><input id="a_age" type="number" placeholder="Must be 18 or older">
+<label>I am *</label><select id="a_gender"><option value="">Select</option><option>Male</option><option>Female</option></select>
+<label>Looking for *</label><select id="a_looking"><option value="">Select intention</option><option>Serious Relationship</option><option>Marriage</option><option>Friendship</option><option>Dating</option></select>
+<label>City *</label><select id="a_city"><option value="">Select city</option><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Polokwane</option><option>Blantyre</option><option>Lilongwe</option><option>Other</option></select>
+<label>Phone Number * — Private, never shown</label><input id="a_phone" type="tel" placeholder="e.g. 081 234 5678">
+<label>About You</label><textarea id="a_about" rows="2" placeholder="What matters to you? Faith, family, work, interests..."></textarea>
+<label>Password *</label><div class="passwrap"><input id="a_pass" type="password" placeholder="Min. 4 characters"><button type="button" class="eyeBtn" onclick="toggleEye('a_pass')">👁️</button></div>
+<label>Secret Word * — For password recovery</label><input id="a_secret" type="text" placeholder="e.g. Mango">
+<label style="display:flex;gap:8px;font-size:13px;margin:10px 0;align-items:flex-start"><input id="a_18" type="checkbox" style="width:18px;margin:2px 0 0"> I confirm I am 18 or older. I will be respectful. I will never ask anyone for money.</label>
+<label>Profile Photo * — Clear face photo</label><input id="a_photo" type="file" accept="image/*">
+<img id="a_preview" class="hidden avatar"><div id="photoStatus" style="font-size:12px;text-align:center;color:#16A34A;font-weight:600"></div>
+<button id="signupBtn" class="pink" onclick="doSignup()">Create My Account →</button>
+<p class="small" style="text-align:center">By joining you agree to our community rules: Be real, be respectful, no scamming.</p>
 </div>
 <div id="loginForm" class="hidden">
 <div id="loginError" class="errorBox"></div>
-<input id="l_phone" type="tel" placeholder="Phone Number"><div class="passwrap"><input id="l_pass" type="password" placeholder="Password"><button type="button" class="eyeBtn" onclick="toggleEye('l_pass')">👁️</button></div>
-<button class="pink" onclick="doLogin()">Log In ➡️</button>
+<label>Phone Number</label><input id="l_phone" type="tel" placeholder="Phone used at signup">
+<label>Password</label><div class="passwrap"><input id="l_pass" type="password" placeholder="Password"><button type="button" class="eyeBtn" onclick="toggleEye('l_pass')">👁️</button></div>
+<button class="pink" onclick="doLogin()">Log In →</button>
 <button class="grey" onclick="showForgot()">Forgot Password?</button>
-<button class="grey" onclick="if(confirm('Clear all and start fresh?')){localStorage.clear();location.reload();}" style="font-size:12px;color:#999">Having trouble? Clear & Start Fresh</button>
+<button class="grey" onclick="if(confirm('Clear saved data and start fresh?')){localStorage.clear();location.reload();}" style="font-size:12px;color:#999">Having trouble? Clear & Start Fresh</button>
 </div>
-<div id="forgotForm" class="hidden"><h3 style="margin:0">Reset Password</h3><input id="f_phone" type="tel" placeholder="Phone Number"><input id="f_secret" type="text" placeholder="Secret Word"><input id="f_newpass" type="password" placeholder="New Password"><button class="pink" onclick="doForgot()">Reset Password</button><button class="grey" onclick="hideForgot()">Back</button></div>
+<div id="forgotForm" class="hidden"><h3 style="margin:0">Reset Password</h3><p class="small">Use your secret word.</p><input id="f_phone" type="tel" placeholder="Phone Number"><input id="f_secret" type="text" placeholder="Secret Word"><input id="f_newpass" type="password" placeholder="New Password"><button class="pink" onclick="doForgot()">Reset Password</button><button class="grey" onclick="hideForgot()">Back to Log In</button></div>
 </div></div>
-<div class="safety" style="margin:14px">🛡️ Never send money. Meet in public first. Your phone is NEVER shown.</div>
+<div class="safety" style="margin:14px"><b>🛡️ Safety Promise:</b> Never send money to anyone. Meet in a public place first. Tell a friend where you are going. Report anyone who asks for money — they will be removed.</div>
 </div>
 
 <div id="mainBox" class="hidden">
-<div class="topbar"><button class="pink" onclick="showHome()">🏠 Discover</button><button class="grey" onclick="showMyProfile()">👤 My Profile</button><button class="grey" onclick="showLikes()">❤️ Likes (<span id="likesCount">0</span>)</button><button class="grey" onclick="showMatches()">💘 Matches (<span id="matchesCount">0</span>)</button><button class="grey" onclick="showChats()">💬 Chats</button><button class="grey" onclick="logout()">Logout</button></div>
-<div id="homeArea"><div class="card"><div class="cardBody"><p class="small" id="peopleCount">Loading...</p><h3>Find Someone</h3><select id="s_city"><option value="">All Cities</option><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Polokwane</option><option>Blantyre</option><option>Lilongwe</option><option>Other</option></select><select id="s_gender"><option value="">All Genders</option><option>Male</option><option>Female</option></select><div class="row"><input id="s_min" type="number" placeholder="Min Age"><input id="s_max" type="number" placeholder="Max Age"></div><button class="pink" onclick="doSearch()">Search</button><button class="grey" onclick="clearSearch()">Clear</button></div></div><div id="list"></div></div>
+<div class="nav"><button class="pink" onclick="showHome()">🏠 Discover</button><button class="grey" onclick="showMyProfile()">👤 My Profile</button><button class="grey" onclick="showLikes()">❤️ Likes (<span id="likesCount">0</span>)</button><button class="grey" onclick="showMatches()">💘 Matches (<span id="matchesCount">0</span>)</button><button class="grey" onclick="showChats()">💬 Chats</button><button class="grey" onclick="logout()">Logout</button></div>
+<div id="homeArea"><div class="card"><div class="cardBody"><p class="sectionTitle">Find Someone</p><p class="small" id="peopleCount">Loading members...</p><label>City</label><select id="s_city"><option value="">All Cities</option><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Polokwane</option><option>Blantyre</option><option>Lilongwe</option><option>Other</option></select><label>Gender</label><select id="s_gender"><option value="">All Genders</option><option>Male</option><option>Female</option></select><div class="row"><div style="flex:1"><label>Min Age</label><input id="s_min" type="number" placeholder="18"></div><div style="flex:1"><label>Max Age</label><input id="s_max" type="number" placeholder="60"></div></div><button class="pink" onclick="doSearch()">Search Members</button><button class="grey" onclick="clearSearch()">Clear Filters</button></div></div><div id="list"></div></div>
 <div id="myProfileBox" class="card hidden"><div class="cardBody" style="text-align:center"><h2>My Profile</h2><div id="myProfileView"></div><button class="pink" onclick="openEdit()">✏️ Edit Profile</button><button class="grey" onclick="deleteAccount()">Delete Account</button></div></div>
-<div id="editBox" class="card hidden"><div class="cardBody"><h2>Edit Profile</h2><input id="e_name" placeholder="Name"><input id="e_age" type="number" placeholder="Age"><select id="e_gender"><option>Male</option><option>Female</option></select><select id="e_looking"><option>Serious Relationship</option><option>Marriage</option><option>Friendship</option><option>Dating</option></select><select id="e_city"><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Polokwane</option><option>Blantyre</option><option>Lilongwe</option><option>Other</option></select><textarea id="e_about" rows="2"></textarea><label>Change Photo:<input id="e_photo" type="file" accept="image/*"></label><img id="e_preview" class="avatar"><button class="pink" onclick="saveEdit()">Save</button><button class="grey" onclick="closeEdit()">Cancel</button></div></div>
+<div id="editBox" class="card hidden"><div class="cardBody"><h2>Edit Profile</h2><label>Name</label><input id="e_name"><label>Age</label><input id="e_age" type="number"><label>Gender</label><select id="e_gender"><option>Male</option><option>Female</option></select><label>Looking For</label><select id="e_looking"><option>Serious Relationship</option><option>Marriage</option><option>Friendship</option><option>Dating</option></select><label>City</label><select id="e_city"><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Polokwane</option><option>Blantyre</option><option>Lilongwe</option><option>Other</option></select><label>About You</label><textarea id="e_about" rows="2"></textarea><label>Change Photo</label><input id="e_photo" type="file" accept="image/*"><img id="e_preview" class="avatar"><button class="pink" onclick="saveEdit()">Save Changes</button><button class="grey" onclick="closeEdit()">Cancel</button></div></div>
 <div id="likesBox" class="card hidden"><div class="cardBody"><h2>❤️ Who Liked You</h2><div id="likesList"></div></div></div>
-<div id="matchesBox" class="card hidden"><div class="cardBody"><h2>💘 Your Matches</h2><div id="matchesList"></div></div></div>
-<div id="chatsBox" class="card hidden"><div class="cardBody"><h2>💬 Messages</h2><div id="chatsList"></div><button class="grey" onclick="showHome()">Back</button></div></div>
-<div id="chatBox" class="card hidden"><div class="cardBody"><h2 id="chatTitle">Chat</h2><div id="chatMessages" class="chatBox"></div><div class="row"><input id="chatInput" type="text" placeholder="Type a message... Be respectful ❤️" autocomplete="off"><button id="sendBtn" class="pink" onclick="sendMsg()">Send ➡️</button></div><p class="small" style="text-align:center">Tip: Press Enter to send • Never send money</p><div class="row"><button class="grey" onclick="reportUser()" style="color:#ff3b30;font-size:12px">🚩 Report</button><button class="grey" onclick="blockUser()" style="color:#ff3b30;font-size:12px">🚫 Block</button></div><button class="grey" onclick="backToChats()">⬅️ Back to Chats</button></div></div>
+<div id="matchesBox" class="card hidden"><div class="cardBody"><h2>💘 Your Matches</h2><p class="small">A match means you both liked each other. Start a respectful conversation.</p><div id="matchesList"></div></div></div>
+<div id="chatsBox" class="card hidden"><div class="cardBody"><h2>💬 Messages</h2><div id="chatsList"></div><button class="grey" onclick="showHome()">Back to Discover</button></div></div>
+<div id="chatBox" class="card hidden"><div class="cardBody"><h2 id="chatTitle">Chat</h2><div id="chatMessages" class="chatBox"></div><div class="row"><input id="chatInput" type="text" placeholder="Type a respectful message..." autocomplete="off"><button class="pink" onclick="sendMsg()">Send →</button></div><p class="small" style="text-align:center">Press Enter to send • Never send money • Be kind</p><div class="row"><button class="grey" onclick="reportUser()" style="color:#DC2626;font-size:12px">🚩 Report</button><button class="grey" onclick="blockUser()" style="color:#DC2626;font-size:12px">🚫 Block</button></div><button class="grey" onclick="backToChats()">⬅️ Back to Chats</button></div></div>
 </div>
-<div id="matchModal" onclick="closeMatch()" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#ff2e63,#ff6b6b);z-index:1000;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:20px"><h1 style="color:#fff;margin:0">It's a Match! 💘</h1><img id="matchPhoto" style="width:150px;height:150px;border-radius:50%;border:4px solid #fff;object-fit:cover;margin:16px 0"><h2 id="matchName" style="color:#fff;margin:0"></h2><p style="color:#fff">You both liked each other!</p><button class="black" onclick="event.stopPropagation();goChatFromMatch()" style="max-width:300px">💬 Send Message Now</button><button class="outline" onclick="closeMatch()" style="max-width:300px;background:#fff">Keep Discovering</button></div>
-<div class="footer">MalawiLove SA ❤️<br>Real People • Real Love • South Africa<br>18+ Only • Be Safe • Never Send Money</div>
+
+<div id="matchModal" onclick="closeMatch()" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#1A0A12,#E91E63);z-index:1000;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:24px"><h1 style="color:#fff;margin:0;font-family:'Playfair Display',serif;font-size:38px">It's a Match! 💘</h1><img id="matchPhoto" style="width:150px;height:150px;border-radius:50%;border:4px solid #fff;object-fit:cover;margin:16px 0"><h2 id="matchName" style="color:#fff;margin:0"></h2><p style="color:#fff;opacity:.9">You both liked each other</p><button class="black" onclick="event.stopPropagation();goChatFromMatch()" style="max-width:320px">💬 Send Message Now</button><button class="outline" onclick="closeMatch()" style="max-width:320px;background:#fff">Keep Discovering</button></div>
+
+<div class="footer"><b style="color:#111">MalawiLove SA</b><br>Real People • Real Love • South Africa<br>18+ Only • Be Safe • Never Send Money<br>© 2026 MalawiLove SA. All rights reserved.</div>
 
 <script>
-// ===== MALAWILOVE SA - LIKE / MATCH / MESSAGE - 100% LOCAL, ALWAYS WORKS =====
 function toast(m){var t=document.getElementById('toast');t.textContent=m;t.style.display='block';clearTimeout(window._tt);window._tt=setTimeout(function(){t.style.display='none'},3000);}
 function normPhone(p){var d=String(p||'').replace(/\D/g,'');if(d.indexOf('27')===0&&d.length===11)d='0'+d.slice(2);return d;}
 function getLS(k){try{var v=localStorage.getItem(k);return v?JSON.parse(v):null;}catch(e){return null;}}
-function setLS(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true;}catch(e){toast('Storage full - use smaller photo');return false;}}
-var users=getLS('ML2_USERS')||[];
-var me=getLS('ML2_ME')||null;
-var blocks=getLS('ML2_BLOCKS')||[];
-var likes=getLS('ML2_LIKES')||[];
-var chats=getLS('ML2_CHATS')||{};
-var filter={city:'',gender:'',min:'',max:''};
-var photoData='';var editPhotoData='';var curChatId=null;var curOtherId=null;var curOtherName='';var lastMatch=null;
+function setLS(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true;}catch(e){toast('Storage full - use a smaller photo');return false;}}
+var users=getLS('ML2_USERS')||[];var me=getLS('ML2_ME')||null;var blocks=getLS('ML2_BLOCKS')||[];var likes=getLS('ML2_LIKES')||[];var chats=getLS('ML2_CHATS')||{};
+var filter={city:'',gender:'',min:'',max:''};var photoData='';var editPhotoData='';var curChatId=null;var curOtherId=null;var curOtherName='';var lastMatch=null;
 function saveAll(){setLS('ML2_USERS',users);setLS('ML2_ME',me);setLS('ML2_BLOCKS',blocks);setLS('ML2_LIKES',likes);setLS('ML2_CHATS',chats);}
 function toggleEye(id){var i=document.getElementById(id);i.type=(i.type==='password'?'text':'password');}
 function showTab(w){document.getElementById('forgotForm').classList.add('hidden');if(w==='signup'){document.getElementById('signupForm').classList.remove('hidden');document.getElementById('loginForm').classList.add('hidden');document.getElementById('tabSignup').className='active';document.getElementById('tabLogin').className='';}else{document.getElementById('signupForm').classList.add('hidden');document.getElementById('loginForm').classList.remove('hidden');document.getElementById('tabSignup').className='';document.getElementById('tabLogin').className='active';}}
 function showForgot(){document.getElementById('signupForm').classList.add('hidden');document.getElementById('loginForm').classList.add('hidden');document.getElementById('forgotForm').classList.remove('hidden');}
 function hideForgot(){document.getElementById('forgotForm').classList.add('hidden');document.getElementById('loginForm').classList.remove('hidden');}
-function showError(msg){var b=document.getElementById('formError');b.textContent='⚠️ '+msg;b.style.display='block';b.scrollIntoView({behavior:'smooth',block:'center'});document.getElementById('signupBtn').textContent='Create My Account ❤️';}
-function doSignup(){
-  document.getElementById('formError').style.display='none';
-  document.getElementById('signupBtn').textContent='Creating... ⏳';
-  setTimeout(function(){
-    var name=document.getElementById('a_name').value.trim();
-    var ageVal=document.getElementById('a_age').value;var age=Number(ageVal);
-    var gender=document.getElementById('a_gender').value;var looking=document.getElementById('a_looking').value;var city=document.getElementById('a_city').value;
-    var phone=normPhone(document.getElementById('a_phone').value);
-    var about=document.getElementById('a_about').value.trim()||"Hi, I am here to find real love ❤️";
-    var pass=document.getElementById('a_pass').value;var secret=document.getElementById('a_secret').value.trim();
-    if(!name)return showError('Please enter Full Name');
-    if(!ageVal)return showError('Please enter Age');
-    if(age<18)return showError('Must be 18+');
-    if(!gender)return showError('Please select Gender');
-    if(!looking)return showError('Please select Looking For');
-    if(!city)return showError('Please select City');
-    if(!phone||phone.length<10)return showError('Please enter valid Phone');
-    if(!pass||pass.length<4)return showError('Password min 4 chars');
-    if(!secret)return showError('Please enter Secret Word');
-    if(!document.getElementById('a_18').checked)return showError('Please tick I am 18+');
-    if(!photoData)return showError('Please add Profile Photo - tap Choose File');
-    for(var i=0;i<users.length;i++)if(normPhone(users[i].phone)===phone){showError('This phone already has account - tap Log In');return;}
-    var u={id:'u'+Date.now()+''+Math.floor(Math.random()*1000),name:name,age:String(age),gender:gender,looking:looking,city:city,phone:phone,about:about,pass:pass,secret:secret,photo:photoData};
-    users.push(u);me=u;saveAll();
-    document.getElementById('formSuccess').textContent='✅ Welcome '+name+'! Going inside...';document.getElementById('formSuccess').style.display='block';
-    setTimeout(showMain,600);
-  },100);
-}
-function doLogin(){
-  var phone=normPhone(document.getElementById('l_phone').value);var pass=document.getElementById('l_pass').value;var box=document.getElementById('loginError');
-  if(!phone||!pass){box.textContent='⚠️ Enter Phone + Password';box.style.display='block';return;}
-  for(var i=0;i<users.length;i++)if(normPhone(users[i].phone)===phone&&users[i].pass===pass){me=users[i];saveAll();showMain();toast('Welcome back '+me.name+' ❤️');return;}
-  box.textContent='⚠️ Wrong phone or password. If you are new, tap Create Account.';box.style.display='block';
-}
-function doForgot(){var phone=normPhone(document.getElementById('f_phone').value);var s=document.getElementById('f_secret').value.trim();var np=document.getElementById('f_newpass').value;for(var i=0;i<users.length;i++)if(normPhone(users[i].phone)===phone&&users[i].secret===s){users[i].pass=np;if(me&&me.id===users[i].id)me=users[i];saveAll();toast('Password reset! Log In now');hideForgot();return;}toast('Wrong phone or secret word');}
-function logout(){me=null;setLS('ML2_ME',null);location.reload();}
-function showMain(){document.getElementById('authBox').classList.add('hidden');document.getElementById('mainBox').classList.remove('hidden');showHome();}
-function showHome(){hideAll();document.getElementById('homeArea').classList.remove('hidden');render();}
-function hideAll(){['homeArea','myProfileBox','editBox','likesBox','matchesBox','chatsBox','chatBox'].forEach(function(id){document.getElementById(id).classList.add('hidden')});}
-function doSearch(){filter={city:document.getElementById('s_city').value,gender:document.getElementById('s_gender').value,min:document.getElementById('s_min').value,max:document.getElementById('s_max').value};render();toast('Search updated ✅');}
-function clearSearch(){filter={city:'',gender:'',min:'',max:''};document.getElementById('s_city').value='';document.getElementById('s_gender').value='';document.getElementById('s_min').value='';document.getElementById('s_max').value='';render();}
-function getUser(id){for(var i=0;i<users.length;i++)if(String(users[i].id)===String(id))return users[i];return null;}
-function alreadyLiked(to){for(var i=0;i<likes.length;i++)if(likes[i].from===me.id&&String(likes[i].to)===String(to))return true;return false;}
-function getMatches(){var m=[];for(var i=0;i<users.length;i++){var u=users[i];var a=false,b=false;for(var j=0;j<likes.length;j++){if(likes[j].from===me.id&&String(likes[j].to)===String(u.id))a=true;if(likes[j].from===u.id&&String(likes[j].to)===String(me.id))b=true;}if(a&&b)m.push(u);}return m;}
-function updateCounts(){var l=0;for(var i=0;i<likes.length;i++)if(likes[i].to===me.id)l++;document.getElementById('likesCount').textContent=l;document.getElementById('matchesCount').textContent=getMatches().length;}
-function render(){
-  if(!me)return;
-  updateCounts();
-  document.getElementById('peopleCount').textContent=users.length+' members on MalawiLove ❤️';
-  var list=document.getElementById('list');
-  var shown=users.filter(function(u){return String(u.id)!==String(me.id)&&blocks.indexOf(u.id)===-1&&u.name&&u.photo;});
-  if(filter.city)shown=shown.filter(function(u){return u.city===filter.city});
-  if(filter.gender)shown=shown.filter(function(u){return u.gender===filter.gender}
+function showError(msg){var b=document.getElementById('formError');b.textContent='⚠️ '+msg;b.style.display='block';b.scrollIntoView({behavior:'smooth',block:'center'});document.getElementById('signupBtn').textContent='Create My Account →';}
+function doSignup(){document.getElementById('formError').style.display='none';document.getElementById('signupBtn').textContent='Creating...';setTimeout(function(){var name=document.getElementById('a_name').value.trim();var ageVal=document.getElementById('a_age').value;var age=Number(ageVal);var gender=document.getElementById('a_gender').value;var looking=document.getElementById('a_looking').value;var city=document.getElementById('a_city').value;var phone=normPhone(document.getElementById('a_phone').value);var about=document.getElementById('a_about').value.trim()||"Hi, I am here to find real love ❤️";var pass=document.getElementById('a_pass').value;var secret=document.getElementById('a_secret').value.trim();if(!name)return showError('Please enter your full name');if(!ageVal)return showError('Please enter your age');         
