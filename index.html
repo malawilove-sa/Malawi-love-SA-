@@ -1,4 +1,4 @@
-      <!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -19,7 +19,7 @@ body{margin:0;background:#FFF5F7;color:#111;padding-bottom:80px}
 input,select,textarea{width:100%;padding:13px;border:1px solid #E5E7EB;border-radius:12px;margin:6px 0;font-size:15px;background:#F9FAFB}
 input:focus,select:focus,textarea:focus{outline:none;border-color:#E91E63;background:#fff}
 .btn{width:100%;padding:14px;border:0;border-radius:12px;font-weight:800;font-size:16px;margin-top:10px;cursor:pointer}
-.pink{background:#E91E63;color:#fff;box-shadow:0 4px 14px rgba(233,30,99,.3)}.grey{background:#F3F4F6;color:#111}.white{background:#fff;color:#E91E63;border:1.5px solid #E91E63}
+.pink{background:#E91E63;color:#fff;box-shadow:0 4px 14px rgba(233,30,99,.3)}.grey{background:#F3F4F6;color:#111}.white{background:#fff;color:#E91E63;border:1.5px solid #E91E63}.red{background:#FEE2E2;color:#B91C1C}
 .eye-wrap{display:flex;gap:6px}.eye-wrap input{flex:1}.eye{width:50px;border:1px solid #E5E7EB;border-radius:12px;background:#F3F4F6;cursor:pointer}
 .small{font-size:12px;color:#6B7280;text-align:center;margin-top:12px;line-height:1.6}.link{color:#E91E63;font-weight:700;cursor:pointer}
 .search{display:flex;gap:8px;margin:12px 0}.search input{margin:0}.search select{margin:0;max-width:120px}
@@ -48,10 +48,14 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#E91E63;backgr
 .theirs{background:#fff;color:#111;align-self:flex-start;border-bottom-left-radius:4px;box-shadow:0 1px 4px rgba(0,0,0,.05)}
 .chat-input{display:flex;gap:8px;padding:10px;background:#fff}
 .chat-input input{margin:0}.chat-input button{width:60px;border:0;background:#E91E63;color:#fff;border-radius:12px;font-weight:800;cursor:pointer}
+.notif{position:fixed;top:70px;left:12px;right:12px;background:#111;color:#fff;padding:14px 16px;border-radius:16px;z-index:100;display:none;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.notif b{color:#FBBF24}.stat{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}.stat div{background:#FFF5F7;border-radius:16px;padding:14px;text-align:center}.stat b{font-size:24px;color:#E91E63;display:block}
+.admin-row{display:flex;gap:10px;align-items:center;padding:12px;background:#F9FAFB;border-radius:14px;margin-bottom:8px}
 </style>
 </head>
 <body>
 <div class="top"><div class="logo">Malawi<span>Love</span> SA</div><div class="badge">● Online</div></div>
+<div id="notif" class="notif" onclick="notifClick()"><b>💬 New Message!</b><br><span id="notifText"></span><br><small>Tap to open chat →</small></div>
 <div class="hero" id="hero"><h1>Find Your Person. 💕</h1><p>Real Malawians in South Africa<br><b id="count">Loading members...</b></p><div><span class="pill">📍 Durban</span><span class="pill">📍 Joburg</span><span class="pill">📍 Cape Town</span><span class="pill">❤️ Verified People</span></div></div>
 <div class="wrap">
 <div class="card" id="authCard">
@@ -88,7 +92,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#E91E63;backgr
 </div>
 <div id="viewMessages" class="hidden">
 <h3>Your Messages 💬</h3>
-<p class="small" style="text-align:left">Chat inside MalawiLove - private & safe. No WhatsApp needed.</p>
+<p class="small" style="text-align:left">Chat inside MalawiLove - private & safe.</p>
 <div id="convList"></div>
 <div id="emptyMsg" class="card" style="text-align:center;color:#888">No chats yet.<br>Go to Discover and tap <b>Say Hi</b> ❤️</div>
 </div>
@@ -104,20 +108,29 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#E91E63;backgr
 <div class="card" id="profileCard"></div>
 <button class="btn grey" onclick="localStorage.removeItem('ml_user');location.reload()">Log Out</button>
 </div>
+<div id="viewAdmin" class="hidden">
+<h3>🛡️ Admin Panel - Boss Only</h3>
+<div class="stat"><div><b id="statMembers">0</b>Members</div><div><b id="statMsgs">0</b>Messages</div><div><b id="statMen">0</b>Men</div><div><b id="statWomen">0</b>Women</div></div>
+<button class="btn pink" onclick="loadAdmin()">🔄 Refresh Admin</button>
+<h4>All Members</h4><div id="adminMembers"></div>
+<h4>Recent Messages</h4><div id="adminMsgs"></div>
 </div>
-<p class="footer">MalawiLove SA • Made with ❤️ for Malawians in SA • Built for 10,000+ members • Chat Inside App</p>
+</div>
+<p class="footer">MalawiLove SA • Made with ❤️ for Malawians in SA • Built for 10,000+ members • Chat + Admin Inside App</p>
 </div>
 <div class="bottomnav hidden" id="bottomnav">
 <button id="navDiscover" class="active" onclick="showView('Discover')"><span>🔍</span>Discover</button>
 <button id="navMessages" onclick="showView('Messages')"><span>💬</span>Messages <span id="msgBadge"></span></button>
 <button id="navProfile" onclick="showView('Profile')"><span>👤</span>Profile</button>
+<button id="navAdmin" class="hidden" onclick="showView('Admin')"><span>🛡️</span>Admin</button>
 </div>
 <div class="toast" id="toast"></div>
 <script>
 const U="https://cotocofslfhcmeyklzrb.supabase.co";
 const K="sb_publishable_1Pm9aAvMes7qoie_A4FVTw_yCwX9a_R";
 const TABLE="love_profiles";
-let me=null, all=[], currentChat=null, currentChatName="", pollTimer=null;
+const ADMIN_PHONE="0683015920";
+let me=null, all=[], currentChat=null, currentChatName="", pollTimer=null, notifTimer=null, lastMsgCount=0, lastNotifPhone=null;
 function cp(p){return (p||"").replace(/\s+/g,"").trim();}
 function clean(v,f){v=(v||"").toString().trim();if(!v||v==="null"||v==="undefined")return f;return v;}
 function toast(m){let t=document.getElementById('toast');t.textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',4000);}
@@ -128,7 +141,7 @@ function fg(){document.getElementById('fB').classList.toggle('hidden');}
 async function q(path,method,body){let r=await fetch(U+"/rest/v1/"+path,{method:method||"GET",headers:{apikey:K,Authorization:"Bearer "+K,"Content-Type":"application/json",Prefer:"return=representation"},body:body?JSON.stringify(body):null});return r.json();}
 async function prevPhoto(inp){let f=inp.files[0];if(!f)return;let img=document.getElementById('pp');img.src=URL.createObjectURL(f);img.style.display='block';}
 function compress(file){return new Promise(res=>{let rd=new FileReader();rd.onload=e=>{let im=new Image();im.onload=()=>{let c=document.createElement('canvas');let max=400;let w=im.width,h=im.height;if(w>max){h=h*max/w;w=max;}c.width=w;c.height=h;c.getContext('2d').drawImage(im,0,0,w,h);res(c.toDataURL('image/jpeg',0.7));};im.src=e.target.result;};rd.readAsDataURL(file);});}
-async function load(){try{let d=await q(TABLE+"?select=id,name,age,gender,city,phone,about,photo,created_at&order=created_at.desc&limit=100");if(Array.isArray(d)){all=d;document.getElementById('count').textContent=all.length+" members joined • Real people, Real love";render();}}catch(err){document.getElementById('count').textContent="Check internet to load members";}}
+async function load(){try{let d=await q(TABLE+"?select=id,name,age,gender,city,phone,about,photo,created_at&order=created_at.desc&limit=200");if(Array.isArray(d)){all=d;document.getElementById('count').textContent=all.length+" members joined • Real people, Real love";render();}}catch(err){document.getElementById('count').textContent="Check internet to load members";}}
 function render(){
 let qq=(document.getElementById('q')?.value||"").toLowerCase(), fc=document.getElementById('fc')?.value||"";
 let h="", shown=0;
@@ -145,12 +158,13 @@ document.getElementById('pe').innerHTML=h||"<p style='grid-column:1/3;text-align
 document.getElementById('noRes').textContent=shown? shown+" people near you":"";
 }
 function showView(v){
-['Discover','Messages','Profile','Chat'].forEach(x=>{let el=document.getElementById('view'+x);if(el)el.classList.add('hidden');});
+['Discover','Messages','Profile','Chat','Admin'].forEach(x=>{let el=document.getElementById('view'+x);if(el)el.classList.add('hidden');});
 document.querySelectorAll('.bottomnav button').forEach(b=>b.classList.remove('active'));
 if(v==='Discover'){document.getElementById('viewDiscover').classList.remove('hidden');document.getElementById('navDiscover').classList.add('active');}
 if(v==='Messages'){document.getElementById('viewMessages').classList.remove('hidden');document.getElementById('navMessages').classList.add('active');loadConvs();}
 if(v==='Profile'){document.getElementById('viewProfile').classList.remove('hidden');document.getElementById('navProfile').classList.add('active');renderProfile();}
 if(v==='Chat'){document.getElementById('viewChat').classList.remove('hidden');}
+if(v==='Admin'){document.getElementById('viewAdmin').classList.remove('hidden');document.getElementById('navAdmin').classList.add('active');loadAdmin();}
 }
 function backToMessages(){currentChat=null;if(pollTimer)clearInterval(pollTimer);showView('Messages');}
 function renderProfile(){
@@ -193,6 +207,44 @@ return '<div class="chat-list-item" onclick="openChat(\''+k+'\',\''+(c.name||"")
 }).join("");
 if(keys.length)document.getElementById('msgBadge').innerHTML='<span class="badge-dot">'+keys.length+'</span>';else document.getElementById('msgBadge').innerHTML='';
 }
+async function checkNotif(){
+if(!me||me.id==="guest")return;
+let d=await q("love_messages?receiver_phone=eq."+me.phone+"&order=created_at.desc&limit=20");
+if(!Array.isArray(d))return;
+if(lastMsgCount!==0 && d.length>lastMsgCount){
+let newest=d[0];
+if(newest.sender_phone!==currentChat){
+lastNotifPhone=newest.sender_phone;
+document.getElementById('notifText').textContent=newest.sender_name+": "+(newest.text||"").slice(0,60);
+document.getElementById('notif').style.display='block';
+if(navigator.vibrate)navigator.vibrate([100,50,100]);
+try{let a=new Audio("data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=");a.play().catch(()=>{});}catch(e){}
+setTimeout(()=>{document.getElementById('notif').style.display='none';},6000);
+if(document.getElementById('viewMessages')&&!document.getElementById('viewMessages').classList.contains('hidden'))loadConvs();
+}
+}
+lastMsgCount=d.length;
+}
+function notifClick(){
+document.getElementById('notif').style.display='none';
+if(lastNotifPhone){let n=all.find(u=>u.phone===lastNotifPhone);openChat(lastNotifPhone,n?n.name:lastNotifPhone);}
+}
+async function loadAdmin(){
+if(!me||me.phone!==ADMIN_PHONE){toast("Admin only for Boss");return;}
+let members=await q(TABLE+"?select=id,name,age,gender,city,phone,about,created_at&order=created_at.desc&limit=200");
+let msgs=await q("love_messages?select=sender_name,receiver_name,text,created_at&order=created_at.desc&limit=50");
+document.getElementById('statMembers').textContent=members.length||0;
+document.getElementById('statMsgs').textContent=msgs.length||0;
+document.getElementById('statMen').textContent=members.filter(m=>m.gender==="Man").length;
+document.getElementById('statWomen').textContent=members.filter(m=>m.gender==="Woman").length;
+document.getElementById('adminMembers').innerHTML=(members||[]).map(m=>'<div class="admin-row"><div style="flex:1"><b>'+clean(m.name,"")+', '+clean(m.age,"")+'</b><br><small>'+clean(m.city,"")+' • '+clean(m.phone,"")+' • '+clean(m.gender,"")+'</small><br><small style="color:#888">'+clean(m.about,"").slice(0,60)+'</small></div><button class="btn red" style="width:auto;padding:8px 10px;margin:0;font-size:12px" onclick="delUser(\''+m.phone+'\',\''+clean(m.name,"").replace(/'/g,"")+'\')">Delete</button></div>').join("")||"No members";
+document.getElementById('adminMsgs').innerHTML=(msgs||[]).map(m=>'<div class="admin-row"><div><b>'+clean(m.sender_name,"")+' → '+clean(m.receiver_name,"")+'</b><br><small>'+clean(m.text,"").slice(0,80)+'</small></div></div>').join("")||"No messages yet";
+}
+async function delUser(phone,name){
+if(!confirm("Delete "+name+"? This cannot be undone."))return;
+await fetch(U+"/rest/v1/"+TABLE+"?phone=eq."+encodeURIComponent(phone),{method:"DELETE",headers:{apikey:K,Authorization:"Bearer "+K}});
+toast("Deleted "+name);loadAdmin();load();
+}
 async function su(){
 let btn=document.getElementById('suBtn');btn.textContent="Creating... Please wait ⏳";btn.disabled=true;
 try{
@@ -229,8 +281,16 @@ toast("Reset done! Log In now");sL();
 }catch(err){toast("Reset failed.");}
 }
 function guest(){me={id:"guest",name:"Guest",city:"Durban",age:"25",phone:"Guest"};document.getElementById('authCard').classList.add('hidden');document.getElementById('hero').classList.add('hidden');document.getElementById('app').classList.remove('hidden');document.getElementById('bottomnav').classList.remove('hidden');document.getElementById('mn').textContent="Guest";document.getElementById('mi').textContent="Durban • Guest Mode - Exploring";load();}
-function enter(){document.getElementById('authCard').classList.add('hidden');document.getElementById('hero').classList.add('hidden');document.getElementById('app').classList.remove('hidden');document.getElementById('bottomnav').classList.remove('hidden');document.getElementById('mn').textContent=me.name;document.getElementById('mi').textContent=me.city+" • "+me.age+" • "+me.phone;load();}
+function enter(){
+document.getElementById('authCard').classList.add('hidden');document.getElementById('hero').classList.add('hidden');document.getElementById('app').classList.remove('hidden');document.getElementById('bottomnav').classList.remove('hidden');
+document.getElementById('mn').textContent=me.name;document.getElementById('mi').textContent=me.city+" • "+me.age+" • "+me.phone;
+if(me.phone===ADMIN_PHONE){document.getElementById('navAdmin').classList.remove('hidden');}
+if(notifTimer)clearInterval(notifTimer);
+notifTimer=setInterval(checkNotif,4000);
+checkNotif();
+load();
+}
 let sv=localStorage.getItem("ml_user");if(sv){try{me=JSON.parse(sv);if(me.id!=="guest")enter();else load();}catch(e){load();}}else{load();}
 </script>
 </body>
-</html>  
+</html>        
