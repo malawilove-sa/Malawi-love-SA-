@@ -1,4 +1,4 @@
-        <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -35,6 +35,7 @@ button{width:100%;padding:16px;border:0;border-radius:12px;font-size:17px;font-w
 <h2>Welcome ❤️</h2>
 <div class="safetyBox">🛡️ Safe Dating: Phone is NEVER shown.</div>
 <button class="green" onclick="enterTest()">🚀 ENTER APP TO TEST - Tap Here To Go Inside ➡️</button>
+<button class="red" onclick="clearAndEnter()">🧹 CLEAR OLD DATA + ENTER - If green doesn't work, tap this</button>
 <p class="small">Tap green button to go inside.</p>
 <div class="row">
 <button id="tabSignup" class="tabBtn tabActive" onclick="showTab('signup')">SIGN UP</button>
@@ -116,7 +117,7 @@ try{
 var DEFAULT_PHOTO="https://via.placeholder.com/150";
 function normPhone(p){var d=String(p||'').replace(/\D/g,'');if(d.indexOf('27')===0&&d.length===11)d='0'+d.slice(2);return d;}
 function isValidUser(u){return u&&u.name&&u.age&&u.city&&u.phone;}
-var users=[]; try{users=JSON.parse(localStorage.getItem('ml_users')||'[]');}catch(e){users=[];}
+var users=[]; try{users=JSON.parse(localStorage.getItem('ml_users')||'[]');}catch(e){users=[]; try{localStorage.removeItem('ml_users');}catch(e2){}}
 var me=null; try{me=JSON.parse(localStorage.getItem('ml_me')||'null');}catch(e){me=null;}
 var blocks=[]; try{blocks=JSON.parse(localStorage.getItem('ml_blocks')||'[]');}catch(e){}
 var likes=[]; try{likes=JSON.parse(localStorage.getItem('ml_likes')||'[]');}catch(e){}
@@ -132,17 +133,23 @@ function showTab(w){
 }
 function showForgot(){document.getElementById('signupForm').classList.add('hidden');document.getElementById('loginForm').classList.add('hidden');document.getElementById('forgotForm').classList.remove('hidden');}
 function hideForgot(){document.getElementById('forgotForm').classList.add('hidden');document.getElementById('loginForm').classList.remove('hidden');}
-function save(){localStorage.setItem('ml_users',JSON.stringify(users));localStorage.setItem('ml_me',JSON.stringify(me));localStorage.setItem('ml_blocks',JSON.stringify(blocks));localStorage.setItem('ml_likes',JSON.stringify(likes));}
+function save(){try{localStorage.setItem('ml_users',JSON.stringify(users));localStorage.setItem('ml_me',JSON.stringify(me));localStorage.setItem('ml_blocks',JSON.stringify(blocks));localStorage.setItem('ml_likes',JSON.stringify(likes));}catch(e){console.log('storage full, skipping save');}}
 function pushUser(u){if(db&&isValidUser(u)){try{db.ref('users/'+u.id).set(u);}catch(e){}}}
 function enterTest(){
-  me={id:'test_'+Date.now(),name:'Test User',age:'25',gender:'Female',city:'Durban',phone:'0712345678',about:'Hi I am testing ❤️',pass:'1234',secret:'Mango',photo:DEFAULT_PHOTO,online:true,lastSeen:Date.now()};
-  var found=false; for(var i=0;i<users.length;i++){if(users[i].phone===me.phone) found=true;}
-  if(!found) users.push(me);
-  save();
-  document.getElementById('authBox').classList.add('hidden');
-  document.getElementById('mainBox').classList.remove('hidden');
-  showHome();
-  alert('You are INSIDE now dada! ❤️');
+  try{
+    me={id:'test_'+Date.now(),name:'Test User',age:'25',gender:'Female',city:'Durban',phone:'0712345678',about:'Hi I am testing ❤️',pass:'1234',secret:'Mango',photo:DEFAULT_PHOTO,online:true,lastSeen:Date.now()};
+    document.getElementById('authBox').classList.add('hidden');
+    document.getElementById('mainBox').classList.remove('hidden');
+    try{users.push(me); save();}catch(e){}
+    showHome();
+    alert('You are INSIDE now dada! ❤️');
+  }catch(e){ alert('Error: '+e.message+' - Tap RED CLEAR button'); }
+}
+function clearAndEnter(){
+  try{localStorage.clear();}catch(e){}
+  users=[]; likes=[]; blocks=[]; me=null;
+  alert('Cleared! Now going inside...');
+  enterTest();
 }
 function doSignup(){
   var name=document.getElementById('a_name').value.trim();
@@ -189,7 +196,7 @@ function doForgot(){
   if(!u||u.secret!==secret) return alert('Wrong phone or secret word');
   u.pass=np;if(me&&me.id===u.id)me=u;save();pushUser(u);alert('Password reset! Login now');hideForgot();
 }
-function logout(){me=null;localStorage.removeItem('ml_me');location.reload();}
+function logout(){me=null;try{localStorage.removeItem('ml_me');}catch(e){} location.reload();}
 function showMain(){document.getElementById('authBox').classList.add('hidden');document.getElementById('mainBox').classList.remove('hidden');showHome();}
 function showHome(){hideAll();document.getElementById('homeArea').classList.remove('hidden');render();}
 function hideAll(){['homeArea','myProfileBox','editBox','likesBox','matchesBox','chatsBox','chatBox'].forEach(function(id){document.getElementById(id).classList.add('hidden')});}
@@ -212,4 +219,22 @@ function openEdit(){hideAll();document.getElementById('editBox').classList.remov
 function closeEdit(){showMyProfile();}
 function saveEdit(){me.name=document.getElementById('e_name').value;me.age=document.getElementById('e_age').value;me.gender=document.getElementById('e_gender').value;me.city=document.getElementById('e_city').value;me.about=document.getElementById('e_about').value;if(editPhotoData)me.photo=editPhotoData;var idx=-1;for(var i=0;i<users.length;i++){if(users[i].id===me.id)idx=i;} if(idx>=0)users[idx]=me;save();pushUser(me);showMyProfile();alert('Saved ✅');}
 function deleteAccount(){if(!confirm('Delete account?'))return;users=users.filter(function(u){return u.id!==me.id});if(db)db.ref('users/'+me.id).remove();me=null;save();location.reload();}
-function likeUser(id){var other=null;for(var i=0;i<users.length;i++){if(users[i].id===id)other=users[i];} if(!other)return;for(var j=0;j<likes.length;j++){if(likes[j].from===me.id&&likes[j].to===id) return alert('Already liked ❤️');} likes.push({from:me.id,to:id});save();if(db)db.ref('likes').push({from:me.id,to:id});var back=false;for(var k=0;k<likes.length;k++){if(likes[k].from===id&&likes[k].to===me.id)back=true;} if(back){lastMatchUser=other;document.getElementById('matchPhoto').src=other.photo;document.getElementById('matchName').textContent=other.name+', '+other.age+' • '+other.gender;document.getElementById('matchModal').sty
+function likeUser(id){var other=null;for(var i=0;i<users.length;i++){if(users[i].id===id)other=users[i];} if(!other)return;for(var j=0;j<likes.length;j++){if(likes[j].from===me.id&&likes[j].to===id) return alert('Already liked ❤️');} likes.push({from:me.id,to:id});save();if(db)db.ref('likes').push({from:me.id,to:id});var back=false;for(var k=0;k<likes.length;k++){if(likes[k].from===id&&likes[k].to===me.id)back=true;} if(back){lastMatchUser=other;document.getElementById('matchPhoto').src=other.photo;document.getElementById('matchName').textContent=other.name+', '+other.age+' • '+other.gender;document.getElementById('matchModal').style.display='flex';}else alert('Liked '+other.name+' ❤️');}
+function closeMatch(){document.getElementById('matchModal').style.display='none';}
+function goChatFromMatch(){closeMatch();if(lastMatchUser)openChat(lastMatchUser.id);}
+function showLikes(){hideAll();document.getElementById('likesBox').classList.remove('hidden');var who=[];for(var i=0;i<likes.length;i++){if(likes[i].to===me.id){for(var j=0;j<users.length;j++){if(users[j].id===likes[i].from)who.push(users[j]);}}} var h='';if(!who.length)h='<p>No likes yet ❤️</p>';else{for(var k=0;k<who.length;k++){h+='<div class="card"><b>'+who[k].name+', '+who[k].age+' • '+(who[k].gender||'')+'</b><br><button class="pink" onclick="likeUser(\''+who[k].id+'\')">❤️ LIKE BACK</button></div>';}} document.getElementById('likesList').innerHTML=h;}
+function showMatches(){hideAll();document.getElementById('matchesBox').classList.remove('hidden');var m=[];for(var i=0;i<users.length;i++){var u=users[i];var a=false,b=false;for(var j=0;j<likes.length;j++){if(likes[j].from===me.id&&likes[j].to===u.id)a=true;if(likes[j].from===u.id&&likes[j].to===me.id)b=true;} if(a&&b)m.push(u);} var h='';if(!m.length)h='<p>No matches yet ❤️</p>';else{for(var k=0;k<m.length;k++){h+='<div class="card"><b>'+m[k].name+', '+m[k].age+' • '+(m[k].gender||'')+' • '+m[k].city+'</b><br><button class="pink" onclick="openChat(\''+m[k].id+'\')">💬 CHAT</button></div>';}} document.getElementById('matchesList').innerHTML=h;}
+function showChats(){hideAll();document.getElementById('chatsBox').classList.remove('hidden');var ids=[];for(var i=0;i<likes.length;i++){var otherId=likes[i].from===me.id?likes[i].to:likes[i].from;if(ids.indexOf(otherId)===-1)ids.push(otherId);} var h='';if(!ids.length)h='<p>No chats yet ❤️</p>';else{for(var k=0;k<ids.length;k++){var u=null;for(var j=0;j<users.length;j++){if(users[j].id===ids[k])u=users[j];} if(u)h+='<div class="card"><b>'+u.name+', '+u.age+'</b><br><button class="pink" onclick="openChat(\''+u.id+'\')">OPEN CHAT 💬</button></div>';}} document.getElementById('chatsList').innerHTML=h;}
+function openChat(id){var other=null;for(var i=0;i<users.length;i++){if(users[i].id===id)other=users[i];} if(!other)return;currentChatOtherId=id;currentChatId=[me.id,id].sort().join('_');hideAll();document.getElementById('chatBox').classList.remove('hidden');document.getElementById('chatTitle').textContent='💬 '+other.name+' • '+other.gender;if(db)db.ref('chats/'+currentChatId).on('value',function(snap){var msgs=snap.val()?Object.values(snap.val()):[];var h='';for(var i=0;i<msgs.length;i++){h+='<div class="msg '+(msgs[i].from===me.id?'msgMine':'msgTheirs')+'">'+msgs[i].text+'</div>';} document.getElementById('chatMessages').innerHTML=h;document.getElementById('chatMessages').scrollTop=99999;});}
+function sendMsg(){var t=document.getElementById('chatInput').value.trim();if(!t||!currentChatId)return;if(db)db.ref('chats/'+currentChatId).push({from:me.id,to:currentChatOtherId,text:t,time:Date.now()});document.getElementById('chatInput').value='';}
+function backToChats(){if(db&&currentChatId)db.ref('chats/'+currentChatId).off();showChats();}
+document.getElementById('a_photo').addEventListener('change',function(e){var r=new FileReader();r.onload=function(){photoData=r.result;var p=document.getElementById('a_preview');p.src=photoData;p.classList.remove('hidden')};r.readAsDataURL(e.target.files[0])});
+document.getElementById('e_photo').addEventListener('change',function(e){var r=new FileReader();r.onload=function(){editPhotoData=r.result;document.getElementById('e_preview').src=editPhotoData};r.readAsDataURL(e.target.files[0])});
+if(me){try{showMain();}catch(e){}}
+if(db){
+  db.ref('users').on('value',function(snap){try{var raw=snap.val()||{};var fbUsers=Object.values(raw).filter(isValidUser);if(fbUsers.length){var map={};var all=users.concat(fbUsers);for(var i=0;i<all.length;i++){map[normPhone(all[i].phone)]=all[i];} users=Object.values(map);save();if(me)render();}}catch(e){}});
+  db.ref('likes').on('value',function(snap){try{var v=snap.val()?Object.values(snap.val()):[];if(v.length){likes=v;save();if(me)render();}}catch(e){}});
+}
+</script>
+</body>
+</html>        
