@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+      <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -33,6 +33,8 @@ button{width:100%;padding:16px;border:0;border-radius:12px;font-size:17px;font-w
 <div id="authBox" class="card">
 <h2>Welcome ❤️</h2>
 <div class="safetyBox">🛡️ Safe Dating: Phone is NEVER shown.</div>
+<button class="green" id="btnTestEnter">🚀 ENTER APP TO TEST - Tap Here To Go Inside ➡️</button>
+<p class="small">If login fails, tap green button to go inside and test.</p>
 <div class="row">
 <button id="tabSignup" class="tabBtn tabActive">SIGN UP</button>
 <button id="tabLogin" class="tabBtn tabInactive">LOGIN</button>
@@ -104,14 +106,12 @@ button{width:100%;padding:16px;border:0;border-radius:12px;font-size:17px;font-w
 <div id="photoModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:999;align-items:center;justify-content:center;flex-direction:column"><img id="bigPhoto" style="max-width:95%;max-height:85%;border-radius:15px"><p style="color:#fff">Tap anywhere to close ✖️</p></div>
 
 <script>
-// --- FIREBASE - if it fails, app still works offline ---
 let db=null;
 try{
   const firebaseConfig={apiKey:"AIzaSyAcNs2UdpGCZYXSquuwMk2ze3odWd36oP0",authDomain:"malawi-love-sa.firebaseapp.com",databaseURL:"https://malawi-love-sa-default-rtdb.firebaseio.com",projectId:"malawi-love-sa",storageBucket:"malawi-love-sa.firebasestorage.app",messagingSenderId:"44621212737",appId:"1:44621212737:web:15daa656f79505d3eaeac0"};
   firebase.initializeApp(firebaseConfig); db=firebase.database();
   document.getElementById('connStatus').textContent='● ONLINE';
 }catch(e){ document.getElementById('connStatus').textContent='● OFFLINE - Still works'; }
-
 const DEFAULT_PHOTO="https://via.placeholder.com/150";
 function normPhone(p){let d=String(p||'').replace(/\D/g,'');if(d.startsWith('27')&&d.length===11)d='0'+d.slice(2);return d;}
 function isValidUser(u){return u&&u.name&&u.age&&u.city&&u.phone;}
@@ -121,11 +121,9 @@ let blocks=JSON.parse(localStorage.getItem('ml_blocks')||'[]');
 let likes=JSON.parse(localStorage.getItem('ml_likes')||'[]');
 let filter={city:'',gender:'',min:'',max:''};
 let photoData='';let editPhotoData='';let currentChatId=null;let currentChatOtherId=null;let lastMatchUser=null;
-
 function toggleEye(id){let inp=document.getElementById(id);inp.type=(inp.type==='password'?'text':'password');}
 function openPhoto(src){document.getElementById('bigPhoto').src=src||DEFAULT_PHOTO;document.getElementById('photoModal').style.display='flex';}
 document.getElementById('photoModal').onclick=function(){this.style.display='none';};
-
 function showTab(w){
   document.getElementById('forgotForm').classList.add('hidden');
   if(w==='signup'){document.getElementById('signupForm').classList.remove('hidden');document.getElementById('loginForm').classList.add('hidden');document.getElementById('tabSignup').className='tabBtn tabActive';document.getElementById('tabLogin').className='tabBtn tabInactive';}
@@ -134,8 +132,8 @@ function showTab(w){
 }
 function save(){localStorage.setItem('ml_users',JSON.stringify(users));localStorage.setItem('ml_me',JSON.stringify(me));localStorage.setItem('ml_blocks',JSON.stringify(blocks));localStorage.setItem('ml_likes',JSON.stringify(likes));}
 function pushUser(u){if(db&&isValidUser(u)){try{db.ref('users/'+u.id).set(u);}catch(e){}}}
+function showMain(){document.getElementById('authBox').classList.add('hidden');document.getElementById('mainBox').classList.remove('hidden');showHome();}
 
-// --- FIX A + B: ALL BUTTONS WIRED HERE, NOT onclick ---
 document.getElementById('tabSignup').addEventListener('click',()=>showTab('signup'));
 document.getElementById('tabLogin').addEventListener('click',()=>showTab('login'));
 document.getElementById('btnGoLogin').addEventListener('click',()=>showTab('login'));
@@ -144,9 +142,19 @@ document.getElementById('btnForgot').addEventListener('click',()=>{document.getE
 document.getElementById('btnBackLogin').addEventListener('click',()=>{document.getElementById('forgotForm').classList.add('hidden');document.getElementById('loginForm').classList.remove('hidden');});
 document.getElementById('eye1').addEventListener('click',()=>toggleEye('a_pass'));
 document.getElementById('eye2').addEventListener('click',()=>toggleEye('l_pass'));
-
 document.getElementById('a_photo').addEventListener('change',e=>{let r=new FileReader();r.onload=()=>{photoData=r.result;let p=document.getElementById('a_preview');p.src=photoData;p.classList.remove('hidden')};r.readAsDataURL(e.target.files[0])});
 document.getElementById('e_photo').addEventListener('change',e=>{let r=new FileReader();r.onload=()=>{editPhotoData=r.result;document.getElementById('e_preview').src=editPhotoData};r.readAsDataURL(e.target.files[0])});
+
+// --- NEW: ENTER TO TEST - ALWAYS WORKS ---
+document.getElementById('btnTestEnter').addEventListener('click',()=>{
+  if(!me){
+    me={id:'test_'+Date.now(),name:'Test User',age:'25',gender:'Female',city:'Durban',phone:'0712345678',about:'Hi I am testing ❤️',pass:'1234',secret:'Mango',photo:DEFAULT_PHOTO,online:true,lastSeen:Date.now()};
+    if(!users.find(u=>u.id===me.id)) users.push(me);
+    save();
+  }
+  showMain();
+  alert('You are INSIDE now dada! ❤️ Tap Profile to see Gender.');
+});
 
 document.getElementById('btnSignup').addEventListener('click',()=>{
   let name=document.getElementById('a_name').value.trim();
@@ -168,16 +176,28 @@ document.getElementById('btnSignup').addEventListener('click',()=>{
   if(!photoData) return alert('Photo REQUIRED 📸');
   if(users.find(u=>normPhone(u.phone)===phone)) return alert('This phone already has account. Tap LOGIN.');
   let u={id:Date.now().toString(),name,age,gender,city,phone,about,pass,secret,photo:photoData,online:true,lastSeen:Date.now()};
-  users.push(u);me=u;save();pushUser(u);showMain();alert('Welcome '+name+' ❤️');
+  users.push(u);me=u;save();pushUser(u);showMain();alert('Welcome '+name+' ❤️ You are INSIDE!');
 });
 
+// --- NEW: LOGIN CHECKS FIREBASE DIRECTLY ---
 document.getElementById('btnLogin').addEventListener('click',()=>{
   let phone=normPhone(document.getElementById('l_phone').value);
   let pass=document.getElementById('l_pass').value;
   if(!phone||!pass) return alert('Enter Phone + Password');
   let u=users.find(x=>normPhone(x.phone)===phone&&x.pass===pass);
-  if(!u) return alert('Wrong phone or password. If new, go to SIGN UP and create account.');
-  me=u;save();showMain();alert('Welcome back '+me.name+' ❤️');
+  if(u){me=u;save();showMain();alert('Welcome back '+me.name+' ❤️');return;}
+  // If not found locally, check Firebase
+  if(db){
+    alert('Checking Firebase... wait 2 sec');
+    db.ref('users').once('value',snap=>{
+      let all=snap.val()?Object.values(snap.val()):[];
+      let fu=all.find(x=>normPhone(x.phone)===phone&&x.pass===pass);
+      if(fu){users.push(fu);me=fu;save();showMain();alert('Welcome back '+me.name+' ❤️ Found in Firebase!');}
+      else alert('Wrong phone or password. If new, go to SIGN UP. Or tap GREEN ENTER TO TEST button.');
+    });
+  } else {
+    alert('Wrong phone or password. If new, go to SIGN UP. Or tap GREEN ENTER TO TEST button.');
+  }
 });
 
 document.getElementById('btnReset').addEventListener('click',()=>{
@@ -188,8 +208,6 @@ document.getElementById('btnReset').addEventListener('click',()=>{
   if(!u||u.secret!==secret) return alert('Wrong phone or secret word');
   u.pass=np;if(me&&me.id===u.id)me=u;save();pushUser(u);alert('Password reset! Login now');document.getElementById('forgotForm').classList.add('hidden');document.getElementById('loginForm').classList.remove('hidden');
 });
-
-// NAV
 document.getElementById('navHome').addEventListener('click',showHome);
 document.getElementById('navProfile').addEventListener('click',showMyProfile);
 document.getElementById('navLikes').addEventListener('click',showLikes);
@@ -208,8 +226,6 @@ document.getElementById('btnSend').addEventListener('click',sendMsg);
 document.getElementById('btnMatchChat').addEventListener('click',()=>{document.getElementById('matchModal').style.display='none';if(lastMatchUser)openChat(lastMatchUser.id);});
 document.getElementById('btnMatchClose').addEventListener('click',()=>{document.getElementById('matchModal').style.display='none';});
 document.getElementById('matchModal').addEventListener('click',()=>{document.getElementById('matchModal').style.display='none';});
-
-function showMain(){document.getElementById('authBox').classList.add('hidden');document.getElementById('mainBox').classList.remove('hidden');showHome();}
 function showHome(){hideAll();document.getElementById('homeArea').classList.remove('hidden');render();}
 function hideAll(){['homeArea','myProfileBox','editBox','likesBox','matchesBox','chatsBox','chatBox'].forEach(id=>document.getElementById(id).classList.add('hidden'));}
 function render(){
@@ -219,10 +235,4 @@ function render(){
   if(filter.gender) shown=shown.filter(u=>u.gender===filter.gender);
   if(filter.min) shown=shown.filter(u=>Number(u.age)>=Number(filter.min));
   if(filter.max) shown=shown.filter(u=>Number(u.age)<=Number(filter.max));
-  if(!shown.length){list.innerHTML='<div class="card">No people found. Try CLEAR SEARCH ❤️</div>';return;}
-  list.innerHTML=shown.map(u=>`<div class="card"><img src="${u.photo||DEFAULT_PHOTO}"><h3>${u.name}, ${u.age}</h3><span class="genderTag">${u.gender||''}</span> <span class="genderTag">${u.city}</span><p class="small">${u.about||''}</p><div class="row"><button class="pink" data-like="${u.id}">❤️ LIKE</button><button class="black" data-chat="${u.id}">💬 CHAT</button></div></div>`).join('');
-  list.querySelectorAll('[data-like]').forEach(b=>b.addEventListener('click',()=>likeUser(b.dataset.like)));
-  list.querySelectorAll('[data-chat]').forEach(b=>b.addEventListener('click',()=>openChat(b.dataset.chat)));
-  list.querySelectorAll('img').forEach((im,i)=>im.addEventListener('click',()=>openPhoto(shown[i].photo)));
-}
-function showMyProfile(){hideAll();document.getElementById('myProfileBox').classList.remove('hidden');document.getElementById('myProfileView').innerHTML=`<img src="${me.photo}" style="width:150px;height:150px;border-radius:50%;object-fit:cover"><h3>${me.name}, ${me.age}</h3><span class="genderTag">Gender: ${me.gender|
+  if(!shown.length){list.in
