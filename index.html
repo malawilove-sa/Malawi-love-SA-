@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -11,24 +11,25 @@
 <style>
 *{box-sizing:border-box;font-family:'Poppins',Arial,sans-serif}
 body{margin:0;background:#fafafa;color:#1a1a1a;padding-bottom:90px}
-.header{background:linear-gradient(135deg,#ff2e63,#ff6b6b);color:#fff;padding:20px 16px 24px;text-align:center;border-radius:0 0 28px 28px;box-shadow:0 4px 20px #ff2e6355}
+.header{background:linear-gradient(135deg,#ff2e63,#ff6b6b);color:#fff;padding:20px 16px 24px;text-align:center;border-radius:0 0 28px 28px;box-shadow:0 4px 20px #ff2e6355;position:sticky;top:0;z-index:10}
 .header h1{margin:0;font-size:27px;font-weight:800}.header p{margin:5px 0 0;opacity:.92;font-size:13px}
 .hero{background:#fff;margin:14px;border-radius:22px;padding:22px;text-align:center;box-shadow:0 4px 18px #0001}
 .hero h2{margin:0;font-size:23px}.hero p{color:#666;font-size:14px;line-height:1.6}
 .badge{display:inline-block;background:#ffe6ef;color:#ff2e63;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:600;margin:4px}
 .card{background:#fff;margin:14px;border-radius:22px;overflow:hidden;box-shadow:0 4px 18px #0001}
 .cardBody{padding:18px}
-.card img.profile{width:100%;height:300px;object-fit:cover;display:block}
+.card img.profile{width:100%;height:300px;object-fit:cover;display:block;background:#f0f0f0}
 .card img.avatar{width:100px;height:100px;object-fit:cover;border-radius:50%;display:block;margin:0 auto 10px;border:3px solid #ffe6ef}
 input,select,textarea{width:100%;padding:14px 16px;margin:7px 0;border:1.5px solid #eee;border-radius:14px;font-size:15px;background:#fafafa;outline:none}
 input:focus,select:focus,textarea:focus{border-color:#ff2e63;background:#fff}
 input.error,select.error{border-color:#ff3b30!important;background:#fff0f0!important}
-button{width:100%;padding:15px;border:0;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;margin:6px 0}
+button{width:100%;padding:15px;border:0;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;margin:6px 0;transition:.15s}
+button:active{transform:scale(.97);opacity:.9}
 .pink{background:linear-gradient(135deg,#ff2e63,#ff6b6b);color:#fff;box-shadow:0 4px 14px #ff2e6344}
 .black{background:#1a1a1a;color:#fff}.grey{background:#f0f0f0;color:#333}.outline{background:#fff;color:#ff2e63;border:1.5px solid #ff2e63}
 .row{display:flex;gap:10px}.row button{flex:1}
 .hidden{display:none}
-.topbar{display:flex;gap:6px;padding:12px;overflow-x:auto;white-space:nowrap}
+.topbar{display:flex;gap:6px;padding:12px;overflow-x:auto;white-space:nowrap;background:#fff;position:sticky;top:76px;z-index:9}
 .topbar button{flex:none;padding:10px 14px;font-size:12px;border-radius:20px}
 .small{font-size:13px;color:#888}
 .tabWrap{display:flex;background:#f0f0f0;border-radius:14px;padding:4px;margin:14px 0}
@@ -38,17 +39,19 @@ button{width:100%;padding:15px;border:0;border-radius:14px;font-size:15px;font-w
 .safety{background:#fff8e1;border-radius:14px;padding:13px;font-size:12.5px;line-height:1.6;color:#5d4037;text-align:left}
 .genderTag{background:#ffe6ef;color:#ff2e63;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600;display:inline-block;margin:3px}
 .verified{color:#25D366;font-size:12px;font-weight:700}
-.chatBox{height:320px;overflow-y:auto;text-align:left;background:#fafafa;border-radius:14px;padding:12px}
-.msg{max-width:78%;padding:10px 12px;border-radius:16px;margin:6px 0;font-size:14px;line-height:1.4}.msgMine{background:#ff2e63;color:#fff;margin-left:auto;border-bottom-right-radius:4px}.msgTheirs{background:#fff;border:1px solid #eee;border-bottom-left-radius:4px}
+.chatBox{height:340px;overflow-y:auto;text-align:left;background:#fafafa;border-radius:14px;padding:12px}
+.msg{max-width:78%;padding:10px 12px;border-radius:16px;margin:6px 0;font-size:14px;line-height:1.4;word-break:break-word}.msgMine{background:#ff2e63;color:#fff;margin-left:auto;border-bottom-right-radius:4px}.msgTheirs{background:#fff;border:1px solid #eee;border-bottom-left-radius:4px}
 .footer{text-align:center;color:#aaa;font-size:11px;padding:14px;line-height:1.6}
 .terms{font-size:12px;color:#888;line-height:1.6;text-align:left}
 .reportBtn{background:#fff!important;color:#ff3b30!important;font-size:12px!important;padding:8px!important;border:1px solid #ffcccc!important;box-shadow:none!important}
 .errorBox{background:#ffebee;border:1.5px solid #ff3b30;color:#c62828;border-radius:12px;padding:12px;font-size:13.5px;font-weight:600;text-align:center;margin:10px 0;display:none}
 .successBox{background:#e8f5e9;border:1.5px solid #25D366;color:#1b5e20;border-radius:12px;padding:12px;font-size:13.5px;font-weight:600;text-align:center;margin:10px 0;display:none}
 .photoStatus{font-size:12px;text-align:center;color:#25D366;font-weight:600}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:12px 18px;border-radius:30px;font-size:13px;font-weight:600;z-index:2000;display:none;box-shadow:0 4px 20px #0004;max-width:90%;text-align:center}
 </style>
 </head>
 <body>
+<div id="toast"></div>
 <div class="header"><h1>MalawiLove SA ❤️</h1><p>Real Love • Real People • South Africa</p></div>
 
 <div id="authBox">
@@ -57,13 +60,11 @@ button{width:100%;padding:15px;border:0;border-radius:14px;font-size:15px;font-w
 <p>For Malawians in South Africa looking for serious love, friendship & marriage.<br><b>Durban • Johannesburg • Cape Town • Pretoria • Polokwane</b></p>
 <div><span class="badge">✓ Real Profiles</span><span class="badge">🛡️ Phone Never Shown</span><span class="badge">18+ Only</span></div>
 </div>
-
 <div class="card"><div class="cardBody">
 <div class="tabWrap">
 <button id="tabSignup" class="active" onclick="showTab('signup')">Create Account</button>
 <button id="tabLogin" onclick="showTab('login')">Log In</button>
 </div>
-
 <div id="signupForm">
 <div id="formError" class="errorBox"></div>
 <div id="formSuccess" class="successBox"></div>
@@ -77,13 +78,12 @@ button{width:100%;padding:15px;border:0;border-radius:14px;font-size:15px;font-w
 <div class="passwrap"><input id="a_pass" type="password" placeholder="Create Password * min 4 characters"><button type="button" class="eyeBtn" onclick="toggleEye('a_pass')">👁️</button></div>
 <input id="a_secret" type="text" placeholder="Secret Word for password reset * e.g. Mango">
 <label style="display:flex;gap:8px;align-items:flex-start;font-size:13px;text-align:left;margin:10px 0"><input id="a_18" type="checkbox" style="width:18px;margin:2px 0 0"> I confirm I am 18+ and I agree to be respectful. No scamming, no asking for money.</label>
-<label style="display:block;text-align:left;font-size:13px;font-weight:600;margin-top:10px">📸 Profile Photo <span style="color:#ff2e63">Required - Real photo of you</span><input id="a_photo" type="file" accept="image/*"></label>
+<label style="display:block;text-align:left;font-size:13px;font-weight:600;margin-top:10px">📸 Profile Photo <span style="color:#ff2e63">Required</span><input id="a_photo" type="file" accept="image/*"></label>
 <img id="a_preview" class="hidden avatar">
 <div id="photoStatus" class="photoStatus"></div>
 <button id="signupBtn" class="pink" onclick="doSignup()">Create My Account ❤️</button>
-<div class="terms">By creating an account you agree: Be 18+, be real, be respectful. Anyone asking for money will be blocked. Your phone is never shown to other members.</div>
+<div class="terms">By creating an account you agree: Be 18+, be real, be respectful. Anyone asking for money will be blocked. Your phone is never shown.</div>
 </div>
-
 <div id="loginForm" class="hidden">
 <div id="loginError" class="errorBox"></div>
 <input id="l_phone" type="tel" placeholder="Phone Number">
@@ -91,7 +91,6 @@ button{width:100%;padding:15px;border:0;border-radius:14px;font-size:15px;font-w
 <button class="pink" onclick="doLogin()">Log In ➡️</button>
 <button class="grey" onclick="showForgot()">Forgot Password?</button>
 </div>
-
 <div id="forgotForm" class="hidden">
 <h3 style="margin:0">Reset Password</h3>
 <p class="small">Use your secret word.</p>
@@ -132,7 +131,7 @@ button{width:100%;padding:15px;border:0;border-radius:14px;font-size:15px;font-w
 <div id="likesBox" class="card hidden"><div class="cardBody"><h2>❤️ Who Liked You</h2><div id="likesList"></div></div></div>
 <div id="matchesBox" class="card hidden"><div class="cardBody"><h2>💘 Your Matches</h2><div id="matchesList"></div></div></div>
 <div id="chatsBox" class="card hidden"><div class="cardBody"><h2>💬 Messages</h2><div id="chatsList"></div><button class="grey" onclick="showHome()">Back to Discover</button></div></div>
-<div id="chatBox" class="card hidden"><div class="cardBody"><h2 id="chatTitle">Chat</h2><div id="chatMessages" class="chatBox"></div><div class="row"><input id="chatInput" placeholder="Type a message... Be respectful ❤️"><button class="pink" onclick="sendMsg()">Send</button></div><div class="row"><button class="reportBtn" onclick="reportUser()">🚩 Report</button><button class="reportBtn" onclick="blockUser()">🚫 Block</button></div><button class="grey" onclick="backToChats()">Back</button></div></div>
+<div id="chatBox" class="card hidden"><div class="cardBody"><h2 id="chatTitle">Chat</h2><div id="chatMessages" class="chatBox"></div><div class="row"><input id="chatInput" placeholder="Type a message... Be respectful ❤️"><button id="sendBtn" class="pink" onclick="sendMsg()">Send</button></div><div class="row"><button class="reportBtn" onclick="reportUser()">🚩 Report</button><button class="reportBtn" onclick="blockUser()">🚫 Block</button></div><button class="grey" onclick="backToChats()">⬅️ Back to Chats</button></div></div>
 </div>
 
 <div id="matchModal" onclick="closeMatch()" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#ff2e63,#ff6b6b);z-index:1000;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:20px"><h1 style="color:#fff;margin:0">It's a Match! 💘</h1><img id="matchPhoto" style="width:150px;height:150px;border-radius:50%;border:4px solid #fff;object-fit:cover;margin:16px 0"><h2 id="matchName" style="color:#fff;margin:0"></h2><p style="color:#fff;opacity:.9">You both liked each other</p><button class="black" onclick="event.stopPropagation();goChatFromMatch()" style="max-width:300px">💬 Send Message</button><button class="outline" onclick="closeMatch()" style="max-width:300px;background:#fff">Keep Discovering</button></div>
@@ -143,21 +142,23 @@ var db=null;
 try{
   var firebaseConfig={apiKey:"AIzaSyAcNs2UdpGCZYXSquuwMk2ze3odWd36oP0",authDomain:"malawi-love-sa.firebaseapp.com",databaseURL:"https://malawi-love-sa-default-rtdb.firebaseio.com",projectId:"malawi-love-sa",storageBucket:"malawi-love-sa.firebasestorage.app",messagingSenderId:"44621212737",appId:"1:44621212737:web:15daa656f79505d3eaeac0"};
   firebase.initializeApp(firebaseConfig); db=firebase.database();
-}catch(e){}
-var DEFAULT_PHOTO="";
+}catch(e){db=null;}
+function toast(msg){var t=document.getElementById('toast'); t.textContent=msg; t.style.display='block'; clearTimeout(window._toastT); window._toastT=setTimeout(function(){t.style.display='none';},2500);}
 function normPhone(p){var d=String(p||'').replace(/\D/g,'');if(d.indexOf('27')===0&&d.length===11)d='0'+d.slice(2);return d;}
 function isValidUser(u){return u&&u.name&&u.age&&u.city&&u.phone&&u.photo&&u.name!=='Test User'&&u.name!=='Demo User';}
-var users=[]; try{users=JSON.parse(localStorage.getItem('ml_users')||'[]').filter(isValidUser);}catch(e){users=[];}
-var me=null; try{me=JSON.parse(localStorage.getItem('ml_me')||'null'); if(me&&!isValidUser(me)) me=null;}catch(e){me=null;}
-var blocks=[]; try{blocks=JSON.parse(localStorage.getItem('ml_blocks')||'[]');}catch(e){}
-var likes=[]; try{likes=JSON.parse(localStorage.getItem('ml_likes')||'[]');}catch(e){}
-var reports=[]; try{reports=JSON.parse(localStorage.getItem('ml_reports')||'[]');}catch(e){}
+function loadLS(k,d){try{var v=JSON.parse(localStorage.getItem(k)||''); return v||d;}catch(e){return d;}}
+var users=loadLS('ml_users',[]).filter(isValidUser);
+var me=loadLS('ml_me',null); if(me&&!isValidUser(me)) me=null;
+var blocks=loadLS('ml_blocks',[]);
+var likes=loadLS('ml_likes',[]);
+var reports=loadLS('ml_reports',[]);
+var localChats=loadLS('ml_chats',{});
 var filter={city:'',gender:'',looking:'',min:'',max:''};
-var photoData='';var editPhotoData='';var currentChatId=null;var currentChatOtherId=null;var lastMatchUser=null;
+var photoData='';var editPhotoData='';var currentChatId=null;var currentChatOtherId=null;var currentChatOtherName='';var lastMatchUser=null;
 function toggleEye(id){var inp=document.getElementById(id);inp.type=(inp.type==='password'?'text':'password');}
 function showError(msg,fieldId){
   var box=document.getElementById('formError'); box.textContent='⚠️ '+msg; box.style.display='block';
-  if(fieldId){var el=document.getElementById(fieldId); if(el){el.classList.add('error'); el.scrollIntoView({behavior:'smooth',block:'center'}); el.focus();}}
+  if(fieldId){var el=document.getElementById(fieldId); if(el){el.classList.add('error'); el.scrollIntoView({behavior:'smooth',block:'center'});}}
   else{box.scrollIntoView({behavior:'smooth',block:'center'});}
   var btn=document.getElementById('signupBtn'); if(btn)btn.textContent='Create My Account ❤️';
 }
@@ -170,7 +171,7 @@ function showTab(w){
 }
 function showForgot(){document.getElementById('signupForm').classList.add('hidden');document.getElementById('loginForm').classList.add('hidden');document.getElementById('forgotForm').classList.remove('hidden');}
 function hideForgot(){document.getElementById('forgotForm').classList.add('hidden');document.getElementById('loginForm').classList.remove('hidden');}
-function save(){try{localStorage.setItem('ml_users',JSON.stringify(users));localStorage.setItem('ml_me',JSON.stringify(me));localStorage.setItem('ml_blocks',JSON.stringify(blocks));localStorage.setItem('ml_likes',JSON.stringify(likes));localStorage.setItem('ml_reports',JSON.stringify(reports));}catch(e){}}
+function save(){try{localStorage.setItem('ml_users',JSON.stringify(users));localStorage.setItem('ml_me',JSON.stringify(me));localStorage.setItem('ml_blocks',JSON.stringify(blocks));localStorage.setItem('ml_likes',JSON.stringify(likes));localStorage.setItem('ml_reports',JSON.stringify(reports));localStorage.setItem('ml_chats',JSON.stringify(localChats));}catch(e){toast('Storage full - photo too big, use smaller photo');}}
 function pushUser(u){if(db&&isValidUser(u)){try{db.ref('users/'+u.id).set(u);}catch(e){}}}
 function doSignup(){
   clearError();
@@ -199,7 +200,7 @@ function doSignup(){
   if(!document.getElementById('a_18').checked) return showError('Please tick: I confirm I am 18+','a_18');
   if(!photoData) return showError('Please add your Profile Photo - tap Choose File and pick a photo','a_photo');
   if(users.find(function(u){return normPhone(u.phone)===phone})) { showError('This phone already has an account. Please tap Log In at the top.'); return; }
-  var u={id:Date.now().toString(),name:name,age:String(age),gender:gender,looking:looking,city:city,phone:phone,about:about,pass:pass,secret:secret,photo:photoData,online:true,lastSeen:Date.now(),createdAt:Date.now()};
+  var u={id:'u'+Date.now().toString(),name:name,age:String(age),gender:gender,looking:looking,city:city,phone:phone,about:about,pass:pass,secret:secret,photo:photoData,online:true,lastSeen:Date.now(),createdAt:Date.now()};
   users.push(u);me=u;save();pushUser(u);
   document.getElementById('formSuccess').textContent='✅ Welcome '+name+'! Your account is created. Going inside...'; document.getElementById('formSuccess').style.display='block';
   setTimeout(function(){showMain();},800);
@@ -210,91 +211,4 @@ function doLogin(){
   var phone=normPhone(document.getElementById('l_phone').value);
   var pass=document.getElementById('l_pass').value;
   var box=document.getElementById('loginError');
-  if(!phone||!pass){box.textContent='⚠️ Enter Phone + Password'; box.style.display='block'; return;}
-  var u=null; for(var i=0;i<users.length;i++){if(normPhone(users[i].phone)===phone&&users[i].pass===pass){u=users[i];break;}}
-  if(u){me=u;save();showMain();return;}
-  if(db){
-    db.ref('users').once('value',function(snap){
-      var all=snap.val()?Object.values(snap.val()):[];
-      var fu=null; for(var j=0;j<all.length;j++){if(normPhone(all[j].phone)===phone&&all[j].pass===pass&&isValidUser(all[j])){fu=all[j];break;}}
-      if(fu){users.push(fu);me=fu;save();showMain();}
-      else{box.textContent='⚠️ Wrong phone or password. If you are new, tap Create Account.'; box.style.display='block';}
-    });
-  } else{box.textContent='⚠️ Wrong phone or password.'; box.style.display='block';}
-}
-function doForgot(){
-  var phone=normPhone(document.getElementById('f_phone').value);
-  var secret=document.getElementById('f_secret').value.trim();
-  var np=document.getElementById('f_newpass').value;
-  var u=null; for(var i=0;i<users.length;i++){if(normPhone(users[i].phone)===phone){u=users[i];break;}}
-  if(!u||u.secret!==secret) return alert('Wrong phone or secret word');
-  u.pass=np;if(me&&me.id===u.id)me=u;save();pushUser(u);alert('Password reset! Please Log In now');hideForgot();
-}
-function logout(){me=null;try{localStorage.removeItem('ml_me');}catch(e){} location.reload();}
-function showMain(){document.getElementById('authBox').classList.add('hidden');document.getElementById('mainBox').classList.remove('hidden');showHome();}
-function showHome(){hideAll();document.getElementById('homeArea').classList.remove('hidden');render();}
-function hideAll(){['homeArea','myProfileBox','editBox','likesBox','matchesBox','chatsBox','chatBox'].forEach(function(id){document.getElementById(id).classList.add('hidden')});}
-function doSearch(){filter={city:document.getElementById('s_city').value,gender:document.getElementById('s_gender').value,looking:document.getElementById('s_looking').value,min:document.getElementById('s_min').value,max:document.getElementById('s_max').value};render();}
-function clearSearch(){filter={city:'',gender:'',looking:'',min:'',max:''};document.getElementById('s_city').value='';document.getElementById('s_gender').value='';document.getElementById('s_looking').value='';document.getElementById('s_min').value='';document.getElementById('s_max').value='';render();}
-function render(){
-  var list=document.getElementById('list');document.getElementById('peopleCount').textContent=users.length+(users.length===1?' member':' members')+' on MalawiLove ❤️';
-  var shown=users.filter(function(u){return u.id!==me.id&&blocks.indexOf(u.id)===-1&&isValidUser(u);});
-  if(filter.city) shown=shown.filter(function(u){return u.city===filter.city});
-  if(filter.gender) shown=shown.filter(function(u){return u.gender===filter.gender});
-  if(filter.looking) shown=shown.filter(function(u){return u.looking===filter.looking});
-  if(filter.min) shown=shown.filter(function(u){return Number(u.age)>=Number(filter.min)});
-  if(filter.max) shown=shown.filter(function(u){return Number(u.age)<=Number(filter.max)});
-  if(!shown.length){list.innerHTML='<div class="card"><div class="cardBody" style="text-align:center"><h3>Be the first! ❤️</h3><p class="small">No members match your search yet.<br>Share MalawiLove SA with friends!</p><button class="pink" onclick="clearSearch()">Show Everyone</button></div></div>';return;}
-  var html='';
-  for(var i=0;i<shown.length;i++){var u=shown[i]; html+='<div class="card"><img class="profile" src="'+(u.photo||'')+'"><div class="cardBody"><h3 style="margin:0">'+u.name+', '+u.age+' <span class="verified">✓ Verified</span></h3><p class="small" style="margin:4px 0">📍 '+u.city+' • '+(u.gender||'')+' • '+(u.looking||'Serious Relationship')+'</p><p style="font-size:14px;color:#555">'+(u.about||'')+'</p><div class="row"><button class="pink" onclick="likeUser(\''+u.id+'\')">❤️ Like</button><button class="black" onclick="openChat(\''+u.id+'\')">💬 Message</button></div></div></div>';}
-  list.innerHTML=html;
-}
-function showMyProfile(){hideAll();document.getElementById('myProfileBox').classList.remove('hidden');document.getElementById('myProfileView').innerHTML='<img class="avatar" src="'+me.photo+'"><h3>'+me.name+', '+me.age+'</h3><span class="genderTag">'+(me.gender||'')+'</span> <span class="genderTag">📍 '+me.city+'</span> <span class="genderTag">'+(me.looking||'')+'</span><p>'+me.about+'</p>';}
-function openEdit(){hideAll();document.getElementById('editBox').classList.remove('hidden');document.getElementById('e_name').value=me.name;document.getElementById('e_age').value=me.age;document.getElementById('e_gender').value=me.gender||'Male';document.getElementById('e_looking').value=me.looking||'Serious Relationship';document.getElementById('e_city').value=me.city;document.getElementById('e_about').value=me.about;document.getElementById('e_preview').src=me.photo;}
-function closeEdit(){showMyProfile();}
-function saveEdit(){me.name=document.getElementById('e_name').value;me.age=document.getElementById('e_age').value;me.gender=document.getElementById('e_gender').value;me.looking=document.getElementById('e_looking').value;me.city=document.getElementById('e_city').value;me.about=document.getElementById('e_about').value;if(editPhotoData)me.photo=editPhotoData;var idx=-1;for(var i=0;i<users.length;i++){if(users[i].id===me.id)idx=i;} if(idx>=0)users[idx]=me;save();pushUser(me);showMyProfile();alert('Profile updated ✅');}
-function deleteAccount(){if(!confirm('Delete your account permanently?'))return;users=users.filter(function(u){return u.id!==me.id});if(db)db.ref('users/'+me.id).remove();me=null;save();location.reload();}
-function likeUser(id){var other=null;for(var i=0;i<users.length;i++){if(users[i].id===id)other=users[i];} if(!other)return;for(var j=0;j<likes.length;j++){if(likes[j].from===me.id&&likes[j].to===id) return alert('You already liked '+other.name+' ❤️');} likes.push({from:me.id,to:id});save();if(db)db.ref('likes').push({from:me.id,to:id});var back=false;for(var k=0;k<likes.length;k++){if(likes[k].from===id&&likes[k].to===me.id)back=true;} if(back){lastMatchUser=other;document.getElementById('matchPhoto').src=other.photo;document.getElementById('matchName').textContent=other.name+', '+other.age;document.getElementById('matchModal').style.display='flex';}else alert('You liked '+other.name+' ❤️');}
-function closeMatch(){document.getElementById('matchModal').style.display='none';}
-function goChatFromMatch(){closeMatch();if(lastMatchUser)openChat(lastMatchUser.id);}
-function showLikes(){hideAll();document.getElementById('likesBox').classList.remove('hidden');var who=[];for(var i=0;i<likes.length;i++){if(likes[i].to===me.id){for(var j=0;j<users.length;j++){if(users[j].id===likes[i].from)who.push(users[j]);}}} var h='';if(!who.length)h='<p>No likes yet. Your profile is live ❤️</p>';else{for(var k=0;k<who.length;k++){h+='<div style="padding:12px 0;border-bottom:1px solid #eee"><b>'+who[k].name+', '+who[k].age+' • '+who[k].city+'</b><br><button class="pink" onclick="likeUser(\''+who[k].id+'\')">❤️ Like Back</button></div>';}} document.getElementById('likesList').innerHTML=h;}
-function showMatches(){hideAll();document.getElementById('matchesBox').classList.remove('hidden');var m=[];for(var i=0;i<users.length;i++){var u=users[i];var a=false,b=false;for(var j=0;j<likes.length;j++){if(likes[j].from===me.id&&likes[j].to===u.id)a=true;if(likes[j].from===u.id&&likes[j].to===me.id)b=true;} if(a&&b)m.push(u);} var h='';if(!m.length)h='<p>No matches yet. Like people ❤️</p>';else{for(var k=0;k<m.length;k++){h+='<div style="padding:12px 0;border-bottom:1px solid #eee"><b>'+m[k].name+', '+m[k].age+' • '+m[k].city+'</b><br><button class="pink" onclick="openChat(\''+m[k].id+'\')">💬 Message</button></div>';}} document.getElementById('matchesList').innerHTML=h;}
-function showChats(){hideAll();document.getElementById('chatsBox').classList.remove('hidden');var ids=[];for(var i=0;i<likes.length;i++){var otherId=likes[i].from===me.id?likes[i].to:likes[i].from;if(ids.indexOf(otherId)===-1)ids.push(otherId);} var h='';if(!ids.length)h='<p>No messages yet ❤️</p>';else{for(var k=0;k<ids.length;k++){var u=null;for(var j=0;j<users.length;j++){if(users[j].id===ids[k])u=users[j];} if(u)h+='<div style="padding:12px 0;border-bottom:1px solid #eee"><b>'+u.name+', '+u.age+'</b><br><button class="pink" onclick="openChat(\''+u.id+'\')">Open Chat 💬</button></div>';}} document.getElementById('chatsList').innerHTML=h;}
-function openChat(id){var other=null;for(var i=0;i<users.length;i++){if(users[i].id===id)other=users[i];} if(!other)return;currentChatOtherId=id;currentChatId=[me.id,id].sort().join('_');hideAll();document.getElementById('chatBox').classList.remove('hidden');document.getElementById('chatTitle').textContent='💬 '+other.name+' • '+other.city;if(db)db.ref('chats/'+currentChatId).on('value',function(snap){var msgs=snap.val()?Object.values(snap.val()):[];var h='';for(var i=0;i<msgs.length;i++){h+='<div class="msg '+(msgs[i].from===me.id?'msgMine':'msgTheirs')+'">'+msgs[i].text+'</div>';} document.getElementById('chatMessages').innerHTML=h;document.getElementById('chatMessages').scrollTop=99999;});}
-function sendMsg(){var t=document.getElementById('chatInput').value.trim();if(!t||!currentChatId)return;if(db)db.ref('chats/'+currentChatId).push({from:me.id,to:currentChatOtherId,text:t,time:Date.now()});document.getElementById('chatInput').value='';}
-function backToChats(){if(db&&currentChatId)db.ref('chats/'+currentChatId).off();showChats();}
-function reportUser(){if(!currentChatOtherId)return;if(!confirm('Report this user?'))return;reports.push({from:me.id,reported:currentChatOtherId,time:Date.now()});save();if(db)db.ref('reports').push({from:me.id,reported:currentChatOtherId,time:Date.now()});alert('Reported. Thank you 🛡️');}
-function blockUser(){if(!currentChatOtherId)return;if(!confirm('Block this user?'))return;blocks.push(currentChatOtherId);save();alert('User blocked 🚫');backToChats();}
-function handlePhoto(file,previewId,statusId,isEdit){
-  if(!file) return;
-  document.getElementById(statusId).textContent='Loading photo... ⏳';
-  var r=new FileReader();
-  r.onload=function(){
-    var data=r.result;
-    if(isEdit){editPhotoData=data;} else{photoData=data;}
-    var p=document.getElementById(previewId); p.src=data; p.classList.remove('hidden');
-    document.getElementById(statusId).textContent='✅ Photo ready!';
-    try{
-      var img=new Image(); img.onload=function(){
-        try{
-          var c=document.createElement('canvas'); var max=600; var w=img.width,h=img.height;
-          if(w>max){h=h*max/w;w=max;}
-          c.width=w;c.height=h; c.getContext('2d').drawImage(img,0,0,w,h);
-          var small=c.toDataURL('image/jpeg',0.7);
-          if(isEdit) editPhotoData=small; else photoData=small;
-        }catch(e){}
-      }; img.src=data;
-    }catch(e){}
-  };
-  r.readAsDataURL(file);
-}
-document.getElementById('a_photo').addEventListener('change',function(e){if(e.target.files[0]) handlePhoto(e.target.files[0],'a_preview','photoStatus',false);});
-document.getElementById('e_photo').addEventListener('change',function(e){if(e.target.files[0]) handlePhoto(e.target.files[0],'e_preview','photoStatus',true);});
-if(me){try{showMain();}catch(e){}}
-if(db){
-  db.ref('users').on('value',function(snap){try{var raw=snap.val()||{};var fbUsers=Object.values(raw).filter(isValidUser);if(fbUsers.length){var map={};var all=users.concat(fbUsers);for(var i=0;i<all.length;i++){map[normPhone(all[i].phone)]=all[i];} users=Object.values(map);save();if(me)render();}}catch(e){}});
-  db.ref('likes').on('value',function(snap){try{var v=snap.val()?Object.values(snap.val()):[];if(v.length){likes=v;save();if(me)render();}}catch(e){}});
-}
-</script>
-</body>
-</html>   
+  if(!phone||!pass){box.textContent='⚠️ 
