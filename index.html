@@ -167,6 +167,13 @@ async function reportUser(phone){
   reps.push({reported_phone: phone, reason: r});
   localStorage.setItem('ml_reports', JSON.stringify(reps));
   toast("Report sent 🚩");
-     }</script>
+     }<async function blockUser(phone){
+  if(!confirm("Block this person?")) return;
+  let b = JSON.parse(localStorage.getItem('ml_blocked')||'[]');
+  if(!b.includes(phone)) b.push(phone);
+  localStorage.setItem('ml_blocked', JSON.stringify(b));
+  toast("Blocked 🚫");
+  render();
+}/script>
 </body>
 </html>
