@@ -1,165 +1,277 @@
-  <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MalawiLove SA - Find Your Person</title>
+         <!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Whosayn — Find Love in Durban</title>
+<meta name="description" content="Whosayn - Real people. Real matches. Find love in Durban.">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{box-sizing:border-box;font-family:system-ui,-apple-system,Arial,sans-serif}
-body{margin:0;background:#FFF5F7;color:#111;padding-bottom:85px}
-.top{background:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;box-shadow:0 2px 12px rgba(0,0,0,.06);z-index:10}
-.logo{font-weight:900;font-size:23px;color:#E91E63}.logo span{color:#111}
-.badge{background:#E8F5E9;color:#1B7A2E;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:800}
-.hero{text-align:center;padding:24px 16px 8px}.hero h1{font-size:30px;margin:8px 0;line-height:1.2}.hero p{color:#666;line-height:1.6}.hero b{color:#E91E63}
-.pill{display:inline-block;background:#fff;border:1px solid #FCE7F3;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:700;margin:4px 2px;color:#555}
-.wrap{max-width:480px;margin:0 auto;padding:14px}
-.card{background:#fff;border-radius:20px;padding:20px;box-shadow:0 8px 28px rgba(0,0,0,.06)}
-.tabs{display:flex;gap:8px;margin-bottom:14px;background:#F3F4F6;padding:4px;border-radius:14px}.tabs button{flex:1;padding:12px;border:0;border-radius:10px;font-weight:800;cursor:pointer;background:transparent}
-.tab-on{background:#fff!important;color:#E91E63!important;box-shadow:0 2px 8px rgba(0,0,0,.08)}
-input,select,textarea{width:100%;padding:13px;border:1px solid #E5E7EB;border-radius:12px;margin:6px 0;font-size:15px;background:#F9FAFB}
-input:focus{outline:none;border-color:#E91E63;background:#fff}
-.btn{width:100%;padding:14px;border:0;border-radius:12px;font-weight:800;font-size:16px;margin-top:10px;cursor:pointer}
-.pink{background:#E91E63;color:#fff}.grey{background:#F3F4F6;color:#111}.white{background:#fff;color:#E91E63;border:1.5px solid #E91E63}.red{background:#FEE2E2;color:#B91C1C}
-.eye-wrap{display:flex;gap:6px}.eye-wrap input{flex:1}.eye{width:50px;border:1px solid #E5E7EB;border-radius:12px;background:#F3F4F6;cursor:pointer}
-.small{font-size:12px;color:#6B7280;text-align:center;margin-top:12px;line-height:1.6}.link{color:#E91E63;font-weight:700;cursor:pointer}
-.search{display:flex;gap:8px;margin:12px 0}.search input{margin:0}.search select{margin:0;max-width:120px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
-.person{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,.06);position:relative}
-.person .img{width:100%;height:170px;background:linear-gradient(135deg,#FCE7F3,#FFE4E6);display:flex;align-items:center;justify-content:center;font-size:42px;font-weight:900;color:#E91E63}
-.person img{width:100%;height:170px;object-fit:cover}.person div{padding:12px}
-.city{font-size:11px;background:#FFF1F2;color:#BE185D;padding:4px 8px;border-radius:20px;font-weight:700;display:inline-block;margin:4px 0}
-.verified{color:#1B7A2E;font-size:11px;font-weight:800}.hidden{display:none}.footer{text-align:center;padding:20px;color:#9CA3AF;font-size:12px}
-.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#111;color:#fff;padding:12px 16px;border-radius:12px;font-size:14px;font-weight:700;z-index:99;display:none;max-width:90%;text-align:center}
-.photo-preview{width:70px;height:70px;border-radius:12px;object-fit:cover;display:none;margin:6px 4px;border:2px solid #FCE7F3}
-.bottomnav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #FCE7F3;display:flex;z-index:20;padding:8px 0 12px}
-.bottomnav button{flex:1;border:0;background:transparent;font-size:10px;font-weight:800;color:#9CA3AF;cursor:pointer}
-.bottomnav button.active{color:#E91E63}
-.bottomnav span{display:block;font-size:22px}
-.badge-dot{background:#E91E63;color:#fff;font-size:10px;padding:2px 6px;border-radius:10px;margin-left:4px}
-.chat-list-item{display:flex;gap:12px;align-items:center;padding:14px;background:#fff;border-radius:16px;margin-bottom:10px;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.04)}
-.avatar{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#FCE7F3,#FFE4E6);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:#E91E63;flex-shrink:0;overflow:hidden}
-.avatar img{width:100%;height:100%;object-fit:cover}
-.chatbox{background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 8px 28px rgba(0,0,0,.08)}
-.chat-head{padding:14px 16px;background:#E91E63;color:#fff;display:flex;align-items:center;gap:10px;font-weight:800}
-.chat-head button{background:rgba(255,255,255,.25);border:0;color:#fff;border-radius:10px;padding:8px 10px;cursor:pointer}
-.msgs{height:360px;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px;background:#FFF5F7}
-.bubble{max-width:78%;padding:10px 14px;border-radius:16px;font-size:14px;line-height:1.4}
-.mine{background:#E91E63;color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
-.theirs{background:#fff;color:#111;align-self:flex-start;border-bottom-left-radius:4px;box-shadow:0 1px 4px rgba(0,0,0,.05)}
-.chat-input{display:flex;gap:8px;padding:10px;background:#fff}
-.chat-input input{margin:0}.chat-input button{width:60px;border:0;background:#E91E63;color:#fff;border-radius:12px;font-weight:800;cursor:pointer}
-.notif{position:fixed;top:70px;left:12px;right:12px;background:#111;color:#fff;padding:14px 16px;border-radius:16px;z-index:100;display:none;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.3)}
-.notif b{color:#FBBF24}.stat{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}.stat div{background:#FFF5F7;border-radius:16px;padding:14px;text-align:center}.stat b{font-size:24px;color:#E91E63;display:block}
-.admin-row{display:flex;gap:10px;align-items:center;padding:12px;background:#F9FAFB;border-radius:14px;margin-bottom:8px}
-.like-row{display:flex;gap:6px;margin-top:8px}.like-row button{flex:1;padding:10px;border:0;border-radius:10px;font-weight:800;cursor:pointer;font-size:13px}
-.gallery{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
-.gallery img{width:100%;height:110px;object-fit:cover;border-radius:12px}
-.gallery .slot{height:110px;border:2px dashed #FBCFE8;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#E91E63;font-size:12px;font-weight:800;background:#FFF5F7}
-</style>
-</head>
-<body>
-<div class="top"><div class="logo">Malawi<span>Love</span> SA</div><div class="badge">● Online</div></div>
-<div id="notif" class="notif" onclick="notifClick()"><b id="notifTitle">💬 New Message!</b><br><span id="notifText"></span><br><small>Tap to open →</small></div>
-<div class="hero" id="hero"><h1>Find Your Person. 💕</h1><p>Real Malawians in South Africa<br><b id="count">Loading members...</b></p><div><span class="pill">📍 Durban</span><span class="pill">📍 Joburg</span><span class="pill">📍 Cape Town</span><span class="pill">❤️ Verified People</span></div></div>
-<div class="wrap"><p style="background:#111827;color:white;display:inline-block;padding:6px 14px;border-radius:999px;font-size:12px;font-weight:700;margin:0">✓ VERIFIED SINGLES • MALAWIANS IN SA • 100% FREE</p>
-<div class="card" id="authCard">
-<div class="tabs"><button id="tS" class="tab-on" onclick="sS()">Create Account</button><button id="tL" onclick="sL()">Log In</button></div>
-<div id="sF">
-<input id="n" placeholder="Full Name *"><input id="a" type="number" min="18" max="80" placeholder="Age * (18+)">
-<select id="g"><option value="">Gender *</option><option>Man</option><option>Woman</option></select>
-<select id="lk"><option value="">Looking for *</option><option>Woman</option><option>Man</option></select>
-<select id="c"><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Blantyre</option><option>Lilongwe</option><option>Other</option></select>
-<input id="p" type="tel" placeholder="Phone * e.g 0683015925"><textarea id="ab" placeholder="About me... e.g Music lover ❤️"></textarea>
-<label style="font-size:13px;font-weight:700;color:#555">Your Photos - up to 4 (more photos = 5x more Hi's) 📸</label>
-<input id="ph" type="file" accept="image/*" multiple onchange="prevPhotos(this)">
-<div id="ppWrap" style="display:flex;flex-wrap:wrap"></div>
-<div class="eye-wrap"><input id="pw" type="password" placeholder="Password * Min 4"><button class="eye" onclick="e('pw',this)">👁️</button></div>
-<input id="sc" placeholder="Secret: Mother's name? (for password reset)">
-<button class="btn pink" id="suBtn" onclick="su()">Create My Account ❤️</button>
-<p class="small">By joining you agree to be kind & respectful.<br>Already have account? <span class="link" onclick="sL()">Log In here</span></p>
-</div>
-<p style="background:#ECFDF5;padding:12px;border-radius:12px;font-size:12px;text-align:center;color:#065F46;font-weight:700;line-height:1.5">🔒 100% PRIVATE • Your number is NEVER shown • Chat inside app only • Block anyone</p>
-<div id="lF" class="hidden">
-<input id="lp" type="tel" placeholder="Phone">
-<div class="eye-wrap"><input id="lw" type="password" placeholder="Password"><button class="eye" onclick="e('lw',this)">👁️</button></div>
-<button class="btn pink" onclick="li()">Log In ❤️</button>
-<button class="btn white" onclick="guest()">👀 Browse as Guest - See People First</button>
-<p class="small"><span class="link" onclick="fg()">Forgot Password?</span> • <span class="link" onclick="sS()">Create Account</span></p>
-<div id="fB" class="hidden"><input id="fp" placeholder="Your Phone"><input id="fs" placeholder="Mother's name?"><div class="eye-wrap"><input id="fn" type="password" placeholder="New Password"><button class="eye" onclick="e('fn',this)">👁️</button></div><button class="btn grey" onclick="fr()">Reset Password</button></div>
-</div>
-</div>
-<div id="app" class="hidden">
-<div class="card"><b>Welcome, <span id="mn"></span>! ❤️</b><br><span class="small" id="mi"></span><div id="adminHint" class="hidden" style="background:#FEF3C7;padding:8px;border-radius:10px;margin-top:8px;font-size:12px;font-weight:700;color:#92400E">🛡️ You are ADMIN - Tap Admin tab below</div></div>
-<div id="viewDiscover"><p style="background:#FFF7ED;padding:10px;border-radius:12px;font-size:12px;text-align:center;color:#9A3412;font-weight:700">⚠️ REAL PEOPLE ONLY • No fake profiles • Report fakes = instant ban</p>
-<h3 style="margin:18px 0 0">Discover People Near You</h3>
-<div class="search"><input id="q" placeholder="Search name or city..." oninput="render()"><select id="fc" onchange="render()"><option value="">All Cities</option><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Blantyre</option><option>Lilongwe</option></select></div>
-<div class="grid" id="pe"></div><p class="small" id="noRes"></p></div>
-<div id="viewMatches" class="hidden"><h3>Your Matches ❤️</h3><p class="small" style="text-align:left">When you BOTH like each other = MATCH! Then you can chat.</p><div id="matchList"></div><div id="emptyMatch" class="card" style="text-align:center;color:#888">No matches yet.<br>Go to Discover and tap ❤️ Like.</div><h3 style="margin-top:20px">People Who Liked You 👀</h3><div id="likedMeList"></div></div>
-<div id="viewMessages" class="hidden"><h3>Your Messages 💬</h3><div id="convList"></div><div id="emptyMsg" class="card" style="text-align:center;color:#888">No chats yet.<br>Go to Discover and tap <b>Say Hi</b> ❤️</div></div>
-<div id="viewChat" class="hidden"><div class="chatbox"><div class="chat-head"><button onclick="backToMessages()">←</button><span id="chatName">Chat</span></div><div class="msgs" id="msgs"></div><div class="chat-input"><input id="msgInput" placeholder="Type message... ❤️" onkeypress="if(event.key==='Enter')sendMsg()"><button onclick="sendMsg()">Send</button></div></div></div>
-<div id="viewProfile" class="hidden"><h3>My Profile 👤</h3><div class="card" id="profileCard"></div><button class="btn grey" onclick="logout()">Log Out</button></div>
-<div id="viewAdmin" class="hidden"><h3>🛡️ Admin Panel - Boss Only</h3><div class="stat"><div><b id="statMembers">0</b>Members</div><div><b id="statMsgs">0</b>Messages</div><div><b id="statMen">0</b>Men</div><div><b id="statWomen">0</b>Women</div><div><b id="statLikes">0</b>Likes</div><div><b id="statMatches">0</b>Matches</div></div><button class="btn pink" onclick="loadAdmin()">🔄 Refresh Admin</button><h4>All Members</h4><div id="adminMembers"></div><h4>Recent Messages</h4><div id="adminMsgs"></div></div>
-</div>
-<p class="footer">MalawiLove SA • Made with ❤️ for Malawians in SA • Likes + Matches + Chat + Admin</p>
-</div>
-<div class="bottomnav hidden" id="bottomnav">
-<button id="navDiscover" class="active" onclick="showView('Discover')"><span>🔍</span>Discover</button>
-<button id="navMatches" onclick="showView('Matches')"><span>❤️</span>Matches <span id="matchBadge"></span></button>
-<button id="navMessages" onclick="showView('Messages')"><span>💬</span>Messages <span id="msgBadge"></span></button>
-<button id="navProfile" onclick="showView('Profile')"><span>👤</span>Profile</button>
-<button id="navAdmin" class="hidden" onclick="showView('Admin')"><span>🛡️</span>Admin</button>
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial}
+:root{--pink:#E91E63;--pink2:#FF5A8A;--bg:#FFF5F7;--line:#FFE0E6;--txt:#111;--mut:#666}
+body{background:var(--bg);color:var(--txt);padding-bottom:86px}
+a{color:var(--pink);text-decoration:none}
+.top{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.95);backdrop-filter:blur(8px);padding:13px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line)}
+.logo{font-size:23px;font-weight:900;letter-spacing:-.5px}.logo i{font-style:normal;color:var(--pink)}
+.logo small{display:block;font-size:10px;letter-spacing:2px;color:var(--mut);font-weight:700}
+.topRight{font-size:13px;font-weight:700}
+.wrap{max-width:500px;margin:0 auto;padding:0 12px}
+.hero{margin:14px 0 4px;text-align:center}.hero h1{font-size:28px;line-height:1.1}.hero p{color:var(--mut);font-size:14px;margin:8px 0}
+.stats{display:flex;gap:8px;justify-content:center;margin:12px 0}.stats div{background:#fff;border:1px solid var(--line);padding:8px 14px;border-radius:999px;font-size:12px;font-weight:800}
+.card{background:#fff;border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:0 10px 30px rgba(233,30,99,.08);margin:12px 0}
+.card img{width:100%;height:440px;object-fit:cover;background:#eee;display:block}
+.pad{padding:16px}
+h2{font-size:21px;line-height:1.2}.sub{color:var(--mut);font-size:13px;margin:6px 0 10px;line-height:1.5}
+.pill{display:inline-block;background:#FFF0F3;border:1px solid #FFD0DA;padding:5px 10px;border-radius:999px;font-size:12px;font-weight:700;margin:2px}
+.ver{color:#2196F3;font-weight:900}.verifiedBadge{background:#E3F2FD;color:#1976D2;padding:3px 8px;border-radius:999px;font-size:11px;font-weight:900}
+.btn{width:100%;padding:14px;border:0;border-radius:14px;font-size:15px;font-weight:800;cursor:pointer}
+.btn-p{background:var(--pink);color:#fff}.btn-p:active{transform:scale(.98)}
+.btn-w{background:#fff;border:1.5px solid #E5E5E5;color:#111}.btn-d{background:#111;color:#fff}.btn-red{background:#FF3B30;color:#fff}
+.row{display:flex;gap:10px}.row .btn{flex:1}
+input,select,textarea{width:100%;padding:13px;border:1.5px solid #E5E5E5;border-radius:12px;margin:7px 0;font-size:15px;background:#fff;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--pink)}
+label{font-size:12px;font-weight:800;color:#444;text-transform:uppercase;letter-spacing:.4px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ph{position:relative;border-radius:16px;overflow:hidden;background:#F3F3F3;height:155px;border:1px solid #eee}.ph img{width:100%;height:100%;object-fit:cover}
+.ph button{position:absolute;bottom:6px;left:6px;right:6px;background:rgba(0,0,0,.75);color:#fff;border:0;padding:8px;border-radius:10px;font-size:12px;font-weight:800}
+.mainTag{position:absolute;top:6px;left:6px;background:var(--pink);color:#fff;font-size:11px;padding:4px 8px;border-radius:999px;font-weight:900}
+.small{font-size:12px;color:#888;text-align:center;margin:10px;line-height:1.5}
+.msg{max-width:82%;padding:11px 14px;border-radius:18px;margin:6px 0;font-size:14px;line-height:1.45}
+.me{background:var(--pink);color:#fff;margin-left:auto;border-bottom-right-radius:6px}.them{background:#F1F1F1;border-bottom-left-radius:6px}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #eee;display:flex;z-index:30;padding-bottom:env(safe-area-inset-bottom)}
+.nav button{flex:1;padding:11px 2px;background:none;border:0;font-size:11px;color:#888;line-height:1.2}.nav button.on{color:var(--pink);font-weight:900}
+.adminBox{background:#FFF3CD;border:1px solid #FFE08A;padding:12px;border-radius:12px;margin:10px 0;font-size:13px;line-height:1.5}
+.danger{border:2px solid #FFCCCC;background:#FFF5F5;padding:14px;border-radius:14px;margin-top:14px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:flex-end;justify-content:center;z-index:99}
+.modal.open{display:flex}.sheet{background:#fff;width:100%;max-width:500px;max-height:88vh;overflow:auto;border-radius:22px 22px 0 0;padding:20px;padding-bottom:30px}
+.chip{font-size:12px;background:#F5F5F5;padding:6px 10px;border-radius:999px;border:1px solid #eee}
+.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:#111;color:#fff;padding:11px 16px;border-radius:999px;font-size:13px;font-weight:700;z-index:999;display:none;max-width:90%;text-align:center}
+</style></head><body>
+<div class="top"><div class="logo">Whosayn<i> ❤️</i><small>FIND LOVE IN DURBAN</small></div><div class="topRight" id="topRight"></div></div>
+<div class="wrap" id="app"></div>
+<div class="nav" id="nav" style="display:none">
+<button onclick="show('discover')" id="n-discover">🔥<br>Discover</button>
+<button onclick="show('matches')" id="n-matches">💘<br>Matches</button>
+<button onclick="show('messages')" id="n-messages">💬<br>Messages <span id="msgDot"></span></button>
+<button onclick="show('profile')" id="n-profile">👤<br>Profile</button>
+<button onclick="show('admin')" id="n-admin" style="display:none">🛡️<br>Admin</button>
 </div>
 <div class="toast" id="toast"></div>
+
+<div class="modal" id="termsModal"><div class="sheet"><h2>Terms, Privacy & Safety</h2><br>
+<h3>📜 Terms</h3><p style="font-size:14px;line-height:1.6;margin:8px 0">1. You must be 18+ to use Whosayn. 2. No fake photos, no harassment, no scams, no asking for money. 3. We can ban accounts that break rules. 4. Always meet in public first.</p>
+<h3>🔒 Privacy (POPIA - South Africa)</h3><p style="font-size:14px;line-height:1.6;margin:8px 0">We store your name, age, city, photos and phone only to match you. We never sell your data. You can delete your account anytime in Profile → Delete Account. Your data is deleted from our database.</p>
+<h3>🛡️ Safety Tips</h3><p style="font-size:14px;line-height:1.6;margin:8px 0">• Meet in public • Tell a friend where you go • Never send money • Never share OTP / bank details • Report fake profiles immediately • Trust your gut</p><br>
+<button class="btn btn-p" onclick="closeModal('termsModal')">Got it ❤️</button></div></div>
+
+<div class="modal" id="reportModal"><div class="sheet"><h2>🚩 Report User</h2><p class="sub" id="reportWho"></p>
+<label>Reason</label><select id="reportReason"><option>Fake profile / Fake photo</option><option>Harassment / Rude</option><option>Scam / Asking money</option><option>Underage</option><option>Other</option></select><br>
+<div class="row"><button class="btn btn-w" onclick="closeModal('reportModal')">Cancel</button><button class="btn btn-p" onclick="doReport()">Send Report</button></div></div></div>
+
 <script>
-const U="https://cotocofslfhcmeyklzrb.supabase.co";
-const K="sb_publishable_1Pm9aAvMes7qoie_A4FVTw_yCwX9a_R";
-const TABLE="love_profiles";
-const ADMIN_PHONES=["0683015925","683015925","+27683015925","0683015920"];
-let me=null, all=[], currentChat=null, currentChatName="", pollTimer=null, notifTimer=null, lastMsgCount=0, lastNotifPhone=null, myLikes=new Set(), likedMe=[], matches=[], signupPhotos=[];
-function isAdmin(){if(!me||!me.phone)return false;let p=cp(me.phone);return ADMIN_PHONES.includes(p);}
-function cp(p){return (p||"").replace(/\s+/g,"").trim();}
-function clean(v,f){v=(v||"").toString().trim();if(!v||v==="null"||v==="undefined")return f;return v;}
-function toast(m){let t=document.getElementById('toast');t.textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',4000);}
-function e(id,b){let x=document.getElementById(id);x.type=x.type==="password"?"text":"password";b.textContent=x.type==="password"?"👁️":"🙈";}
-function sS(){document.getElementById('sF').classList.remove('hidden');document.getElementById('lF').classList.add('hidden');document.getElementById('tS').className='tab-on';document.getElementById('tL').className='';}
-function sL(){document.getElementById('sF').classList.add('hidden');document.getElementById('lF').classList.remove('hidden');document.getElementById('tS').className='';document.getElementById('tL').className='tab-on';}
-function fg(){document.getElementById('fB').classList.toggle('hidden');}
-function logout(){localStorage.removeItem('ml_user');location.reload();}
-async function q(path,method,body){let r=await fetch(U+"/rest/v1/"+path,{method:method||"GET",headers:{apikey:K,Authorization:"Bearer "+K,"Content-Type":"application/json",Prefer:"return=representation"},body:body?JSON.stringify(body):null});let t=await r.text();try{return JSON.parse(t);}catch(e){return {message:t};}}
-function compress(file){return new Promise(res=>{let rd=new FileReader();rd.onload=ev=>{let im=new Image();im.onload=()=>{let c=document.createElement('canvas');let max=500;let w=im.width,h=im.height;if(w>max){h=h*max/w;w=max;}c.width=w;c.height=h;c.getContext('2d').drawImage(im,0,0,w,h);res(c.toDataURL('image/jpeg',0.7));};im.src=ev.target.result;};rd.readAsDataURL(file);});}
-async function prevPhotos(inp){signupPhotos=[];let wrap=document.getElementById('ppWrap');wrap.innerHTML='';let files=Array.from(inp.files||[]).slice(0,4);for(let f of files){let d=await compress(f);signupPhotos.push(d);let im=document.createElement('img');im.src=d;im.className='photo-preview';im.style.display='block';wrap.appendChild(im);}if(files.length)toast(files.length+' photo(s) ready 📸');}
-function getPhotos(u){let arr=[];if(u.photo)arr.push(u.photo);if(u.photo2)arr.push(u.photo2);if(u.photo3)arr.push(u.photo3);if(u.photo4)arr.push(u.photo4);return arr.filter(x=>x&&x.length>10);}
-function setPhotosOnMe(arr){me.photo=arr[0]||"";me.photo2=arr[1]||"";me.photo3=arr[2]||"";me.photo4=arr[3]||"";}
-async function load(){try{let d=await q(TABLE+"?select=id,name,age,gender,looking,city,phone,about,photo,photo2,photo3,photo4,created_at&order=created_at.desc&limit=200");if(Array.isArray(d)){all=d;document.getElementById('count').textContent=all.length+" members joined • Real people, Real love";render();if(me&&me.id!=="guest")loadLikes();}}catch(err){document.getElementById('count').textContent="Check internet to load members";}}
-function render(){renderDiscover();}
-async function loadLikes(){if(!me||me.id==="guest")return;let d=await q("love_likes?or=(liker_phone.eq."+me.phone+",liked_phone.eq."+me.phone+")&limit=200");myLikes=new Set();likedMe=[];matches=[];let likedByMe=new Set(),likedMeSet=new Set();if(Array.isArray(d))d.forEach(l=>{if(l.liker_phone===me.phone){myLikes.add(l.liked_phone);likedByMe.add(l.liked_phone);}else{likedMeSet.add(l.liker_phone);likedMe.push(l);}});likedByMe.forEach(p=>{if(likedMeSet.has(p))matches.push(p);});render();renderMatches();}
-function renderDiscover(){let qq=(document.getElementById('q')?.value||"").toLowerCase(),fc=document.getElementById('fc')?.value||"";let h="",shown=0;all.forEach(u=>{if(me&&u.id===me.id)return;let name=clean(u.name,"Malawi Member"),city=clean(u.city,"Durban"),gender=clean(u.gender,""),age=clean(u.age,""),about=clean(u.about,"Looking for something real ❤️");if(qq&&!name.toLowerCase().includes(qq)&&!city.toLowerCase().includes(qq))return;if(fc&&city!==fc)return;shown++;let initial=name.charAt(0).toUpperCase();let photos=getPhotos(u);let photo=photos.length?'<img src="'+photos[0]+'">':'<div class="img">'+initial+'</div>';let liked=myLikes.has(u.phone);let likeBtn=liked?'<button style="background:#FEE2E2;color:#E91E63" onclick="unlike(\''+clean(u.phone,"")+'\')">❤️ Liked</button>':'<button style="background:#FCE7F3;color:#E91E63" onclick="likeUser(\''+clean(u.phone,"")+'\',\''+name.replace(/\'/g,"")+'\')">❤️ Like</button>';h+='<div class="person">'+photo+'<div><b>'+name+', '+age+'</b> <span class="verified">✓</span> '+(photos.length>1?'<small>📸 x'+photos.length+'</small>':'')+'<br><span class="city">📍 '+city+'</span><br><small style="color:#6B7280">'+gender+'</small><p style="font-size:13px;color:#555;margin:6px 0;line-height:1.4">'+about.slice(0,70)+'</p><div class="like-row">'+likeBtn+'<button style="background:#E91E63;color:#fff" onclick="openChat(\''+clean(u.phone,"")+'\',\''+name.replace(/\'/g,"")+'\')">💬 Say Hi</button></div></div></div>';});document.getElementById('pe').innerHTML=h||"<p style='grid-column:1/3;text-align:center;color:#888'>No members yet. Be the first!</p>";document.getElementById('noRes').textContent=shown?shown+" people near you":"";}
-function renderMatches(){let mHtml=matches.map(p=>{let u=all.find(x=>x.phone===p);let name=u?clean(u.name,p):p;let city=u?clean(u.city,""):"";let ph=u&&getPhotos(u)[0]?'<div class="avatar"><img src="'+getPhotos(u)[0]+'"></div>':'<div class="avatar">'+name.charAt(0).toUpperCase()+'</div>';return '<div class="chat-list-item" onclick="openChat(\''+p+'\',\''+name.replace(/\'/g,"")+'\')">'+ph+'<div style="flex:1"><b>'+name+' 🔥 MATCH!</b><br><small>📍 '+city+' • Tap to chat</small></div><span style="color:#E91E63">💬</span></div>';}).join("");document.getElementById('matchList').innerHTML=mHtml||"";document.getElementById('emptyMatch').style.display=matches.length?"none":"block";let lHtml=likedMe.map(l=>{let u=all.find(x=>x.phone===l.liker_phone);let name=l.liker_name||(u?u.name:l.liker_phone);let ph=u&&getPhotos(u)[0]?'<div class="avatar"><img src="'+getPhotos(u)[0]+'"></div>':'<div class="avatar">'+name.charAt(0).toUpperCase()+'</div>';return '<div class="chat-list-item">'+ph+'<div style="flex:1"><b>'+name+'</b><br><small>liked you 👀 - Like back to MATCH!</small></div><button class="btn pink" style="width:auto;padding:8px 14px;margin:0" onclick="likeUser(\''+l.liker_phone+'\',\''+name.replace(/\'/g,"")+'\')">❤️ Like Back</button></div>';}).join("");document.getElementById('likedMeList').innerHTML=lHtml||"<p style='color:#888;text-align:center'>No one liked you yet - add good photos!</p>";document.getElementById('matchBadge').innerHTML=matches.length?'<span class="badge-dot">'+matches.length+'</span>':'';}
-async function likeUser(phone,name){if(!me||me.id==="guest"){toast("Log In to Like ❤️");return;}if(myLikes.has(phone)){toast("Already liked");return;}await q("love_likes","POST",{liker_phone:me.phone,liked_phone:phone,liker_name:me.name,liked_name:name});myLikes.add(phone);let check=await q("love_likes?liker_phone=eq."+phone+"&liked_phone=eq."+me.phone+"&limit=1");if(check&&check.length){toast("🔥 IT'S A MATCH with "+name+"!");showNotif("🔥 IT'S A MATCH!",name+" liked you back! Tap to chat",phone,name);}else{toast("❤️ You liked "+name);}loadLikes();}
-async function unlike(phone){await fetch(U+"/rest/v1/love_likes?liker_phone=eq."+me.phone+"&liked_phone=eq."+phone,{method:"DELETE",headers:{apikey:K,Authorization:"Bearer "+K}});myLikes.delete(phone);render();toast("Unliked");}
-function showNotif(title,txt,phone,name){document.getElementById('notifTitle').textContent=title;document.getElementById('notifText').textContent=txt;lastNotifPhone=phone;document.getElementById('notif').style.display='block';if(navigator.vibrate)navigator.vibrate([100,50,100]);setTimeout(()=>{document.getElementById('notif').style.display='none';},6000);}
-function showView(v){['Discover','Matches','Messages','Profile','Chat','Admin'].forEach(x=>{let el=document.getElementById('view'+x);if(el)el.classList.add('hidden');});document.querySelectorAll('.bottomnav button').forEach(b=>b.classList.remove('active'));if(v==='Discover'){document.getElementById('viewDiscover').classList.remove('hidden');document.getElementById('navDiscover').classList.add('active');}if(v==='Matches'){document.getElementById('viewMatches').classList.remove('hidden');document.getElementById('navMatches').classList.add('active');loadLikes();}if(v==='Messages'){document.getElementById('viewMessages').classList.remove('hidden');document.getElementById('navMessages').classList.add('active');loadConvs();}if(v==='Profile'){document.getElementById('viewProfile').classList.remove('hidden');document.getElementById('navProfile').classList.add('active');renderProfile();}if(v==='Chat'){document.getElementById('viewChat').classList.remove('hidden');}if(v==='Admin'){document.getElementById('viewAdmin').classList.remove('hidden');document.getElementById('navAdmin').classList.add('active');loadAdmin();}}
-function backToMessages(){currentChat=null;if(pollTimer)clearInterval(pollTimer);showView('Messages');}
-function renderProfile(){if(!me||me.id==="guest"){document.getElementById('profileCard').innerHTML="<p>Guest Mode - Create account to have profile, chat & get matches.</p><button class='btn pink' onclick='logout()'>Create Account</button>";return;}let photos=getPhotos(me);let gal=photos.map((p,i)=>'<div style="position:relative"><img src="'+p+'"><button onclick="setMainPhoto('+i+')" style="position:absolute;bottom:6px;left:6px;background:#E91E63;color:#fff;border:0;border-radius:8px;padding:4px 8px;font-size:11px;font-weight:800">'+(i===0?'⭐ Main':'Set Main')+'</button><button onclick="deletePhoto('+i+')" style="position:absolute;top:6px;right:6px;background:#111;color:#fff;border:0;border-radius:50%;width:24px;height:24px">✕</button></div>').join("");for(let i=photos.length;i<4;i++){gal+='<label class="slot">+ Add Photo '+(i+1)+'<input type="file" accept="image/*" style="display:none" onchange="addOnePhoto(this)"></label>';}document.getElementById('profileCard').innerHTML='<div style="text-align:center"><h3>'+clean(me.name,"")+', '+clean(me.age,"")+'</h3><p>📍 '+clean(me.city,"")+' • '+clean(me.gender,"")+'</p></div><div class="gallery">'+gal+'</div><label style="font-size:12px;font-weight:800">Full Name</label><input id="epName" value="'+clean(me.name,"")+'"><label style="font-size:12px;font-weight:800">About Me</label><textarea id="epAbout">'+clean(me.about,"")+'</textarea><label style="font-size:12px;font-weight:800">City</label><select id="epCity"><option>Durban</option><option>Johannesburg</option><option>Cape Town</option><option>Pretoria</option><option>Blantyre</option><option>Lilongwe</option><option>Other</option></select><button class="btn pink" onclick="saveProfile()">💾 Save Profile</button><p class="small">Your photos: '+photos.length+' / 4 • Tap ⭐ to make a photo your main photo</p>';document.getElementById('epCity').value=me.city||"Durban";}
-async function addOnePhoto(inp){if(!inp.files[0])return;let d=await compress(inp.files[0]);let arr=getPhotos(me);if(arr.length>=4){toast("Max 4 photos");return;}arr.push(d);await savePhotosToDB(arr);toast("Photo added 📸");}
-async function setMainPhoto(i){let arr=getPhotos(me);let tmp=arr.splice(i,1)[0];arr.unshift(tmp);await savePhotosToDB(arr);toast("Main photo updated ⭐");}
-async function deletePhoto(i){if(!confirm("Delete this photo?"))return;let arr=getPhotos(me);arr.splice(i,1);await savePhotosToDB(arr);toast("Photo deleted");}
-async function savePhotosToDB(arr){setPhotosOnMe(arr);localStorage.setItem("ml_user",JSON.stringify(me));await q(TABLE+"?phone=eq."+encodeURIComponent(me.phone),"PATCH",{photo:me.photo||"",photo2:me.photo2||"",photo3:me.photo3||"",photo4:me.photo4||""});renderProfile();render();}
-async function saveProfile(){let nm=document.getElementById('epName').value.trim(),ab=document.getElementById('epAbout').value.trim(),ct=document.getElementById('epCity').value;if(!nm){toast("Name needed");return;}me.name=nm;me.about=ab;me.city=ct;localStorage.setItem("ml_user",JSON.stringify(me));await q(TABLE+"?phone=eq."+encodeURIComponent(me.phone),"PATCH",{name:nm,about:ab,city:ct});toast("Profile saved ✅");renderProfile();load();}
-async function openChat(phone,name){if(!me||me.id==="guest"){toast("Create account / Log In to chat ❤️");return;}currentChat=phone;currentChatName=name;document.getElementById('chatName').textContent="💬 "+name;showView('Chat');await loadChat();if(pollTimer)clearInterval(pollTimer);pollTimer=setInterval(loadChat,3000);}
-async function loadChat(){if(!currentChat||!me)return;let d=await q("love_messages?or=(and(sender_phone.eq."+me.phone+",receiver_phone.eq."+currentChat+"),and(sender_phone.eq."+currentChat+",receiver_phone.eq."+me.phone+"))&order=created_at.asc&limit=200");let box=document.getElementById('msgs');if(!Array.isArray(d)||d.length===0){box.innerHTML="<p style='text-align:center;color:#888'>Say Hi to "+currentChatName+" ❤️<br>Be kind, be real.</p>";return;}box.innerHTML=d.map(m=>"<div class='bubble "+(m.sender_phone===me.phone?"mine":"theirs")+"'>"+(m.text||"").replace(/</g,"&lt;")+"</div>").join("");box.scrollTop=box.scrollHeight;}
-async function sendMsg(){let inp=document.getElementById('msgInput');let txt=inp.value.trim();if(!txt||!currentChat)return;inp.value="";await q("love_messages","POST",{sender_phone:me.phone,receiver_phone:currentChat,sender_name:me.name,receiver_name:currentChatName,text:txt});await loadChat();}
-async function loadConvs(){if(!me||me.id==="guest"){document.getElementById('convList').innerHTML="";return;}let d=await q("love_messages?or=(sender_phone.eq."+me.phone+",receiver_phone.eq."+me.phone+")&order=created_at.desc&limit=100");let map={};if(Array.isArray(d))d.forEach(m=>{let other=m.sender_phone===me.phone?m.receiver_phone:m.sender_phone;let otherName=m.sender_phone===me.phone?m.receiver_name:m.sender_name;if(!map[other])map[other]={name:otherName||other,last:m.text,phone:other};});let keys=Object.keys(map);document.getElementById('emptyMsg').style.display=keys.length?"none":"block";document.getElementById('convList').innerHTML=keys.map(k=>{let c=map[k];let prof=all.find(u=>u.phone===k);let av=prof&&getPhotos(prof)[0]?'<div class="avatar"><img src="'+getPhotos(prof)[0]+'"></div>':'<div class="avatar">'+(c.name||"?").charAt(0).toUpperCase()+'</div>';return '<div class="chat-list-item" onclick="openChat(\''+k+'\',\''+(c.name||"").replace(/\'/g,"")+'\')">'+av+'<div style="flex:1"><b>'+c.name+'</b><br><small style="color:#888">'+(c.last||"").slice(0,50)+'</small></div><span style="color:#E91E63">›</span></div>';}).join("");document.getElementById('msgBadge').innerHTML=keys.length?'<span class="badge-dot">'+keys.length+'</span>':'';}
-async function checkNotif(){if(!me||me.id==="guest")return;let d=await q("love_messages?receiver_phone=eq."+me.phone+"&order=created_at.desc&limit=20");if(!Array.isArray(d))return;if(lastMsgCount!==0&&d.length>lastMsgCount){let newest=d[0];if(newest.sender_phone!==currentChat){showNotif("💬 New Message!",newest.sender_name+": "+(newest.text||"").slice(0,60),newest.sender_phone,newest.sender_name);}}lastMsgCount=d.length;}
-function notifClick(){document.getElementById('notif').style.display='none';if(lastNotifPhone){let n=all.find(u=>u.phone===lastNotifPhone);openChat(lastNotifPhone,n?n.name:lastNotifPhone);}}
-async function loadAdmin(){if(!isAdmin()){toast("Admin only for Boss");return;}let members=await q(TABLE+"?select=id,name,age,gender,city,phone,about,created_at&order=created_at.desc&limit=200");let msgs=await q("love_messages?select=sender_name,receiver_name,text,created_at&order=created_at.desc&limit=50");let likes=await q("love_likes?select=id&limit=200");document.getElementById('statMembers').textContent=members.length||0;document.getElementById('statMsgs').textContent=msgs.length||0;document.getElementById('statMen').textContent=members.filter(m=>m.gender==="Man").length;document.getElementById('statWomen').textContent=members.filter(m=>m.gender==="Woman").length;document.getElementById('statLikes').textContent=likes.length||0;document.getElementById('statMatches').textContent=Math.floor((likes.length||0)/2);document.getElementById('adminMembers').innerHTML=(members||[]).map(m=>'<div class="admin-row"><div style="flex:1"><b>'+clean(m.name,"")+', '+clean(m.age,"")+'</b><br><small>'+clean(m.city,"")+' • '+clean(m.phone,"")+' • '+clean(m.gender,"")+'</small><br><small style="color:#888">'+clean(m.about,"").slice(0,60)+'</small></div><button class="btn red" style="width:auto;padding:8px 10px;margin:0;font-size:12px" onclick="delUser(\''+m.phone+'\',\''+clean(m.name,"").replace(/\'/g,"")+'\')">Delete</button></div>').join("")||"No members";document.getElementById('adminMsgs').innerHTML=(msgs||[]).map(m=>'<div class="admin-row"><div><b>'+clean(m.sender_name,"")+' → '+clean(m.receiver_name,"")+'</b><br><small>'+clean(m.text,"").slice(0,80)+'</small></div></div>').join("")||"No messages yet";}
-async function delUser(phone,name){if(!confirm("Delete "+name+"?"))return;await fetch(U+"/rest/v1/"+TABLE+"?phone=eq."+encodeURIComponent(phone),{method:"DELETE",headers:{apikey:K,Authorization:"Bearer "+K}});toast("Deleted "+name);loadAdmin();load();}
-async function su(){let btn=document.getElementById('suBtn');btn.textContent="Creating... Please wait ⏳";btn.disabled=true;try{let name=document.getElementById('n').value.trim(),age=parseInt(document.getElementById('a').value),gender=document.getElementById('g').value,looking=document.getElementById('lk').value,city=document.getElementById('c').value,phone=cp(document.getElementById('p').value),about=document.getElementById('ab').value.trim(),pass=document.getElementById('pw').value.trim(),secret=document.getElementById('sc').value.trim();if(!name||!age||age<18||!gender||!phone||pass.length<4){toast("Fill Name, Age 18+, Gender, Phone, Password 4+");btn.textContent="Create My Account ❤️";btn.disabled=false;return;}let ex=await q(TABLE+"?phone=eq."+encodeURIComponent(phone)+"&select=id");if(ex&&ex[0]){toast("Phone already has account. Tap Log In.");sL();btn.textContent="Create My Account ❤️";btn.disabled=false;return;}let payload={name:name,age:age,gender:gender,looking:looking,city:city,phone:phone,about:about,pass:pass,secret:secret,photo:signupPhotos[0]||"",photo2:signupPhotos[1]||"",photo3:signupPhotos[2]||"",photo4:signupPhotos[3]||"",verified:false,last_seen:Date.now()};let d=await q(TABLE,"POST",payload);if(d&&d[0]){me=d[0];localStorage.setItem("ml_user",JSON.stringify(me));enter();toast("Welcome "+name+"! ❤️");}else{toast("Could not create: "+(d&&d.message?d.message:"Try different phone"));} }catch(err){toast("Connection error. Check internet.");}btn.textContent="Create My Account ❤️";btn.disabled=false;}
-async function li(){try{let phone=cp(document.getElementById('lp').value),pass=document.getElementById('lw').value.trim();if(!phone||!pass){toast("Enter Phone and Password");return;}let d=await q(TABLE+"?phone=eq."+encodeURIComponent(phone)+"&select=*");if(!d||!d[0]){toast("No account with this phone. Create Account.");return;}if((d[0].pass||"").trim()!==pass){toast("Wrong password. Tap Forgot Password.");return;}me=d[0];localStorage.setItem("ml_user",JSON.stringify(me));enter();}catch(err){toast("Login failed - try Guest.");}}
-async function fr(){try{let phone=cp(document.getElementById('fp').value),sec=document.getElementById('fs').value.trim(),np=document.getElementById('fn').value.trim();let d=await q(TABLE+"?phone=eq."+encodeURIComponent(phone)+"&select=*");if(!d||!d[0]){toast("Phone not found");return;}if((d[0].secret||"").toLowerCase().trim()!==sec.toLowerCase().trim()){toast("Wrong secret answer");return;}await q(TABLE+"?phone=eq."+encodeURIComponent(phone),"PATCH",{pass:np});toast("Reset done! Log In now");sL();}catch(err){toast("Reset failed.");}}
-function guest(){me={id:"guest",name:"Guest",city:"Durban",age:"25",phone:"Guest"};document.getElementById('authCard').classList.add('hidden');document.getElementById('hero').classList.add('hidden');document.getElementById('app').classList.remove('hidden');document.getElementById('bottomnav').classList.remove('hidden');document.getElementById('mn').textContent="Guest";document.getElementById('mi').textContent="Durban • Guest Mode - Exploring";load();}
-function enter(){document.getElementById('authCard').classList.add('hidden');document.getElementById('hero').classList.add('hidden');document.getElementById('app').classList.remove('hidden');document.getElementById('bottomnav').classList.remove('hidden');document.getElementById('mn').textContent=me.name;document.getElementById('mi').textContent=me.city+" • "+me.age+" • "+me.phone;if(isAdmin()){document.getElementById('navAdmin').classList.remove('hidden');document.getElementById('adminHint').classList.remove('hidden');}else{document.getElementById('navAdmin').classList.add('hidden');document.getElementById('adminHint').classList.add('hidden');}if(notifTimer)clearInterval(notifTimer);notifTimer=setInterval(checkNotif,4000);checkNotif();load();}
-let sv=localStorage.getItem("ml_user");if(sv){try{me=JSON.parse(sv);if(me.id!=="guest")enter();else load();}catch(e){load();}}else{load();}
-</script>
-</body>
-</html>      
+const SUPABASE_URL="https://qjdzxkzgnrmwckjrgzja.supabase.co";
+const SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFqZHp4a3pnbmRtd2NranJnemphIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMyNzY2MTMsImV4cCI6MjA3ODg1MjYxM30.4iB1sT7U4RlJ5x5N5V1v5f5a5b5c5d5e5f5a5b5c5d5e5f";
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+let me=null,all=[],matches=[],msgs=[],view='discover',curChat=null,curReport=null,lastMsgCount=0,filterGender='All',filterCity='All';
+const adminPhone="0683015919";
+function closeModal(id){document.getElementById(id).classList.remove('open')}
+function openModal(id){document.getElementById(id).classList.add('open')}
+function toast(t){let el=document.getElementById('toast');el.textContent=t;el.style.display='block';setTimeout(()=>el.style.display='none',2800)}
+function notify(title,body){try{if(Notification.permission==="granted"&&document.hidden){new Notification(title,{body})}}catch(e){}}
+async function askNotif(){try{if("Notification" in window&&Notification.permission==="default")await Notification.requestPermission()}catch(e){}}
+function esc(s){return String(s||'').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+async function loadAll(){
+  let {data,error}=await sb.from('profiles').select('*').order('created_at',{ascending:false});
+  if(error){all=[];return} all=data||[];
+  if(me){
+    let {data:b}=await sb.from('blocks').select('*').eq('blocker_phone',me.phone);
+    let blocked=(b||[]).map(x=>x.blocked_phone);
+    let {data:b2}=await sb.from('blocks').select('*').eq('blocked_phone',me.phone);
+    let blockedMe=(b2||[]).map(x=>x.blocker_phone);
+    all=all.filter(u=>!blocked.includes(u.phone)&&!blockedMe.includes(u.phone));
+  }
+}
+async function loadMatches(){
+  let {data}=await sb.from('likes').select('*').or(`from_phone.eq.${me.phone},to_phone.eq.${me.phone}`);
+  let likes=data||[];let likedMe=new Set(),iLiked=new Set();
+  likes.forEach(l=>{if(l.from_phone===me.phone)iLiked.add(l.to_phone);if(l.to_phone===me.phone)likedMe.add(l.from_phone)});
+  matches=all.filter(u=>iLiked.has(u.phone)&&likedMe.has(u.phone));
+  window._likedMe=likedMe; window._iLiked=iLiked;
+}
+async function loadMsgs(){
+  let {data}=await sb.from('messages').select('*').or(`from_phone.eq.${me.phone},to_phone.eq.${me.phone}`).order('created_at',{ascending:true});
+  msgs=data||[];
+  let unread=msgs.filter(m=>m.to_phone===me.phone&&!m.read).length;
+  document.getElementById('msgDot').innerHTML=unread?`(${unread})`:'';
+  if(msgs.length>lastMsgCount&&lastMsgCount>0){let last=msgs[msgs.length-1];if(last.to_phone===me.phone)notify("New message on Whosayn",last.text.slice(0,60))}
+  lastMsgCount=msgs.length;
+}
+function isAdmin(){return me&&me.phone===adminPhone}
+
+function renderAuth(){
+  document.getElementById('nav').style.display='none';
+  document.getElementById('app').innerHTML=`<div class="hero"><h1>Find Love<br>in Durban ❤️</h1><p>Real people. Real matches. No fakes.</p></div>
+  <div class="stats"><div>🔥 ${all.length||''} Members</div><div>✔️ Verified Profiles</div><div>🛡️ Safe & Private</div></div>
+  <div class="card"><div class="pad"><h2>Welcome back</h2><p class="sub">Login to continue</p>
+  <label>Phone Number</label><input id="phone" placeholder="0683015919" inputmode="tel">
+  <label>Password</label><input id="pass" type="password" placeholder="••••••">
+  <label>Secret Word (for password reset)</label><input id="secret" placeholder="e.g. my dog name">
+  <button class="btn btn-p" onclick="login()">Login ❤️</button><br><br>
+  <button class="btn btn-w" onclick="showSignup()">Create New Account →</button>
+  <p class="small">By continuing you agree to our <a href="#" onclick="openModal('termsModal');return false">Terms, Privacy & Safety</a><br><a href="#" onclick="forgot();return false">Forgot password?</a></p></div></div>
+  <p class="small">Made with ❤️ in Durban • 18+ Only • Stay Safe</p>`;
+}
+function showSignup(){
+  document.getElementById('app').innerHTML=`<div class="card"><div class="pad"><h2>Create Account ❤️</h2><p class="sub">Join in 30 seconds. Be real, be kind.</p>
+  <label>Full Name</label><input id="s_name" placeholder="Whosayn">
+  <label>Phone</label><input id="s_phone" placeholder="0683015919" inputmode="tel">
+  <label>Password</label><input id="s_pass" type="password" placeholder="Min 6 characters">
+  <label>Secret Word</label><input id="s_secret" placeholder="For password reset - remember it">
+  <div class="row"><div style="flex:1"><label>Age</label><input id="s_age" type="number" placeholder="27"></div><div style="flex:1"><label>Gender</label><select id="s_gender"><option>Man</option><option>Woman</option></select></div></div>
+  <label>Looking For</label><select id="s_looking"><option>Woman</option><option>Man</option><option>Both</option></select>
+  <label>City</label><select id="s_city"><option>Durban</option><option>Pietermaritzburg</option><option>Umhlanga</option><option>Pinelands</option><option>Chatsworth</option><option>Umlazi</option><option>Other</option></select>
+  <label>About Me</label><textarea id="s_about" placeholder="Tell people about you... hobbies, vibe, what you looking for"></textarea>
+  <label>Main Photo</label><input id="s_photo" type="file" accept="image/*">
+  <p class="small">By signing up you agree to <a href="#" onclick="openModal('termsModal');return false">Terms, Privacy & Safety</a> • You must be 18+</p>
+  <button class="btn btn-p" onclick="signup()">Create Account ❤️</button><br><br><button class="btn btn-w" onclick="renderAuth()">← Back to Login</button></div></div>`;
+}
+function fileToB64(f){return new Promise(r=>{let rd=new FileReader();rd.onload=()=>r(rd.result);rd.readAsDataURL(f)})}
+async function signup(){
+  let phone=document.getElementById('s_phone').value.trim(),pass=document.getElementById('s_pass').value,name=document.getElementById('s_name').value.trim(),age=parseInt(document.getElementById('s_age').value)||0;
+  if(!phone||!pass||!name) return alert("Fill name, phone, password");
+  if(pass.length<6) return alert("Password must be 6+ characters");
+  if(age<18) return alert("You must be 18+");
+  let photo="";let f=document.getElementById('s_photo').files[0];if(f)photo=await fileToB64(f);
+  let {error}=await sb.from('profiles').insert({phone,pass,secret:document.getElementById('s_secret').value,name,age,gender:document.getElementById('s_gender').value,looking_for:document.getElementById('s_looking').value,city:document.getElementById('s_city').value,about:document.getElementById('s_about').value,photo,photo2:"",photo3:"",photo4:""});
+  if(error) return alert(error.message); toast("Account created! Login now 🎉"); renderAuth();
+}
+async function login(){
+  let phone=document.getElementById('phone').value.trim(),pass=document.getElementById('pass').value;
+  let {data}=await sb.from('profiles').select('*').eq('phone',phone).eq('pass',pass).single();
+  if(!data) return alert("Wrong phone or password");
+  me=data;localStorage.setItem('whosayn_phone',phone);localStorage.setItem('whosayn_pass',pass);
+  await askNotif();await afterLogin();
+}
+async function forgot(){
+  let phone=prompt("Enter your phone:");if(!phone)return;
+  let secret=prompt("Enter your Secret Word:");if(!secret)return;
+  let {data}=await sb.from('profiles').select('*').eq('phone',phone).eq('secret',secret).single();
+  if(!data) return alert("Wrong phone or secret");
+  let np=prompt("Enter NEW password (6+):");if(!np||np.length<6)return;
+  await sb.from('profiles').update({pass:np}).eq('phone',phone);alert("Password changed! Login now");
+}
+async function afterLogin(){
+  document.getElementById('nav').style.display='flex';
+  document.getElementById('n-admin').style.display=isAdmin()?'block':'none';
+  document.getElementById('topRight').innerHTML=`Hi, ${esc(me.name)} ${me.verified?'✔️':''} • <a href="#" onclick="logout();return false">Logout</a>`;
+  await loadAll();await loadMatches();await loadMsgs();
+  setInterval(async()=>{if(me){await loadAll();await loadMatches();await loadMsgs();if(view==='messages'&&curChat)renderChat()}},10000);
+  show('discover');
+}
+function logout(){localStorage.clear();me=null;location.reload()}
+function show(v){
+  view=v;document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('on'));
+  let m={discover:'n-discover',matches:'n-matches',messages:'n-messages',profile:'n-profile',admin:'n-admin'};if(document.getElementById(m[v]))document.getElementById(m[v]).classList.add('on');
+  if(v==='discover')renderDiscover();if(v==='matches')renderMatches();if(v==='messages')renderMessages();if(v==='profile')renderProfile();if(v==='admin')renderAdmin();
+}
+function renderDiscover(){
+  let others=all.filter(u=>u.phone!==me.phone);
+  if(filterGender!=='All') others=others.filter(u=>u.gender===filterGender);
+  if(filterCity!=='All') others=others.filter(u=>u.city===filterCity);
+  let cities=['All',...new Set(all.map(u=>u.city).filter(Boolean))];
+  let html=`<h2 style="margin:14px 4px 6px">Discover in ${esc(me.city||'Durban')} 🔥</h2><p class="sub" style="margin:0 4px 8px">${others.length} people near you</p>
+  <div style="display:flex;gap:8px;margin:6px 4px"><select id="fGender" onchange="filterGender=this.value;renderDiscover()" style="margin:0"><option>All</option><option>Woman</option><option>Man</option></select><select id="fCity" onchange="filterCity=this.value;renderDiscover()" style="margin:0">${cities.map(c=>`<option ${filterCity===c?'selected':''}>${esc(c)}</option>`).join('')}</select></div>`;
+  if(!others.length) html+=`<div class="card"><div class="pad"><h2>No members yet 👀</h2><p class="sub">Be the first to invite friends! Share Whosayn on WhatsApp.</p><button class="btn btn-p" onclick="shareApp()">Invite Friends on WhatsApp</button></div></div>`;
+  others.forEach(u=>{
+    let photos=[u.photo,u.photo2,u.photo3,u.photo4].filter(Boolean);
+    html+=`<div class="card"><img src="${photos[0]||'https://via.placeholder.com/400x500?text=No+Photo'}"><div class="pad">
+    <h2>${esc(u.name)}, ${u.age} ${u.verified?'<span class="verifiedBadge">✔️ Verified</span>':''}</h2><p class="sub">${esc(u.city||'')} • ${esc(u.gender)} • Looking for ${esc(u.looking_for||'')}</p>
+    <p style="font-size:14px;line-height:1.55">${esc(u.about||'')}</p><div style="margin:8px 0">${photos.length>1?`<span class="pill">📸 ${photos.length} photos</span>`:''}<span class="pill">📍 ${esc(u.city||'Durban')}</span></div>
+    <div class="row"><button class="btn btn-w" onclick="passUser('${u.phone}')">✖️ Pass</button><button class="btn btn-p" onclick="likeUser('${u.phone}','${esc(u.name)}')">❤️ Like</button></div><br>
+    <div class="row"><button class="btn btn-w" style="font-size:13px" onclick="openReport('${u.phone}','${esc(u.name)}')">🚩 Report</button><button class="btn btn-w" style="font-size:13px" onclick="blockUser('${u.phone}','${esc(u.name)}')">🚫 Block</button><button class="btn btn-w" style="font-size:13px" onclick="openChat('${u.phone}')">💬 Chat</button></div>
+    </div></div>`;
+  });
+  document.getElementById('app').innerHTML=html;
+  let fg=document.getElementById('fGender');if(fg)fg.value=filterGender;
+}
+async function likeUser(to,name){
+  let {data:ex}=await sb.from('likes').select('*').eq('from_phone',me.phone).eq('to_phone',to).single();
+  if(!ex) await sb.from('likes').insert({from_phone:me.phone,to_phone:to});
+  let {data:back}=await sb.from('likes').select('*').eq('from_phone',to).eq('to_phone',me.phone).single();
+  if(back){toast(`🔥 IT'S A MATCH with ${name}!`);await loadMatches();show('matches')}else{toast(`You liked ${name} ❤️`);show('discover')}
+}
+function passUser(phone){show('discover')}
+function openReport(phone,name){curReport=phone;document.getElementById('reportWho').innerText="Reporting "+name;openModal('reportModal')}
+async function doReport(){let reason=document.getElementById('reportReason').value;await sb.from('reports').insert({reporter_phone:me.phone,reported_phone:curReport,reason});closeModal('reportModal');toast("Report sent. Admin will review 🚩")}
+async function blockUser(phone,name){if(!confirm(`Block ${name}? You won't see each other anymore.`))return;await sb.from('blocks').insert({blocker_phone:me.phone,blocked_phone:phone});await loadAll();toast(`${name} blocked 🚫`);show('discover')}
+function openChat(phone){curChat=phone;renderChat()}
+async function renderChat(){
+  let u=all.find(x=>x.phone===curChat)||{name:'Chat',phone:curChat};
+  let chatMsgs=msgs.filter(m=>(m.from_phone===me.phone&&m.to_phone===curChat)||(m.from_phone===curChat&&m.to_phone===me.phone));
+  let html=`<div class="card"><div class="pad"><button class="btn btn-w" style="width:auto;padding:8px 14px" onclick="show('messages')">← Back</button><h2 style="margin-top:10px">${esc(u.name)} ${u.verified?'✔️':''}</h2><p class="sub">${esc(u.city||'')} • ${esc(u.about||'').slice(0,80)}</p><div style="max-height:420px;overflow:auto;margin:12px 0">`;
+  if(!chatMsgs.length) html+=`<p class="sub" style="text-align:center">Say hi! Be kind, be real ❤️</p>`;
+  chatMsgs.forEach(m=>{html+=`<div class="msg ${m.from_phone===me.phone?'me':'them'}">${esc(m.text)}</div>`});
+  html+=`</div><div class="row"><input id="chatInput" placeholder="Type message..." onkeydown="if(event.key==='Enter')sendMsg()"><button class="btn btn-p" style="width:90px" onclick="sendMsg()">Send</button></div></div></div>`;
+  document.getElementById('app').innerHTML=html;
+  await sb.from('messages').update({read:true}).eq('to_phone',me.phone).eq('from_phone',curChat);
+}
+async function sendMsg(){
+  let t=document.getElementById('chatInput').value.trim();if(!t)return;
+  await sb.from('messages').insert({from_phone:me.phone,to_phone:curChat,text:t,read:false});await loadMsgs();renderChat();
+}
+function renderMessages(){
+  let html=`<h2 style="margin:14px 4px">Messages 💬</h2>`;
+  if(!matches.length) html+=`<div class="card"><div class="pad"><h2>No matches yet</h2><p class="sub">Like people in Discover - when they like you back, you can chat here.</p><button class="btn btn-p" onclick="show('discover')">Go Discover 🔥</button></div></div>`;
+  matches.forEach(u=>{
+    let last=[...msgs].reverse().find(m=>m.from_phone===u.phone||m.to_phone===u.phone);
+    let unread=msgs.filter(m=>m.from_phone===u.phone&&m.to_phone===me.phone&&!m.read).length;
+    html+=`<div class="card" onclick="openChat('${u.phone}')" style="cursor:pointer"><div class="pad"><div style="display:flex;justify-content:space-between"><b>${esc(u.name)}, ${u.age} ${u.verified?'✔️':''}</b>${unread?`<span style="background:#E91E63;color:#fff;font-size:11px;padding:3px 8px;border-radius:999px">${unread} new</span>`:''}</div><p class="sub">${last?esc(last.text.slice(0,60)):'Start chatting...'}</p></div></div>`;
+  });
+  document.getElementById('app').innerHTML=html;
+}
+function renderMatches(){
+  let html=`<h2 style="margin:14px 4px">Your Matches 💘 (${matches.length})</h2>`;
+  if(!matches.length) html+=`<div class="card"><div class="pad"><h2>No matches yet</h2><p class="sub">Tip: Like people, complete your profile with 4 photos, write a nice bio.</p><button class="btn btn-p" onclick="show('discover')">Discover People 🔥</button></div></div>`;
+  matches.forEach(u=>{html+=`<div class="card"><img src="${u.photo||''}" style="height:280px"><div class="pad"><b>${esc(u.name)}, ${u.age} ${u.verified?'✔️':''}</b><p class="sub">${esc(u.city||'')}</p><button class="btn btn-p" onclick="openChat('${u.phone}')">💬 Chat Now</button></div></div>`});
+  document.getElementById('app').innerHTML=html;
+}
+function renderProfile(){
+  let photos=[{k:'photo',label:'Main'},{k:'photo2',label:'Photo 2'},{k:'photo3',label:'Photo 3'},{k:'photo4',label:'Photo 4'}];
+  let html=`<div class="card"><div class="pad"><h2>My Profile ${me.verified?'<span class="verifiedBadge">✔️ Verified</span>':'<span style="font-size:12px;color:#E91E63;font-weight:800">• Not Verified</span>'}</h2><p class="sub">Good profiles get 3x more matches. Add 4 photos + nice bio.</p>
+  ${!me.verified?`<button class="btn btn-w" onclick="requestVerify()" style="margin:6px 0">${me.verification_requested?'⏳ Verification Requested - Waiting Admin':'✔️ Request Verification'}</button>`:''}
+  <div class="grid">`;
+  photos.forEach((p,i)=>{html+=`<div class="ph">${me[p.k]?`<img src="${me[p.k]}">`:`<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#aaa;font-size:13px">No Photo</div>`}${i===0?'<span class="mainTag">⭐ Main</span>':''}<button onclick="document.getElementById('up_${p.k}').click()">+ ${p.label}</button><input type="file" id="up_${p.k}" accept="image/*" style="display:none" onchange="uploadPhoto('${p.k}',this)"></div>`});
+  html+=`</div><br><label>Full Name</label><input id="e_name" value="${esc(me.name||'')}">
+  <label>About Me</label><textarea id="e_about">${esc(me.about||'')}</textarea>
+  <div class="row"><div style="flex:1"><label>Age</label><input id="e_age" type="number" value="${me.age||''}"></div><div style="flex:1"><label>City</label><input id="e_city" value="${esc(me.city||'') }"></div></div>
+  <button class="btn btn-p" onclick="saveProfile()">💾 Save Profile</button><br><br>
+  <button class="btn btn-w" onclick="shareApp()">📲 Share Whosayn on WhatsApp</button><br><br>
+  <button class="btn btn-w" onclick="openModal('termsModal')">📜 Terms, Privacy & Safety</button>
+  <div class="danger"><b>⚠️ Danger Zone</b><p style="font-size:13px;margin:8px 0;line-height:1.5">Delete your account permanently. All your photos, likes and messages will be deleted.</p><button class="btn btn-red" onclick="deleteAccount()">Delete My Account</button></div>
+  </div></div>`;
+  document.getElementById('app').innerHTML=html;
+}
+async function requestVerify(){await sb.from('profiles').update({verification_requested:true}).eq('phone',me.phone);me.verification_requested=true;toast("Verification requested! Admin will check ✔️");renderProfile()}
+async function uploadPhoto(key,input){let f=input.files[0];if(!f)return;let b=await fileToB64(f);let upd={};upd[key]=b;await sb.from('profiles').update(upd).eq('phone',me.phone);me[key]=b;toast("Photo saved! 📸");renderProfile()}
+async function saveProfile(){let upd={name:document.getElementById('e_name').value,about:document.getElementById('e_about').value,age:parseInt(document.getElementById('e_age').value),city:document.getElementById('e_city').value};await sb.from('profiles').update(upd).eq('phone',me.phone);Object.assign(me,upd);toast("Saved! ✅")}
+async function deleteAccount(){
+  if(!confirm("Are you SURE? This deletes everything forever."))return;
+  if(!confirm("Last chance - Delete "+me.name+"?"))return;
+  await sb.from('profiles').delete().eq('phone',me.phone);
+  await sb.from('likes').delete().or(`from_phone.eq.${me.phone},to_phone.eq.${me.phone}`);
+  await sb.from('messages').delete().or(`from_phone.eq.${me.phone},to_phone.eq.${me.phone}`);
+  toast("Account deleted");logout();
+}
+async function renderAdmin(){
+  if(!isAdmin()){document.getElementById('app').innerHTML=`<div class="card"><div class="pad">Admin only</div></div>`;return}
+  let {data:reps}=await sb.from('reports').select('*').order('created_at',{ascending:false}).limit(20);
+  let reqs=all.filter(u=>u.verification_requested&&!u.verified);
+  let html=`<div class="card"><div class="pad"><h2>🛡️ Admin - Boss Panel</h2><div class="adminBox"><b>${all.length} Members</b> • ${reqs.length} Verification Requests • ${(reps||[]).length} Reports</div>`;
+  html+=`<h3>✔️ Verification Requests</h3>${reqs.length?reqs.map(u=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #eee"><span>${esc(u.name)} - ${u.phone}</span><button class="btn btn-p" style="width:auto;padding:8px 14px" onclick="verifyUser('${u.phone}')">Verify ✔️</button></div>`).join(''):'<p class="sub">No requests</p>'}`;
+  html+=`<br><h3>🚩 Reports</h3>${(reps||[]).length?reps.map(r=>`<div style="padding:10px 0;border-bottom:1px solid #eee;font-size:13px"><b>${r.reported_phone}</b> - ${esc(r.reason)}<br><span style="color:#888">Reported by ${r.reporter_phone}</span><br><button onclick="banUser('${r.reported_phone}')" style="background:#FF3B30;color:#fff;border:0;padding:6px 12px;border-radius:8px;margin-top:6px">Ban User</button></div>`).join(''):'<p class="sub">No reports - clean app 🎉</p>'}`;
+  html+=`<br><h3>All Members</h3>${all.map(u=>`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #eee;font-size:13px"><span>${esc(u.name)} (${u.phone}) ${u.verified?'✔️':''}</span><button onclick="banUser('${u.phone}')" style="background:#eee;border:0;padding:5px 10px;border-radius:8px">Ban</button></div>`).join('')}`;
+  html+=`</div></div>`;document.getElementById('app').innerHTML=html;
+}
+async function verifyUser(phone){await sb.from('profiles').update({verified:true,verification_requested:false}).eq('phone',phone);toast("Verified! ✔️");await loadAll();renderAdmin()}
+async function banUser(phone){if(!confirm("Ban "+phone+"?"))return;await sb.from('profiles').delete().eq('phone',phone);toast("Banned");await loadAll();renderAdmin()}
+function shareApp(){let t=`Join me on Whosayn ❤️ Find Love in Durban! ${location.href}`;window.open(`https://wa.me/?text=${encodeURIComponent(t)}`)}
+(async()=>{await loadAll();let p=localStorage.getItem('whosayn_phone'),pw=localStorage.getItem('whosayn_pass');if(p&&pw){let {data}=await sb.from('profiles').select('*').eq('phone',p).eq('pass',pw).single();if(data){me=data;await afterLogin();return}}renderAuth()})();
+</script></body></html>
