@@ -162,7 +162,20 @@ if(Array.isArray(d))d.forEach(l=>{if(l.liker_phone===me.phone){myLikes.add(l.lik
 likedByMe.forEach(p=>{if(likedMeSet.has(p))matches.push(p);});
 render();renderMatches();
 }
-function render(){
+function async function updatePhoto(){
+let f=document.getElementById('changePhotoInput').files[0];
+if(!f) return;
+let r=new FileReader();
+r.onload=async e=>{
+let img=new Image(); img.onload=async ()=>{
+let c=document.createElement('canvas'); let s=Math.min(1,600/Math.max(img.width,img.height)); c.width=img.width*s; c.height=img.height*s; c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+let photo=c.toDataURL('image/jpeg',0.7);
+me.photo=photo; localStorage.setItem('luvme_user',JSON.stringify(me));
+try{ await db.collection('users').doc(me.id).update({photo:photo}); }catch(err){}
+renderProfile(); alert('Photo updated!');
+}; img.src=e.target.result;
+}; r.readAsDataURL(f);
+}{
 let qq=(document.getElementById('q')?.value||"").toLowerCase(), fc=document.getElementById('fc')?.value||"";
 let h="", shown=0;
 all.forEach(u=>{
