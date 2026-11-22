@@ -160,6 +160,13 @@ async function fr(){try{let phone=cp(document.getElementById('fp').value),sec=do
 function guest(){me={id:"guest",name:"Guest",city:"Durban",age:"25",phone:"Guest"};document.getElementById('authCard').classList.add('hidden');document.getElementById('hero').classList.add('hidden');document.getElementById('app').classList.remove('hidden');document.getElementById('bottomnav').classList.remove('hidden');document.getElementById('mn').textContent="Guest";document.getElementById('mi').textContent="Durban • Guest Mode - Exploring";load();}
 function enter(){document.getElementById('authCard').classList.add('hidden');document.getElementById('hero').classList.add('hidden');document.getElementById('app').classList.remove('hidden');document.getElementById('bottomnav').classList.remove('hidden');document.getElementById('mn').textContent=me.name;document.getElementById('mi').textContent=me.city+" • "+me.age+" • "+me.phone;if(isAdmin()){document.getElementById('navAdmin').classList.remove('hidden');document.getElementById('adminHint').classList.remove('hidden');}else{document.getElementById('navAdmin').classList.add('hidden');document.getElementById('adminHint').classList.add('hidden');}if(notifTimer)clearInterval(notifTimer);notifTimer=setInterval(checkNotif,4000);checkNotif();load();}
 let sv=localStorage.getItem("ml_user");if(sv){try{me=JSON.parse(sv);if(me.id!=="guest")enter();else load();}catch(e){load();}}else{load();}
-</script>
+async function reportUser(phone){
+  let r = prompt("Report why? Type: Fake, Scam, Rude, Underage");
+  if(!r) return;
+  let reps = JSON.parse(localStorage.getItem('ml_reports')||'[]');
+  reps.push({reported_phone: phone, reason: r});
+  localStorage.setItem('ml_reports', JSON.stringify(reps));
+  toast("Report sent 🚩");
+     }</script>
 </body>
 </html>
