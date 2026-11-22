@@ -162,7 +162,7 @@ if(Array.isArray(d))d.forEach(l=>{if(l.liker_phone===me.phone){myLikes.add(l.lik
 likedByMe.forEach(p=>{if(likedMeSet.has(p))matches.push(p);});
 render();renderMatches();
 }
-function async function updatePhoto(){
+ async function updatePhoto(){
 let f=document.getElementById('changePhotoInput').files[0];
 if(!f) return;
 let r=new FileReader();
