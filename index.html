@@ -229,7 +229,9 @@ let photo=me.photo&&me.photo.length>10?'<img src="'+me.photo+'" style="width:100
 document.getElementById('profileCard').innerHTML=photo+"<h3 style='text-align:center'>"+clean(me.name,"")+", "+clean(me.age,"")+"</h3><p style='text-align:center'>📍 "+clean(me.city,"")+" • "+clean(me.gender,"")+"<br>"+clean(me.about,"")+"<br><small>"+clean(me.phone,"")+"</small></p>";
 }<div style="text-align:center;margin:8px">
 <input type="file" id="changePhotoInput" accept="image/*" style="display:none" onchange="updatePhoto()">
-<button onclick="document.getElementById('changePhotoInput').click()" style="background:#ff4d6d;color:#fff;border:0;padding:8px 14px;border-radius:20px">📸 Change Photo</button>
+<button onclick="document.getElementById('changePhotoInput').click()" style="background:#ff4d6d;color:#fff;border:0;padding:8px 14px;border-radius:20px">📸 Change Photo<div style="text-align:center;margin:8px">
+<input type="file" id="changePhotoInput" accept="image/*" style="display:none" onchange="updatePhoto()">
+<label for="changePhotoInput" style="display:inline-block;background:#ff4d6d;color:#fff;padding:8px 14px;border-radius:20px">📸 Change Photo</label>
 </div>
 async function openChat(phone,name){
 if(!me||me.id==="guest"){toast("Create account / Log In to chat inside app ❤️");sL();document.getElementById('app').classList.add('hidden');document.getElementById('authCard').classList.remove('hidden');document.getElementById('hero').classList.remove('hidden');document.getElementById('bottomnav').classList.add('hidden');window.scrollTo(0,0);return;}
