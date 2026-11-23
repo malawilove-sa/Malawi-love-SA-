@@ -57,7 +57,28 @@ input:focus{outline:none;border-color:#E91E63;background:#fff}
 .gallery .slot{height:110px;border:2px dashed #FBCFE8;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#E91E63;font-size:12px;font-weight:800;background:#FFF5F7}
 </style>
 </head>
-<body>
+<body><div id="welcomeScreen" style="position:fixed; inset:0; background:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:9999; text-align:center; padding:20px; font-family:Arial, sans-serif;">
+
+  <div style="width:110px; height:110px; background:#E63946; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:55px; color:white; font-weight:bold; box-shadow:0 10px 25px rgba(0,0,0,0.15);">
+    ❤️
+  </div>
+
+  <h1 style="margin:20px 0 5px; font-size:28px; color:#111; letter-spacing:0.5px;">Malawi Love SA</h1>
+  
+  <p style="margin:0 0 30px; color:#666; font-size:15px;">Connecting Malawians Everywhere</p>
+
+  <button onclick="enterApp()" style="background:#E63946; color:white; border:none; padding:14px 45px; border-radius:30px; font-size:16px; font-weight:bold; cursor:pointer; box-shadow:0 5px 15px rgba(230,57,70,0.3);">
+    Get Started →
+  </button>
+
+  <p style="margin-top:20px; font-size:12px; color:#999;">Malawi • South Africa • Everywhere</p>
+</div>
+
+<script>
+  function enterApp() {
+    document.getElementById('welcomeScreen').style.display = 'none';
+  }
+</script>
 <div class="top"><div class="logo">Malawi<span>Love</span> SA</div><div class="badge">● Online</div></div>
 <div id="notif" class="notif" onclick="notifClick()"><b id="notifTitle">💬 New Message!</b><br><span id="notifText"></span><br><small>Tap to open →</small></div>
 <div class="hero" id="hero"><h1>Find Your Person. 💕</h1><p>Real Malawians in South Africa<br><b id="count">Loading members...</b></p><div><span class="pill">📍 Durban</span><span class="pill">📍 Joburg</span><span class="pill">📍 Cape Town</span><span class="pill">❤️ Verified People</span></div></div>
