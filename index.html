@@ -181,6 +181,20 @@ async function fr(){try{let phone=cp(document.getElementById('fp').value),sec=do
 function guest(){me={id:"guest",name:"Guest",city:"Durban",age:"25",phone:"Guest"};document.getElementById('authCard').classList.add('hidden');document.getElementById('hero').classList.add('hidden');document.getElementById('app').classList.remove('hidden');document.getElementById('bottomnav').classList.remove('hidden');document.getElementById('mn').textContent="Guest";document.getElementById('mi').textContent="Durban • Guest Mode - Exploring";load();}
 function enter(){document.getElementById('authCard').classList.add('hidden');document.getElementById('hero').classList.add('hidden');document.getElementById('app').classList.remove('hidden');document.getElementById('bottomnav').classList.remove('hidden');document.getElementById('mn').textContent=me.name;document.getElementById('mi').textContent=me.city+" • "+me.age+" • "+me.phone;if(isAdmin()){document.getElementById('navAdmin').classList.remove('hidden');document.getElementById('adminHint').classList.remove('hidden');}else{document.getElementById('navAdmin').classList.add('hidden');document.getElementById('adminHint').classList.add('hidden');}if(notifTimer)clearInterval(notifTimer);notifTimer=setInterval(checkNotif,4000);checkNotif();load();}
 let sv=localStorage.getItem("ml_user");if(sv){try{me=JSON.parse(sv);if(me.id!=="guest")enter();else load();}catch(e){load();}}else{load();}
-</script>
+</script><div id="privacyBox" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:9999;padding:20px;overflow:auto;">
+  <div style="background:white;max-width:500px;margin:30px auto;padding:20px;border-radius:15px;">
+    <h2 style="text-align:center;">Privacy Policy - Malawi Love</h2>
+    <p style="font-size:14px;line-height:1.6;">
+    <b>1. What we collect:</b> Your name, age, photos and location you choose to share.<br><br>
+    <b>2. How we use it:</b> Only to show your profile to other members and help you connect.<br><br>
+    <b>3. We never sell your data.</b><br><br>
+    <b>4. Your photos:</b> Only members can see your photos. You can delete them anytime.<br><br>
+    <b>5. Location:</b> Your exact location is never shown, only your city/town.<br><br>
+    <b>6. Delete Account:</b> You can delete your account anytime.<br><br>
+    <b>7. Contact:</b> Contact us on Facebook Page - Malawi Love.
+    </p>
+    <button onclick="document.getElementById('privacyBox').style.display='none'" style="width:100%;padding:12px;background:#E63946;color:white;border:none;border-radius:10px;font-weight:bold;">Close</button>
+  </div>
+</div>
 </body>
 </html>              
