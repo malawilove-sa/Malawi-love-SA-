@@ -145,7 +145,21 @@ function e(id,b){let x=document.getElementById(id);x.type=x.type==="password"?"t
 function sS(){document.getElementById('sF').classList.remove('hidden');document.getElementById('lF').classList.add('hidden');document.getElementById('tS').className='tab-on';document.getElementById('tL').className='';}
 function sL(){document.getElementById('sF').classList.add('hidden');document.getElementById('lF').classList.remove('hidden');document.getElementById('tS').className='';document.getElementById('tL').className='tab-on';}
 function fg(){document.getElementById('fB').classList.toggle('hidden');}
-function logout(){localStorage.removeItem('ml_user');location.reload();}
+function logout(){localStorage.removeItem('ml_user');location.reload();}async function deleteAccount(){
+  if(!me || !me.phone){ alert("Not logged in"); return; }
+  if(!confirm("Are you SURE? This will delete your account forever and cannot be undone.")){ return; }
+  if(!confirm("Last chance dada - Delete forever?")){ return; }
+  try{
+    await fetch(U+"/rest/v1/"+TABLE+"?phone=eq."+me.phone, {
+      method:"DELETE",
+      headers:{ "apikey":K, "Authorization":"Bearer "+K }
+    });
+  }catch(e){}
+  localStorage.clear();
+  me = null;
+  alert("Your account has been deleted. Thank you for using MalawiLove SA ❤️");
+  location.reload();
+}
 async function q(path,method,body){let r=await fetch(U+"/rest/v1/"+path,{method:method||"GET",headers:{apikey:K,Authorization:"Bearer "+K,"Content-Type":"application/json",Prefer:"return=representation"},body:body?JSON.stringify(body):null});let t=await r.text();try{return JSON.parse(t);}catch(e){return {message:t};}}
 function compress(file){return new Promise(res=>{let rd=new FileReader();rd.onload=ev=>{let im=new Image();im.onload=()=>{let c=document.createElement('canvas');let max=500;let w=im.width,h=im.height;if(w>max){h=h*max/w;w=max;}c.width=w;c.height=h;c.getContext('2d').drawImage(im,0,0,w,h);res(c.toDataURL('image/jpeg',0.7));};im.src=ev.target.result;};rd.readAsDataURL(file);});}
 async function prevPhotos(inp){signupPhotos=[];let wrap=document.getElementById('ppWrap');wrap.innerHTML='';let files=Array.from(inp.files||[]).slice(0,4);for(let f of files){let d=await compress(f);signupPhotos.push(d);let im=document.createElement('img');im.src=d;im.className='photo-preview';im.style.display='block';wrap.appendChild(im);}if(files.length)toast(files.length+' photo(s) ready 📸');}
