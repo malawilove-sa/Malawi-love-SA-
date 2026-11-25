@@ -1,9 +1,9 @@
  {
   "name": "Malawi Love SA",
   "short_name": "Malawi Love",
-  "start_url": "/Malawi-love-SA/",
-  "id": "/Malawi-love-SA/",
-  "scope": "/Malawi-love-SA/",
+  "start_url": "./",
+  "id": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#BDFDF0",
   "theme_color": "#FF106A",
