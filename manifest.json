@@ -1,9 +1,31 @@
-{
-  "name": "Malawi Love SA ❤️",
+ {
+  "name": "Malawi Love SA",
   "short_name": "Malawi Love",
-  "start_url": "/Malawi-love-SA-/",
+  "id": "/Malawi-love-SA/",
+  "start_url": "/Malawi-love-SA/",
+  "scope": "/Malawi-love-SA/",
   "display": "standalone",
-  "background_color": "#0f0f0f",
-  "theme_color": "#ff004f",
-  "icons": [{"src": "https://cdn-icons-png.flaticon.com/512/833/833472.png","sizes": "512x512","type": "image/png"}]
-  }
+  "background_color": "#0D0F0F",
+  "theme_color": "#FF0047",
+  "description": "Malawi Love SA - Find love",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
