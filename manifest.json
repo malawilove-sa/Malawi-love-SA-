@@ -1,12 +1,12 @@
  {
   "name": "Malawi Love SA",
   "short_name": "Malawi Love",
-  "id": "/Malawi-love-SA/",
   "start_url": "/Malawi-love-SA/",
+  "id": "/Malawi-love-SA/",
   "scope": "/Malawi-love-SA/",
   "display": "standalone",
-  "background_color": "#0D0F0F",
-  "theme_color": "#FF0047",
+  "background_color": "#BDFDF0",
+  "theme_color": "#FF106A",
   "description": "Malawi Love SA - Find love",
   "icons": [
     {
