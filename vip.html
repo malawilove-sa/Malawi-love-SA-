@@ -1,36 +1,53 @@
-  <!DOCTYPE html>
+    <!DOCTYPE html>
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>VIP - Vybz</title>
+<title>VIP - Vybz Malawi</title>
 <style>
 body{background:#000;color:#fff;font-family:Arial;text-align:center;padding:20px}
 .card{background:#111;border:2px solid gold;border-radius:20px;padding:20px;max-width:420px;margin:auto}
+.plan{background:#222;padding:15px;border-radius:12px;margin:10px 0;text-align:left;border:2px solid #333}
+.plan.selected{border-color:gold;background:#2a2300}
 button{background:gold;color:#000;border:none;padding:15px;width:100%;border-radius:12px;font-weight:bold;font-size:18px;margin-top:15px}
 .box{background:#222;padding:15px;border-radius:12px;margin-top:15px;text-align:left}
 </style>
 </head>
 <body>
 <div class="card">
-<h1>👑 VYBZ VIP 👑</h1>
-<p>Unlock ALL songs • No ads • Download</p>
-<h2>MK 3,000 / month</h2>
+<h1>👑 VYBZ VIP - MALAWI 👑</h1>
+<p>FREE = 1 message per day ONLY<br>VIP = Unlimited messages every day</p>
+
+<div class="plan selected" onclick="selectPlan('Weekly - K2,000', this)">
+<b>Weekly VIP</b><br><h2 style="margin:5px 0">K2,000</h2>7 days unlimited
+</div>
+
+<div class="plan" onclick="selectPlan('Monthly - K5,000', this)">
+<b>Monthly VIP</b><br><h2 style="margin:5px 0">K5,000</h2>30 days unlimited - MOST POPULAR
+</div>
+
+<div class="plan" onclick="selectPlan('3 Months Launch Offer - K10,000', this)">
+<b>🔥 3 Months Launch Offer</b><br><h2 style="margin:5px 0">K10,000 ONE TIME</h2>90 days unlimited - Launch price locked for you!
+</div>
+
 <div class="box">
 <b>HOW TO PAY - MALAWI:</b><br><br>
-<b>1. TNM Mpamba:</b><br>0886702139<br>Name: Whosayn Twaha<br><br>
-<b>2. Airtel Money:</b><br>0982113701<br>Name: Whosayn Twaha<br><br>
-Send MK 3,000 to EITHER number.
+<b>TNM Mpamba:</b><br>0886702139<br>Name: Whosayn Twaha<br><br>
+<b>Airtel Money:</b><br>0982113701<br>Name: Whosayn Twaha<br><br>
+Send to EITHER number, then send screenshot on WhatsApp. Boss will APPROVE you.
 </div>
-<div class="box">
-<b>2. Send Proof:</b><br>
-After paying, tap below and send screenshot of your payment on WhatsApp.
-</div>
-<button onclick="sendProof()">I HAVE PAID - SEND PROOF ON WHATSAPP ✅</button>
+
+<button onclick="payNow()">I HAVE PAID - SEND PROOF ✅</button>
 <p><a href="index.html" style="color:gold">← Back to Home</a></p>
 </div>
 <script>
-function sendProof(){
-  window.open('https://wa.me/265886702139?text=Hi Vybz, I have paid VIP MK 3000. Here is my proof screenshot. Please activate me.', '_blank');
+let chosen = 'Weekly - K2,000';
+function selectPlan(name, el){
+  chosen = name;
+  document.querySelectorAll('.plan').forEach(p=>p.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function payNow(){
+  window.open('https://wa.me/265886702139?text=Hi Vybz, I have paid VIP Malawi: ' + chosen + '. Here is my proof screenshot. Please approve me. Name: Whosayn Twaha', '_blank');
 }
 </script>
 </body>
