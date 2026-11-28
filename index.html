@@ -251,5 +251,39 @@ function submitPayment(){alert("Sent for approval! Dada will approve you soon.")
 <script>
 function openVip(){document.getElementById("vipModal").classList.remove("hidden");}
 </script>
-</body>
+<!-- VIP MODAL - REAL -->
+<div id="vipModal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:999;padding:16px;">
+  <div style="background:#fff;width:100%;max-width:420px;border-radius:16px;padding:20px;">
+    <h2 style="text-align:center;">👑 Go VIP - Malawi</h2>
+    <p style="text-align:center;color:#666;">Unlock VIP features. Pay, upload receipt, get approved.</p>
+    <h3>1. Choose Plan</h3>
+    <div style="display:flex;gap:8px;">
+      <button type="button" onclick="selectPlan('Weekly',2000,this)" style="flex:1;padding:12px;border:1px solid #ddd;border-radius:10px;">Weekly<br><b>K2,000</b></button>
+      <button type="button" onclick="selectPlan('Monthly',5000,this)" style="flex:1;padding:12px;border:1px solid #ddd;border-radius:10px;">Monthly<br><b>K5,000</b></button>
+      <button type="button" onclick="selectPlan('Launch',10000,this)" style="flex:1;padding:12px;border:1px solid #ddd;border-radius:10px;">Launch<br><b>K10,000</b></button>
+    </div>
+    <h3 style="margin-top:14px;">2. Choose Payment</h3>
+    <div style="display:flex;gap:8px;">
+      <button type="button" onclick="selectPay('Airtel Money','0982113701',this)" style="flex:1;padding:12px;border:1px solid #ddd;border-radius:10px;">Airtel Money<br><b>0982113701</b><br>Whosayn Twaha</button>
+      <button type="button" onclick="selectPay('TNM Mpamba','0886702139',this)" style="flex:1;padding:12px;border:1px solid #ddd;border-radius:10px;">TNM Mpamba<br><b>0886702139</b><br>Whosayn Twaha</button>
+    </div>
+    <div id="payDetails" class="hidden" style="background:#f3f4f6;padding:12px;border-radius:10px;margin-top:12px;">
+      <p id="payText"></p>
+      <button type="button" onclick="copyNum()" style="padding:8px 12px;border-radius:8px;background:#111;color:#fff;">Copy Number</button>
+    </div>
+    <h3 style="margin-top:14px;">3. Upload Receipt</h3>
+    <input id="receipt" type="file" accept="image/*" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:10px;">
+    <button type="button" onclick="submitVip()" style="width:100%;margin-top:12px;padding:14px;background:#ff2d55;color:#fff;border:none;border-radius:12px;font-weight:800;">I Have Sent - Submit ✅</button>
+    <button type="button" onclick="closeVip()" style="width:100%;margin-top:8px;padding:12px;background:#eee;border:none;border-radius:12px;">Close</button>
+  </div>
+</div>
+<script>
+let vipPlan=null, vipAmount=0, vipPay=null, vipNum="";
+function selectPlan(p,a,el){vipPlan=p;vipAmount=a;showPay();}
+function selectPay(p,n,el){vipPay=p;vipNum=n;showPay();}
+function showPay(){if(vipPlan && vipPay){document.getElementById("payDetails").classList.remove("hidden");document.getElementById("payText").innerHTML="Send <b>"+vipPlan+" - K"+vipAmount+"</b> to <b>Whosayn Twaha</b><br>"+vipPay+" - "+vipNum;}}
+function copyNum(){navigator.clipboard.writeText(vipNum);alert("Copied: "+vipNum);}
+function closeVip(){document.getElementById("vipModal").classList.add("hidden");}
+function submitVip(){if(!vipPlan||!vipPay){alert("Choose plan and payment first");return;}alert("Sent for approval! Plan: "+vipPlan+" - K"+vipAmount+" via "+vipPay);}
+</script>/body>
 </html>    
