@@ -216,6 +216,34 @@ let sv=localStorage.getItem("ml_user");if(sv){try{me=JSON.parse(sv);if(me.id!=="
     <b>7. Contact:</b> Contact us on Facebook Page - Malawi Love.
     </p>
     <button onclick="document.getElementById('privacyBox').style.display='none'" style="width:100%;padding:12px;background:#E63946;color:white;border:none;border-radius:10px;font-weight:bold;">Close</button>
-  
+<!-- MALAWI VIP PAYMENT - REAL - START -->
+<button onclick="document.getElementById('malawiPay').style.display='block'" style="width:100%;padding:15px;background:#FF1493;color:white;border:none;border-radius:12px;font-size:17px;font-weight:bold;margin-top:15px;">👑 Go VIP - Malawi - K5,000</button>
+
+<div id="malawiPay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:9999;padding:20px;box-sizing:border-box;overflow-y:auto;">
+  <div style="background:white;border-radius:15px;padding:20px;max-width:400px;margin:30px auto;">
+    <h2 style="text-align:center;margin:0;">👑 Go VIP - Malawi</h2>
+    <p style="text-align:center;color:#666;">K5,000 / Month</p>
+
+    <p><b>Step 1:</b> Send money to:</p>
+    <div style="background:#f5f5f5;padding:12px;border-radius:10px;">
+      <p style="margin:5px 0;"><b>Name:</b> Whosayn Twaha</p>
+      <p style="margin:5px 0;"><b>TNM Mpamba:</b> 0886702139</p>
+      <p style="margin:5px 0;"><b>Airtel Money:</b> 0982113701</p>
+    </div>
+
+    <p><b>Step 2:</b> After sending, enter details below:</p>
+    <select id="payMethod" style="width:100%;padding:12px;margin-bottom:10px;border-radius:8px;border:1px solid #ddd;">
+      <option>TNM Mpamba</option>
+      <option>Airtel Money</option>
+    </select>
+    <input id="payPhone" type="tel" placeholder="Your phone number you used" style="width:100%;padding:12px;margin-bottom:10px;border-radius:8px;border:1px solid #ddd;box-sizing:border-box;">
+    <input id="payTransID" type="text" placeholder="Transaction ID from SMS" style="width:100%;padding:12px;margin-bottom:10px;border-radius:8px;border:1px solid #ddd;box-sizing:border-box;">
+
+    <button onclick="alert('Thank you! We will verify your payment for ' + document.getElementById('payTransID').value + ' and activate VIP within 30 mins.'); document.getElementById('malawiPay').style.display='none';" style="width:100%;padding:14px;background:#FF1493;color:white;border:none;border-radius:10px;font-size:16px;font-weight:bold;">I Have Sent Payment ✅</button>
+
+    <button onclick="document.getElementById('malawiPay').style.display='none'" style="width:100%;padding:12px;background:#eee;border:none;border-radius:10px;margin-top:10px;">Close</button>
+  </div>
+</div>
+<!-- MALAWI VIP PAYMENT - REAL - END -->  
 </script>/body>
 </html>    
