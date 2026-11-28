@@ -246,6 +246,10 @@ function updatePayDetails(){if(!vipPlan||!vipMethod)return;document.getElementBy
 function copyPayNumber(){navigator.clipboard.writeText(vipNumber);alert("Copied: "+vipNumber);}
 function closeVip(){document.getElementById("vipModal").classList.add("hidden");}
 function submitPayment(){alert("Sent for approval! Dada will approve you soon.");closeVip();}
+</script<!-- STEP 3 - VIP BUTTON TO OPEN IT -->
+<button onclick="openVip()" style="position:fixed;bottom:90px;right:16px;z-index:998;background:#ff2d55;color:#fff;border:none;padding:14px 18px;border-radius:999px;font-weight:800;box-shadow:0 6px 20px rgba(0,0,0,0.3);">👑 Go VIP</button>
+<script>
+function openVip(){document.getElementById("vipModal").classList.remove("hidden");}
 </script>
 </body>
 </html>    
