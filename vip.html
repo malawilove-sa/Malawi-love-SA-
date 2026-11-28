@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+ <!DOCTYPE html>
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -6,10 +6,14 @@
 <style>
 body{background:#000;color:#fff;font-family:Arial;text-align:center;padding:20px}
 .card{background:#111;border:2px solid gold;border-radius:20px;padding:20px;max-width:420px;margin:auto}
-.plan{background:#222;padding:15px;border-radius:12px;margin:10px 0;text-align:left;border:2px solid #333}
+.plan{background:#222;padding:15px;border-radius:12px;margin:10px 0;text-align:left;border:2px solid #333;cursor:pointer}
 .plan.selected{border-color:gold;background:#2a2300}
-button{background:gold;color:#000;border:none;padding:15px;width:100%;border-radius:12px;font-weight:bold;font-size:18px;margin-top:15px}
+button{background:gold;color:#000;border:none;padding:15px;width:100%;border-radius:12px;font-weight:bold;font-size:18px;margin-top:15px;cursor:pointer}
+button:disabled{background:#555;color:#999}
 .box{background:#222;padding:15px;border-radius:12px;margin-top:15px;text-align:left}
+input{width:100%;padding:12px;border-radius:10px;border:1px solid #444;background:#111;color:#fff;margin-top:10px;box-sizing:border-box}
+#preview{width:100%;border-radius:12px;margin-top:10px;display:none;border:2px solid gold}
+.success{background:#0a3d0a;border:2px solid #2ecc71;padding:15px;border-radius:12px;margin-top:15px;display:none}
 </style>
 </head>
 <body>
@@ -33,21 +37,69 @@ button{background:gold;color:#000;border:none;padding:15px;width:100%;border-rad
 <b>HOW TO PAY - MALAWI:</b><br><br>
 <b>TNM Mpamba:</b><br>0886702139<br>Name: Whosayn Twaha<br><br>
 <b>Airtel Money:</b><br>0982113701<br>Name: Whosayn Twaha<br><br>
-Send to EITHER number, then send screenshot on WhatsApp. Boss will APPROVE you.
+Send to EITHER number, then upload screenshot HERE in the app. Boss will APPROVE you in the app.
 </div>
 
-<button onclick="payNow()">I HAVE PAID - SEND PROOF ✅</button>
+<div class="box">
+<b>YOUR NAME:</b>
+<input id="userName" placeholder="Type your name as on Mpamba / Airtel">
+<b>UPLOAD PROOF SCREENSHOT:</b>
+<input type="file" id="proofFile" accept="image/*" onchange="showPreview(event)">
+<img id="preview">
+</div>
+
+<button id="sendBtn" onclick="sendProof()">I HAVE PAID - SEND PROOF IN APP ✅</button>
+
+<div id="doneBox" class="success">
+<b>✅ PROOF SENT!</b><br><br>
+Your proof is now in the app.<br>
+Wait for Boss to APPROVE you in Admin Panel.<br>
+Check back in a few minutes.
+</div>
+
 <p><a href="index.html" style="color:gold">← Back to Home</a></p>
 </div>
 <script>
 let chosen = 'Weekly - K2,000';
+let proofImage = '';
 function selectPlan(name, el){
   chosen = name;
   document.querySelectorAll('.plan').forEach(p=>p.classList.remove('selected'));
   el.classList.add('selected');
 }
-function payNow(){
-  window.open('https://wa.me/265886702139?text=Hi Vybz, I have paid VIP Malawi: ' + chosen + '. Here is my proof screenshot. Please approve me. Name: Whosayn Twaha', '_blank');
+function showPreview(e){
+  let file = e.target.files[0];
+  if(!file) return;
+  let reader = new FileReader();
+  reader.onload = function(ev){
+    proofImage = ev.target.result;
+    let img = document.getElementById('preview');
+    img.src = proofImage;
+    img.style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+function sendProof(){
+  let name = document.getElementById('userName').value.trim();
+  if(!name){ alert('Please type your name first dada'); return; }
+  if(!proofImage){ alert('Please pick your payment screenshot first'); return; }
+  let btn = document.getElementById('sendBtn');
+  btn.disabled = true;
+  btn.innerText = 'SENDING...';
+  let all = JSON.parse(localStorage.getItem('vybz_vip_proofs') || '[]');
+  // Also save to the key your Admin Panel uses
+  let all2 = JSON.parse(localStorage.getItem('vybz_vip_requests') || '[]');
+  let req = { name: name, plan: chosen, proof: proofImage, time: new Date().toLocaleString(), status: 'pending', id: Date.now() };
+  all.push(req);
+  all2.push(req);
+  localStorage.setItem('vybz_vip_proofs', JSON.stringify(all));
+  localStorage.setItem('vybz_vip_requests', JSON.stringify(all2));
+  // Save for this user so Home knows they are waiting
+  localStorage.setItem('vybz_my_vip_status', 'pending');
+  localStorage.setItem('vybz_my_vip_name', name);
+  document.getElementById('doneBox').style.display = 'block';
+  btn.innerText = '✅ PROOF SENT IN APP';
+  alert('Proof sent in app! Boss will approve you soon.');
 }
 </script>
 </body>
