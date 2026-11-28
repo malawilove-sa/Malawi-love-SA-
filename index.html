@@ -224,32 +224,7 @@ let sv=localStorage.getItem("ml_user");if(sv){try{me=JSON.parse(sv);if(me.id!=="
 <p style="text-align:center;color:#666;font-size:13px;">Kwacha ONLY</p>
 <button onclick="selectPlan('Weekly','K2,000')" style="width:100%;padding:12px;margin:5px 0;border:2px solid #ff2d55;border-radius:12px;background:#fff;text-align:left;"><b>Weekly - K2,000</b></button>
 <button onclick="selectPlan('Monthly','K5,000')" style="width:100%;padding:12px;margin:5px 0;border:2px solid #ddd;border-radius:12px;background:#fff;text-align:left;"><b>Monthly - K5,000</b></button>
-<button onclick="selectPlan('Launch 3 Months','K10,000')" style="width:100%;padding:12px;margin:5px 0;border:2px solid #FFD700;border-radius:12px;background:#FFF8E1;text-align:left;"><b>🔥 Launch - 3 Months - K10,000</b></button>
-<p style="font-weight:800;">Choose where to send:</p>
-<button onclick="selectPay('Airtel Money','0982113701')" style="width:100%;padding:12px;margin:5px 0;border:2px solid #E40000;border-radius:12px;background:#fff;"><b style="color:#E40000;">Airtel Money</b><br>0982113701 - Whosayn Twaha</button>
-<button onclick="selectPay('TNM Mpamba','0886702139')" style="width:100%;padding:12px;margin:5px 0;border:2px solid #007A33;border-radius:12px;background:#fff;"><b style="color:#007A33;">TNM Mpamba</b><br>0886702139 - Whosayn Twaha</button>
-<div id="payDetails" style="background:#f6f6f6;border-radius:12px;padding:12px;margin-top:10px;display:none;">
-<p style="margin:0;font-size:13px;">Send <b id="selectedPlanText">-</b> to <b>Whosayn Twaha</b></p>
-<p style="font-size:18px;font-weight:800;margin:6px 0;"><span id="selectedPayName">-</span> - <span id="selectedPayNumber">-</span></p>
-<button onclick="copyPayNumber()" style="width:100%;padding:10px;border:none;border-radius:10px;background:#111;color:#fff;font-weight:800;">📋 Copy Number</button>
-</div>
-<input type="file" id="payScreenshot" accept="image/*" style="width:100%;padding:10px;margin-top:12px;border:1px dashed #ccc;border-radius:10px;">
-<button onclick="submitPayment()" style="width:100%;margin-top:10px;padding:13px;border:none;border-radius:14px;background:#ff2d55;color:#fff;font-weight:800;">I Have Sent - Submit ✅</button>
-<button onclick="closeVip()" style="width:100%;margin-top:8px;padding:10px;border:none;background:none;color:#666;">Close</button>
-</div>
-</div>
-<script>
-let vipPlan="";let vipAmount="";let vipMethod="";let vipNumber="";
-function selectPlan(p,a){vipPlan=p;vipAmount=a;document.getElementById("selectedPlanText").innerText=p+" - "+a;updatePayDetails();}
-function selectPay(m,n){vipMethod=m;vipNumber=n;updatePayDetails();}
-function updatePayDetails(){if(!vipPlan||!vipMethod)return;document.getElementById("payDetails").style.display="block";document.getElementById("selectedPayName").innerText=vipMethod;document.getElementById("selectedPayNumber").innerText=vipNumber;}
-function copyPayNumber(){navigator.clipboard.writeText(vipNumber);alert("Copied: "+vipNumber);}
-function closeVip(){document.getElementById("vipModal").classList.add("hidden");}
-function submitPayment(){alert("Sent for approval! Dada will approve you soon.");closeVip();}
-</script<!-- STEP 3 - VIP BUTTON TO OPEN IT -->
-<button onclick="openVip()" style="position:fixed;bottom:90px;right:16px;z-index:998;background:#ff2d55;color:#fff;border:none;padding:14px 18px;border-radius:999px;font-weight:800;box-shadow:0 6px 20px rgba(0,0,0,0.3);">👑 Go VIP</button>
-<script>
-function openVip(){document.getElementById("vipModal").classList.remove("hidden");}
+<button onclick="selectPlan('Launch 3 Months','K10,000')" style="width:100%;padding:12px;margin:5px 0;border:2px solid #FF
 </script>
 <!-- VIP MODAL - REAL -->
 <div id="vipModal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:999;padding:16px;">
