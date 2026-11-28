@@ -245,5 +245,19 @@ let sv=localStorage.getItem("ml_user");if(sv){try{me=JSON.parse(sv);if(me.id!=="
   </div>
 </div>
 <!-- MALAWI VIP PAYMENT - REAL - END -->  
-</body>
+<script>
+setInterval(function(){
+  var btns=document.querySelectorAll('button');
+  for(var i=0;i<btns.length;i++){
+    if(btns[i].textContent.includes('Delete My Account') && !document.getElementById('vipBtnAuto')){
+      var b=document.createElement('button');
+      b.id='vipBtnAuto';
+      b.innerHTML='👑 Go VIP - Malawi - K5,000';
+      b.style='width:100%;padding:15px;background:#FF1493;color:white;border:none;border-radius:12px;font-size:17px;font-weight:bold;margin-top:15px;';
+      b.onclick=function(){document.getElementById('malawiPay').style.display='block'};
+      btns[i].parentNode.insertBefore(b, btns[i].nextSibling);
+    }
+  }
+},1000);
+</script>/body>
 </html>    
