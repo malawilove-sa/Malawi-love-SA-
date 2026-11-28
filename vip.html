@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VIP - Vybz</title>
+<script type="module" src="supabase.js"></script>
+<style>
+body{background:#000;color:#fff;font-family:Arial;text-align:center;padding:20px}
+.card{background:#111;border:1px solid gold;border-radius:20px;padding:20px;max-width:400px;margin:auto}
+button{background:gold;color:#000;border:none;padding:15px;width:100%;border-radius:12px;font-weight:bold;font-size:18px;margin-top:15px}
+input{width:100%;padding:12px;border-radius:10px;border:none;margin-top:10px}
+</style>
+</head>
+<body>
+<div class="card">
+<h1>👑 VYBZ VIP 👑</h1>
+<p>Unlock ALL songs • No ads • Download</p>
+<h2>R50 / month</h2>
+<input id="phone" placeholder="Enter your phone number e.g. 0712345678">
+<button onclick="payVIP()">PAY R50 & GO VIP 💛</button>
+<p id="msg"></p>
+<p><a href="index.html" style="color:gold">← Back to Home</a></p>
+</div>
+<script type="module">
+import { supabase } from './supabase.js';
+window.payVIP = async function(){
+  const phone = document.getElementById('phone').value;
+  if(!phone){ document.getElementById('msg').innerText='Please enter phone number dada'; return; }
+  document.getElementById('msg').innerText='Opening payment... If payment fails, WhatsApp us your proof.';
+  window.open('https://wa.me/27646066737?text=Hi Vybz, I want VIP. My number is '+phone, '_blank');
+}
+</script>
+</body>
+</html>
